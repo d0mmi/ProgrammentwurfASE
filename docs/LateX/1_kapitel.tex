@@ -1,0 +1,223 @@
+\chapter{Domain Driven Design}
+\section{Analyse der Ubiquitous Language}
+
+%% „allgegenwärtige Sprache“
+%% Gleiche Begriffe in Domäne und Sourcecode
+%% Jede Domäne besitzt eine eigene Fachsprache
+%% Verstehen, warum diese Fachsprache gesprochen wird
+%% Nicht versuchen, diese Fachsprache in „eigene“ Begriffe zu übersetzen
+%% Ubiquitous Language bezeichnet die von Domänenexperten und Entwicklern gemeinsam im Projekt verwendete Sprache
+
+%% Die Ubiquitous Language soll die Kluft reduzieren, indem Domänenexperten und Entwickler eine gemeinsame Sprache finden, die
+%% - Alle relevanten Konzepte, Prozesse und Regeln der Domäne beschreibt
+%% - Zusammenhänge verdeutlicht
+%% - Mehrdeutigkeiten und Unklarheiten beseitigt
+
+\begin{center}
+    \begin{tabular}{ | l | l | }
+        \hline
+        Wort & Bedeutung                   \\ \hline
+        Test & Test ist sehr toll          \\ \hline
+        User & User spielen auf dem Server \\
+        \hline
+    \end{tabular}
+\end{center}
+
+
+\section{Analyse und Begründung der verwendeten Muster}
+
+\subsection{Value Objects}
+
+%% Value Objects (VO) sind einfache Objekte ohne eigene Identität
+%% VO sind unveränderlich (immutable)
+%% Ein VO kapselt ein „Wertkonzept“ und wird nur durch seine Eigenschaften oder Werte beschrieben -> daher: Value Object
+%% Daraus folgt: zwei VO sind gleich, wenn sie die selben Werte haben
+
+%% Vorteile von Unveränderlichkeit
+%% Wenn ein Objekt gültig konstruiert wurde, kann es danach nicht ungültig werden
+%% ->Einhalten von Invarianten der Domäne im Code wird sehr einfach
+%% Unveränderliche Objekte sind frei von Seiteneffekten
+%% -> Code ist weniger anfällig für ungewolltes Verhalten
+
+%% Vorteile von Value Objects
+%% Verbessern die Deutlichkeit und Verständlichkeit durch Modellierung von fachlichen Domänenkonzepten
+%% Kapseln Verhalten und Regeln
+%% Unveränderlich (frei von Seiteneffekten , beispielsweise Aliasing)
+%% Selbst-Validierend
+%% Leicht testbar
+
+%% Implementierung von Value Objects in Java
+%% lasse ist „final“ deklariert (Vererbung unterdrücken)
+%% Alle Felder sind „blank final“ deklariert
+%% equals() und hashCode() sind passend überschrieben
+%% Ist nach Konstruktion in gültigem Zustand (andernfalls muss Konstruktion fehlschlagen)
+%% Keine Setter oder andere Methoden, durch die Felder geändert werden können
+%% Alle Methoden mit Rückgabewert liefern entweder:
+%% Unveränderliche Rückgabewerte (immutable) oder
+%% Defensive Kopien
+
+
+\subsection{Entities}
+
+%% Eine Entity unterscheidet sich in drei wesentlichen Punkten von einem VO:
+%% Sie hat eine eindeutige ID innerhalb der Domäne
+%% Zwei Entities sind verschieden, wenn sie verschiedene IDs haben; ihre Eigenschaften sind unerheblich
+%% Eine Entity hat einen Lebenszyklus und verändert sich während ihrer Lebenszeit
+%% Wie auch VO sollen Entities die Einhaltung der für sie geltenden Domänenregeln (Invarianten) forcieren:
+%% Es darf nicht möglich sein, eine Entity mit ungültigen Werten zu erzeugen
+%% Es darf nicht möglich sein, eine Entity nach Konstruktion in einen ungültigen Zustand zu versetzen
+%% Entities sollten so viel Verhalten wie möglich in VO auslagern
+%% (mindestens) die öffentlichen Methoden einer Entity sollten Verhalten beschreiben und nicht nur einfache getter/setter darstellen
+
+%% Strategien für einzigartige Identitäten
+%% Es gibt mehrere Strategien, um eine Entity eindeutig identifizierbar zu machen
+%% Jede Strategie hat mehr oder weniger ausgeprägte Vorteile und Nachteile
+%% Die jeweils passende Strategie hängt (wie immer) von den Anforderungen ab
+%% Es spricht nichts dagegen, mehrere Strategien in einer Anwendung zu verwenden
+%% Grundsätzliche Unterscheidung: 
+%% natürliche Schlüssel und Surrogatschlüssel
+
+
+%% Value Objects vs Entities
+%% http://prntscr.com/w4mgu2
+
+
+
+\subsection{Aggregates}
+
+%% Wenn die Domäne maßstabsgetreu modelliert wird, findet man viele Entities und VO, die große Objektgraphen mit oft bidirektionalen Abhängig-keiten bilden
+%% Das wird schnell ungemütlich:
+%% Wahrscheinlichkeit nicht eingehaltener Regeln steigt
+%% Verstärkt Kollisionen beim gleichzeitigen Bearbeiten
+%% Performance-Einbußen durch Warten auf Sperrenfreigabe
+%% Lange Wartezeiten beim Laden und Speichern
+%% Aggregate gruppieren die Entities und VO zu gemeinsam verwalteten Einheiten
+%% Jede Entity gehört zu einem Aggregat – selbst wenn das Aggregat nur aus dieser Entity besteht
+%% Aggregate reduzieren die Komplexität der Beziehungen zwischen den Objekten
+%% Das Aggregat wird immer als Einheit betrachtet und verwaltet (geladen und gespeichert)
+%% Es gibt klare Regeln, wie außenstehende Objekte mit dem Aggregat interagieren dürfen
+%% In jedem Aggregat übernimmt eine Entity die Rolle der Aggregate Root Entity bzw. des Aggregat Root (AR)
+%% Alle Zugriffe auf das Aggregat müssen über das AR erfolgen
+%% Auch Zugriffe auf die inneren Elemente des Aggregat
+%% Langfristige direkte Referenzen auf innere Elemente sind nicht erlaubt
+%% Nur temporäre Referenzen während einer Berechnung
+%% Eines pro Aggregat
+%% Das AR kann als eine Art 
+%% „Türsteher“ alle Zugriffe auf 
+%% das Aggregat kontrollieren
+%% Zentrale Stelle zur Über-
+%% wachung der Domänenregeln
+%% Beispiel: Der Gesamtpreis einer Erstbestellung darf nicht mehr als 100 € betragen
+%% aggregatsinterne Angelegenheiten bleiben „in der Familie“
+%% Zugriff auf Aggregat nur über Aggregate Root
+%% Wenn das AR Referenzen auf innere Objekte herausgeben muss, sollten das immer defensive Kopien oder Immutable-Dekorierer sein
+%% Aussenwelt muss eine Methode auf dem AR aufrufen, wenn der innere Zustand des AR verändert werden soll
+%% Das Aggregat sorgt dafür, dass sein Zustand immer den Domänenregeln entspricht
+%% Alle Änderungen gehen über den AR und sind daher bekannt
+%% Wenn die Außenwelt den AR „vergisst“, ist das gesamte Aggregat nicht mehr erreichbar
+
+%% Zusammenfassung Aggregate
+%% Aggregate sind Zusammenfassungen von Entities und Value Objects
+%% Jedes Aggregat bildet eine eigene Einheit (auch für Create, Read, Update, Delete – CRUD)
+%% Wird immer vollständig geladen und gespeichert
+%% Aggregate
+%% entkoppeln die Objektbeziehungen
+%% bilden natürliche Transaktionsgrenzen
+%% sichern Entity-/VO-übergreifende Domänenregeln zu
+%% Aggregate sind mächtig, aber auch schwierig
+
+
+\subsection{Repositories}
+
+%% Kapseln die Logik für das Persistieren und Erzeugen von Entities, Value Objects und Aggregates
+%% Halten das Modell frei von „accidental complexity“
+%% Repositories vermitteln zwischen der Domäne und dem Datenmodell
+%% Sie stellen der Domäne Methoden bereit, um Aggregates aus dem Persistenzspeicher zu lesen, zu speichern und zu löschen
+%% Der konkrete technische Zugriff (accidental complecity) auf den Speicher (relationale DB, NoSQL, XML-Dateien usw.) wird vom Repository verborgen
+%% Dadurch bleibt die Domäne von technischen Details unbeeinflusst
+%% Repositories arbeiten direkt mit Aggregates zusammen
+%% je Aggregate existiert also typischerweise ein Repository
+%% Repositories liefern immer die Aggregate Roots (und damit den Zugriff auf den Rest) zurück
+%% Die Definition der Repositories ist Teil des Domain Code
+%% Die Implementierung findet „außerhalb“ statt
+%% Die Methoden des Repository-Interface werden in der Sprache der Domäne benannt
+%% Der Klassenname kann „Pure Fabrication“ sein
+%% Der Rest der Anwendung muss eine bestimmte Aggregate Root anhand ihrer Eigenschaften finden können
+%% Diese Abfragen sind die wichtigste Aufgabe des Repositories
+%% Die Abfragen sollten genau zu den Aufgaben der Domäne passen
+%% Selbst wenn es eine allgemeine Abfrage (über Kriterien) gibt, lohnen sich die speziellen Methoden
+%% Das Repository kann für die Erstellung von Identifikationen (IDs) für neue Root Entities zuständig sein
+%% Kann zusätzliche speicherseitige Prüffelder bei Veränderungen setzen („zuletztGeändertAm“)
+%% Kann für Unit Tests leicht gemockt werden
+%% Kann für Integrationstests ohne Datenbank durch eine In-Memory-Implementierung ersetzt werden
+%% Die Implementierung erfolgt normalerweise in einer technischen Schicht der Anwendung (DB, Infrastruktur, …) und nicht innerhalb des Domänenmodells
+%% Keine Vermischung von essential und accidental complexity
+
+%% Zusammenfassung Repositories
+%% Repositories bieten dem Domain Code Zugriff auf persistenten Speicher
+%% In der Granularität von Aggregates
+%% Direkter Zugriff immer nur auf die Aggregate Roots
+%% Repositories verbergen die konkrete Speicher- technologie vollständig vor dem Domain Code
+%% Anti-Corruption-Layer zur Persistenzschicht
+%% Repositories bieten passend für die Domäne Abfragemöglichkeiten auf den Datenbestand
+%% Adapter zwischen Anwendung und Datenbank
+
+
+%% Factories 
+Factories haben nur einen einzigen Zweck:
+das Erzeugen von Objekten
+Factories sind ein allgemein nützliches Konzept, unabhängig von DDD
+Wenn die Logik für das Erzeugen einer Entity, eines Aggregates oder eines VO komplex wird, kann dies den eigentlichen Zweck des Objekts verschleiern (Verletzung des Single-Responsibility-Prinzips)
+Factories helfen, indem sie dem Objekt die Verantwortung für seine Konstruktion abnehmen; dadurch kann sich das Objekt auf sein Verhalten konzentrieren
+Der Begriff „Factory“ wird in OOP mehrdeutig verwendet. Es bezeichnet sowohl:
+Das allgemeine Konzept einer Factory:
+irgendein Objekt oder irgendeine Methode zur Erzeugung andere Objekte als Konstruktor-Ersatz
+spezielle Erzeugungs-Muster
+Factory Method
+Abstract Factory
+Im DDD meint man mit Factory normalerweise das „allgemeine Konzept“
+Allgemein ist eine Factory irgendein Objekt/ irgendeine Methode als Konstruktor-Ersatz (siehe unten)
+
+
+
+
+\subsection{Domain Services}
+
+%% Ein Domain Service hat zwei Haupt-Einsatzzwecke:
+%% Abbildung von komplexem Verhalten, Prozessen oder Regeln der Problemdomäne, die nicht in eindeutig einer bestimmten Entity oder einem bestimmten VO zugeordnet werden können
+%% Definition eines „Erfüllungs-Vertrages“ für externe Dienste, damit das Domänenmodell nicht mit unnötiger „accidental complexity“ belastet wird
+%% Manchmal kann ein bestimmtes Verhalten oder eine bestimmte Regel nicht eindeutig einer Entity oder einem VO zugeordnet werden
+%% Beispiel:
+%% Berechnung der Zahlungsmoral eines Kunden
+%% Benötigt Kunde
+%% Benötigt Rechnungen
+%% Benötigt Kontenbewegungen
+%% Die Domäne kann zur Erfüllung der Anforderungen auf externe Unterstützung angewiesen sein, beispielsweise durch einen Webservice, der von einer Fremdanwendung bereitgestellt wird
+%% Innerhalb des Domänenmodells kann dazu ein Domain Service als Vertrag (Interface) definiert werden
+%% Außerhalb des Domänemodells kann  dann ein „Dienstleister“ (beispielsweise in der Infrastruktur-Schicht – siehe Onion Architecture) diesen Vertrag implementieren und die benötigten Funktionen bereitstellen 
+%% urch die Definition eines Vertrages kann das Domänenmodell vorgeben, was für ein Ergebnis erwartet wird („CreditWorthiness „) und welche Daten es zur Erfüllung des Vertrages bereitstellt („Customer“)
+%% „fachlich“ ist dann alles relevante im Domänenmodell abgebildet – lediglich die technischen Details werden an eine Schicht außerhalb des Domänenmodells delegiert
+%% Der Domain Service bezieht sich auf ein Domänenkonzept, das nicht natürlicherweise Teil einer Entity oder eines Value Object ist
+%% Die Schnittstelle (die Methodensignaturen) verwendet die Begriffe des Domänenmodells
+%% Ein- und Ausgabeparameter sind Entities und VO
+%% Der Domain Service selbst ist zustandlos
+%% Jede konkrete Instanz des Domain Service kann verwendet werden (alt oder neu)
+%% Er darf aber (global sichtbare) Seiteneffekte haben
+
+
+
+
+
+
+
+
+
+%% Zusammenfassung
+
+%% Um die Entities und Value Objects technisch sauber implementieren zu können, benötigen wir unterstützende Strukturen
+%% Domain Services enthalten Use Cases oder entkoppeln von Drittsystemen
+%% Aggregates gruppieren Entities und vereinfachen die Beziehungen zwischen den Gruppen
+%% Aggregate Roots stellen die primären Objekte dar
+%% Repositories entkoppeln die Persistenz und machen die Aggregate Roots einfach auffindbar
+%% Factories erzeugen Objektgraphen mit komplexen Konstruktionsregeln und entlasten den Konstruktor (Einhaltung Single Responsibility Principle)
+
