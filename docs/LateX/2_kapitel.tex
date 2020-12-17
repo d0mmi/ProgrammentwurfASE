@@ -1,2 +1,50 @@
 \chapter{Clean Architecture}
+
+%% Plugins (DB / GUI) -> Adapters (Presenters, Controllers, Gateways) -> Application Code (Use Cases) -> Domain Code (Entities) -> Abstraction Code (Generic Entities (mathematische Konzepte))
+%% Abstraction Code: 
+%%  Mathematische Konzepte (z.B. Matrizen)
+%%  Algorithmen und Datenstrukturen (z.B. Zelluläre Automaten)
+%%  Abstrahierte Muster (z.B. Quantitäten)
+%%  !!!!!Häufig nicht notwendig!!!!
+%% 
+%% Domain Code:
+%%  Entities 
+%%  Implementiert organisationsweit gültige Geschäftslogik
+%%  Sollte sich am seltensten ändern
+%% 
+%% Application Code:
+%%  Use Cases
+%%  Implementiert die anwendungsspezifische Geschäftslogik
+%%  Steuert den Fluss der Daten und Aktionen von und zu den Entities
+%% 
+%% Adapters:
+%%  Diese Schicht vermittelt Aufrufe und Daten an die inneren Schichten
+%%  Formatkonvertierungen
+%%  Oftmals nur einfache Datenstrukturen, die hin- und hergereicht werden
+%%  Anti-Corruption Layer
+%% 
+%% Plugins:
+%%  Diese Schicht greift grundsätzlich nur auf die Adapter zu
+%%  Enthält Frameworks, Datentransportmittel und andere Werkzeuge (Datenbank, API)
+%%  Wir versuchen, hier möglichst wenig Code zu schreiben
+%%  Hauptsächlich Delegationscode, der an die Adapter weiterleitet
+%% 
+%% Grundregeln der Clean Architecture
+%%  ●Der Anwendungs- und Domaincode ist frei von Abhängigkeiten●Sämtlicher Code kann eigenständig verändert werden
+%%  ●Sämtlicher Code kann unabhängig von Infrastruktur kompiliert und ausgeführt werden
+%%  ●Innere Schichten definieren Interfaces, äußere Schichten implementieren diese
+%%  ●Die äußeren Schichten koppeln sich an die inneren Schichten (Richtung Zentrum)
+
+%% Konkrete Umsetzung
+%% ●Nicht alle Klassenin einem Projekt
+%% ●Schichtenbildung überPackages ist in Ordnung
+%% ●Aber: keine Überprüfungdurch den Compiler
+%% ●Lieber mehrere Projekte(„Multi-Projekt“)
+%% ●Compiler findet nur Klassen–im eigenen Projekt–in referenzierten Projekten
+%% Maven parent Pom
+
+%% Ziel der Clean Architecture
+%% Das Ziel der Clean Architecture ist, Code nur von langlebigerem Code abhängig zu machen
+%% Wenn sich Technologien ändern müssen, kann die Anwendung unverändert bleiben
+
 \section{Schichtarchitektur planen und begründen}
