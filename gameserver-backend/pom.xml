@@ -8,11 +8,18 @@
     <artifactId>root</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>3-gameserver-backend-domain</module>
         <module>2-gameserver-backend-application</module>
         <module>1-gameserver-backend-adapters</module>
         <module>0-gameserver-backend-plugin-database</module>
+        <module>0-gameserver-backend-plugin-api</module>
     </modules>
+
+    <properties>
+        <grpc.version>1.34.1</grpc.version>
+    </properties>
+
 
 </project>

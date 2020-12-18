@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "dev.dommi.example";
+option java_outer_classname = "ExampleProto";
+option objc_class_prefix = "EX";
+
+package example;
+
+service Example{
+
+
+  rpc getValue(ExampleRequest) returns (ExampleResponse);
+
+}
+
+message ExampleRequest{
+    
+}
+
+message ExampleResponse{
+    string value = 1;
+}
