@@ -42,7 +42,7 @@ public class ExampleServer {
 
     public static void main(String[] args) throws Exception {
 
-        final ExampleServer server = new ExampleServer(8080);
+        final ExampleServer server = new ExampleServer(50051);
         server.start();
         server.blockUntilShutdown();
     }

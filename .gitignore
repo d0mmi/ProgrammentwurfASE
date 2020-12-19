@@ -1,6 +1,7 @@
 .vscode/
 .idea/
 target/
+node_modules/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -275,3 +276,4 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+gameserver-frontend/.eslintcache
