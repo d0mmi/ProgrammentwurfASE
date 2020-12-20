@@ -1,6 +1,7 @@
-package example;
+package dev.dommi.gameserver.backend.plugin.api.server;
 
 
+import dev.dommi.gameserver.backend.plugin.api.services.ExampleService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -25,26 +26,18 @@ public class ExampleServer {
 
     }
 
-    private void stop() throws InterruptedException {
+    public void stop() throws InterruptedException {
         if (server != null) {
             server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }
     }
 
     /**
-     * Await termination on the main thread since the grpc library uses daemon threads.
+     * Await termination on the dev.dommi.gameserver.backend.plugin.main thread since the grpc library uses daemon threads.
      */
-    private void blockUntilShutdown() throws InterruptedException {
+    public void blockUntilShutdown() throws InterruptedException {
         if (server != null) {
             server.awaitTermination();
         }
     }
-
-    public static void main(String[] args) throws Exception {
-
-        final ExampleServer server = new ExampleServer(50051);
-        server.start();
-        server.blockUntilShutdown();
-    }
-
 }

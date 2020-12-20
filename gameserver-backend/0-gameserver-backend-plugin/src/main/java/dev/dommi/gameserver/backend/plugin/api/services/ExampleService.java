@@ -1,9 +1,9 @@
-package example;
+package dev.dommi.gameserver.backend.plugin.api.services;
 
 
-import dev.dommi.example.ExampleGrpc;
-import dev.dommi.example.ExampleRequest;
-import dev.dommi.example.ExampleResponse;
+import dev.dommi.gameserver.backend.plugin.api.ExampleGrpc;
+import dev.dommi.gameserver.backend.plugin.api.ExampleRequest;
+import dev.dommi.gameserver.backend.plugin.api.ExampleResponse;
 import io.grpc.stub.StreamObserver;
 
 public class ExampleService extends ExampleGrpc.ExampleImplBase {

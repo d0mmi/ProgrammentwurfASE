@@ -4,30 +4,33 @@ services:
   database:
     container_name: database
     image: mariadb/server:10.4
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - /mariadb
+      - dbdata:/var/lib/mariadb
     ports: 
       - "3307:3306"
   backend:
     container_name: backend
+    restart: always
     depends_on:
      - database
     build: ./gameserver-backend
     volumes:
-      - /var/lib/backend
+      - backenddata:/var/lib/backend
     ports:
       - "50052:50051"
   frontend:
-    container_name: frontend-dev
+    container_name: frontend-prod
     depends_on:
      - backend
     build:
-      context: ./gameserver-frontend
-      dockerfile: Dockerfile
+      context: /gameserver-frontend
+      dockerfile: Dockerfile.prod
     volumes:
-      - /var/lib/frontend
+      - '.:/app'
+      - '/app/node_modules'
     ports:
       - "3001:3000"
     environment:
