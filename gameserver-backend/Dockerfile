@@ -7,8 +7,11 @@ COPY pom.xml /usr/src/app
 
 #Copy Modules
 
-COPY 0-gameserver-backend-plugin/src /usr/src/app/0-gameserver-backend-plugin/src
-COPY 0-gameserver-backend-plugin/pom.xml /usr/src/app/0-gameserver-backend-plugin
+COPY 0-gameserver-backend-plugin-api/src /usr/src/app/0-gameserver-backend-plugin-api/src
+COPY 0-gameserver-backend-plugin-api/pom.xml /usr/src/app/0-gameserver-backend-plugin-api
+
+COPY 0-gameserver-backend-plugin-database/src /usr/src/app/0-gameserver-backend-plugin-database/src
+COPY 0-gameserver-backend-plugin-database/pom.xml /usr/src/app/0-gameserver-backend-plugin-database
 
 COPY 1-gameserver-backend-adapters/src /usr/src/app/1-gameserver-backend-adapters/src    
 COPY 1-gameserver-backend-adapters/pom.xml /usr/src/app/1-gameserver-backend-adapters 
@@ -24,6 +27,6 @@ COPY 3-gameserver-backend-domain/pom.xml /usr/src/app/3-gameserver-backend-domai
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM gcr.io/distroless/java
-COPY --from=build /usr/src/app/0-gameserver-backend-plugin/target/0-gameserver-backend-plugin-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/app/gameserver-backend-1.0-SNAPSHOT.jar
+COPY --from=build /usr/src/app/0-gameserver-backend-plugin-api/target/0-gameserver-backend-plugin-api-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/app/gameserver-backend-1.0-SNAPSHOT.jar
 EXPOSE 7001
 ENTRYPOINT ["java","-jar","/usr/app/gameserver-backend-1.0-SNAPSHOT.jar"]

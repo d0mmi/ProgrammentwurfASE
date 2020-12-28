@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.adapters.user;
+package dev.dommi.gameserver.backend.adapters.api.user;
 
 public class User {
     public int id;

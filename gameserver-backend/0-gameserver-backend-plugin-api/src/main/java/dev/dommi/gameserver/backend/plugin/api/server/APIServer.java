@@ -26,7 +26,7 @@ public class APIServer {
     private static final String USERS_PATH = "users";
     private static final String USER_PATH = ":userId";
     private static final String API_VERSION = "1.0";
-    private static final String API_DESCRIPTION = "User API";
+    private static final String API_DESCRIPTION = "UserEntity API";
     private static final String API_ANNOTATIONS_PACKAGE = "dev.dommi.gameserver.backend.plugin.api.services";
     private static final String SWAGER_DOCS_PATH = "/swagger-docs";
     private static final String SWAGER_UI_PATH = "/swagger-ui";

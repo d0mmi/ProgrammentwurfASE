@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>0-gameserver-backend-plugin</artifactId>
+    <artifactId>0-gameserver-backend-plugin-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>

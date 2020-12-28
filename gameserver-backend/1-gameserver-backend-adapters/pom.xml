@@ -12,6 +12,16 @@
     <artifactId>1-gameserver-backend-adapters</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
+        <dependency>
+            <groupId>dev.dommi.gameserver-backend</groupId>
+            <artifactId>2-gameserver-backend-application</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.dommi.gameserver-backend</groupId>
+            <artifactId>3-gameserver-backend-domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 
