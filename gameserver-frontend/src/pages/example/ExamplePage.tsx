@@ -35,7 +35,8 @@ class ExamplePage extends React.Component<RouteComponentProps<any>, IState>
 
     async getExample() {
 
-        var client = new ExampleClient('http://localhost:50051', null, null);
+        var client = new ExampleClient('/api', null, null);
+        console.log(globalThis.window.location.host);
         const request = new ExampleRequest();
         var response = await client.getValue(request, {});
 

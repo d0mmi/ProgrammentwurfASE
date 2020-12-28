@@ -25,5 +25,5 @@ RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM gcr.io/distroless/java
 COPY --from=build /usr/src/app/0-gameserver-backend-plugin/target/0-gameserver-backend-plugin-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/app/gameserver-backend-1.0-SNAPSHOT.jar
-EXPOSE 50051  
+EXPOSE 7001
 ENTRYPOINT ["java","-jar","/usr/app/gameserver-backend-1.0-SNAPSHOT.jar"]

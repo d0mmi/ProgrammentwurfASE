@@ -1,24 +1,35 @@
 version: "3.9"
 
 services:
+
   database:
     container_name: database
     image: mariadb/server:10.4
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - /mariadb
+      - data-mariadb:/mariadb
     ports: 
-      - "3307:3306"
+      - "3306:3306"
+    networks:
+      - backend
+
   backend:
     container_name: backend
+    environment:
+      MYSQL_ADRESS: "database:3306"
+      API_PORT: "7001"
     depends_on:
      - database
     build: ./gameserver-backend
     volumes:
       - /var/lib/backend
     ports:
-      - "50052:50051"
+      - "7001:7001"
+    networks:
+      - backend
+      - frontend
+
   frontend:
     container_name: frontend-dev
     depends_on:
@@ -29,6 +40,18 @@ services:
     volumes:
       - /var/lib/frontend
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       - CHOKIDAR_USEPOLLING=true
+    networks:
+      - frontend
+
+volumes:
+  data-mariadb:
+    driver: local
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

@@ -1,11 +1,10 @@
 package dev.dommi.gameserver.backend.plugin.main;
 
-import dev.dommi.gameserver.backend.plugin.api.server.ExampleServer;
+import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        final ExampleServer server = new ExampleServer(50051);
+        final APIServer server = new APIServer();
         server.start();
-        server.blockUntilShutdown();
     }
 }

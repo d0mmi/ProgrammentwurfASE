@@ -12,12 +12,6 @@
     <artifactId>1-gameserver-backend-adapters</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
-        <dependency>
-            <artifactId>0-gameserver-backend-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <groupId>dev.dommi.gameserver-backend</groupId>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 
