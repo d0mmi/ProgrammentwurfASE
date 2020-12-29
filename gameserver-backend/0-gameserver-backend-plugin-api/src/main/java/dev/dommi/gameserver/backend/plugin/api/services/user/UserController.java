@@ -11,25 +11,7 @@ import io.javalin.plugin.openapi.annotations.*;
 public class UserController {
 
     private static final String NOT_FOUND_RESPONSE = "UserEntity not found";
-    private static  final UserService service = UserService.getInstance();
-
-    @OpenApi(
-            summary = "Create user",
-            operationId = "createUser",
-            path = "/users",
-            method = HttpMethod.POST,
-            tags = {"UserEntity"},
-            requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = NewUserRequest.class)}),
-            responses = {
-                    @OpenApiResponse(status = "201"),
-                    @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
-            }
-    )
-    public static void create(Context ctx) {
-        NewUserRequest user = ctx.bodyAsClass(NewUserRequest.class);
-        service.save(user.name, user.email);
-        ctx.status(201);
-    }
+    private static final String USER_ID = "userId";
 
     @OpenApi(
             summary = "Get all users",
@@ -42,15 +24,15 @@ public class UserController {
             }
     )
     public static void getAll(Context ctx) {
-        ctx.json(service.getAll());
+        ctx.json(UserService.getAll());
     }
 
     @OpenApi(
             summary = "Get user by ID",
             operationId = "getUserById",
-            path = "/users/:userId",
+            path = "/users/:" + USER_ID,
             method = HttpMethod.GET,
-            pathParams = {@OpenApiParam(name = "userId", type = Integer.class, description = "The user ID")},
+            pathParams = {@OpenApiParam(name = USER_ID, type = Integer.class, description = "The user ID")},
             tags = {"UserEntity"},
             responses = {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = User.class)}),
@@ -59,7 +41,7 @@ public class UserController {
             }
     )
     public static void getOne(Context ctx) {
-        User user = service.findById(validPathParamUserId(ctx));
+        User user = UserService.findById(validPathParamUserId(ctx));
         if (user == null) {
             throw new NotFoundResponse(NOT_FOUND_RESPONSE);
         } else {
@@ -70,11 +52,12 @@ public class UserController {
     @OpenApi(
             summary = "Update user by ID",
             operationId = "updateUserById",
-            path = "/users/:userId",
+            path = "/users/:" + USER_ID,
             method = HttpMethod.PATCH,
-            pathParams = {@OpenApiParam(name = "userId", type = Integer.class, description = "The user ID")},
+            pathParams = {@OpenApiParam(name = USER_ID, type = Integer.class, description = "The user ID")},
             tags = {"UserEntity"},
-            requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = NewUserRequest.class)}),
+            headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
+            requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = UserRequest.class)}),
             responses = {
                     @OpenApiResponse(status = "204"),
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)}),
@@ -82,12 +65,12 @@ public class UserController {
             }
     )
     public static void update(Context ctx) {
-        User user = service.findById(validPathParamUserId(ctx));
+        User user = UserService.findById(validPathParamUserId(ctx));
         if (user == null) {
             throw new NotFoundResponse(NOT_FOUND_RESPONSE);
         } else {
-            NewUserRequest newUser = ctx.bodyAsClass(NewUserRequest.class);
-            service.update(user.id, newUser.name, newUser.email);
+            UserRequest newUser = ctx.bodyAsClass(UserRequest.class);
+            UserService.update(user.id, newUser.name, newUser.email);
             ctx.status(204);
         }
     }
@@ -95,10 +78,11 @@ public class UserController {
     @OpenApi(
             summary = "Delete user by ID",
             operationId = "deleteUserById",
-            path = "/users/:userId",
+            path = "/users/:" + USER_ID,
             method = HttpMethod.DELETE,
-            pathParams = {@OpenApiParam(name = "userId", type = Integer.class, description = "The user ID")},
+            pathParams = {@OpenApiParam(name = USER_ID, type = Integer.class, description = "The user ID")},
             tags = {"UserEntity"},
+            headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
             responses = {
                     @OpenApiResponse(status = "204"),
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)}),
@@ -106,18 +90,18 @@ public class UserController {
             }
     )
     public static void delete(Context ctx) {
-        User user = service.findById(validPathParamUserId(ctx));
+        User user = UserService.findById(validPathParamUserId(ctx));
         if (user == null) {
             throw new NotFoundResponse(NOT_FOUND_RESPONSE);
         } else {
-            service.delete(user.id);
+            UserService.delete(user.id);
             ctx.status(204);
         }
     }
 
     // Prevent duplicate validation of userId
     private static int validPathParamUserId(Context ctx) {
-        return ctx.pathParam("userId", Integer.class).check(id -> id > 0).get();
+        return ctx.pathParam(USER_ID, Integer.class).check(id -> id > 0).get();
     }
 
 }

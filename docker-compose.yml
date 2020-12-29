@@ -19,6 +19,7 @@ services:
     environment:
       MYSQL_ADRESS: "database:3306"
       API_PORT: "7001"
+      JWT_SECRET: "secret"
     depends_on:
      - database
     build: ./gameserver-backend

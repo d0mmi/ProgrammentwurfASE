@@ -12,7 +12,8 @@
     <modules>
         <module>3-gameserver-backend-domain</module>
         <module>2-gameserver-backend-application</module>
-        <module>1-gameserver-backend-adapters</module>
+        <module>1-gameserver-backend-adapter-api</module>
+        <module>1-gameserver-backend-adapter-database</module>
         <module>0-gameserver-backend-plugin-api</module>
         <module>0-gameserver-backend-plugin-database</module>
     </modules>

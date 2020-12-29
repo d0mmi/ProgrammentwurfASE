@@ -1,19 +1,29 @@
 package dev.dommi.gameserver.backend.plugin.api.server;
 
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.services.login.LoginController;
 import dev.dommi.gameserver.backend.plugin.api.services.user.UserController;
 import io.javalin.Javalin;
+import io.javalin.core.security.Role;
+import io.javalin.core.util.Header;
+import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.ServiceUnavailableResponse;
+import io.javalin.http.UnauthorizedResponse;
 import io.javalin.plugin.openapi.OpenApiOptions;
 import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.ui.ReDocOptions;
 import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.info.Info;
+import javalinjwt.JavalinJWT;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 import java.io.IOException;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class APIServer {
@@ -23,8 +33,11 @@ public class APIServer {
 
     private static final String API_PORT = "API_PORT";
     private static final String DEFAULT_CONTENT_TYPE = "application/json";
+    private static final String INVALID_AUTH_ERROR = "Missing, invalid token or not enough permissions";
     private static final String USERS_PATH = "users";
     private static final String USER_PATH = ":userId";
+    private static final String LOGIN_PATH = "login";
+    private static final String REGISTER_PATH = "register";
     private static final String API_VERSION = "1.0";
     private static final String API_DESCRIPTION = "UserEntity API";
     private static final String API_ANNOTATIONS_PACKAGE = "dev.dommi.gameserver.backend.plugin.api.services";
@@ -37,17 +50,44 @@ public class APIServer {
         server = Javalin.create(config -> {
             config.registerPlugin(getConfiguredOpenApiPlugin());
             config.defaultContentType = DEFAULT_CONTENT_TYPE;
+            config.accessManager((handler, ctx, permittedRoles) -> {
+                if (permittedRoles.contains(AppRole.ANYONE)) handler.handle(ctx);
+                else if (permittedRoles.contains(AppRole.USER) && tokenValid(ctx, AppRole.USER.level))
+                    handler.handle(ctx);
+                else if (permittedRoles.contains(AppRole.MODERATOR) && tokenValid(ctx, AppRole.MODERATOR.level))
+                    handler.handle(ctx);
+                else if (permittedRoles.contains(AppRole.ADMINISTRATOR) && tokenValid(ctx, AppRole.ADMINISTRATOR.level))
+                    handler.handle(ctx);
+                else if (permittedRoles.isEmpty()) handler.handle(ctx);
+                else ctx.status(401).json(new UnauthorizedResponse(INVALID_AUTH_ERROR));
+            });
         }).routes(() -> {
+            path(REGISTER_PATH, () -> {
+                post(LoginController::register, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+            });
+            path(LOGIN_PATH, () -> {
+                post(LoginController::login, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+            });
             path(USERS_PATH, () -> {
-                get(UserController::getAll);
-                post(UserController::create);
+                get(UserController::getAll, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
                 path(USER_PATH, () -> {
-                    get(UserController::getOne);
-                    patch(UserController::update);
-                    delete(UserController::delete);
+                    get(UserController::getOne, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+                    patch(UserController::update, new HashSet<>(Arrays.asList(AppRole.USER)));
+                    delete(UserController::delete, new HashSet<>(Arrays.asList(AppRole.USER)));
                 });
             });
         });
+    }
+
+    private boolean tokenValid(Context ctx, int minLevel) {
+        Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
+        if (token.isPresent()) {
+            DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
+            if (decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class) >= minLevel) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void start() throws IOException {
