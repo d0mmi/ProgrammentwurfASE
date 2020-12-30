@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.plugin.api.services.user;
 
-import dev.dommi.gameserver.backend.adapters.api.user.User;
-import dev.dommi.gameserver.backend.adapters.api.user.UserService;
+import dev.dommi.gameserver.backend.adapter.api.user.User;
+import dev.dommi.gameserver.backend.adapter.api.user.UserService;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
@@ -70,8 +70,11 @@ public class UserController {
             throw new NotFoundResponse(NOT_FOUND_RESPONSE);
         } else {
             UserRequest newUser = ctx.bodyAsClass(UserRequest.class);
-            UserService.update(user.id, newUser.name, newUser.email);
-            ctx.status(204);
+            if (UserService.update(user.id, newUser.name, newUser.email)) {
+                ctx.status(204);
+            } else {
+                throw new BadRequestResponse();
+            }
         }
     }
 

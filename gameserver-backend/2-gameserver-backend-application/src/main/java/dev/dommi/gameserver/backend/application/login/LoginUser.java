@@ -9,8 +9,7 @@ public class LoginUser {
 
     public UserEntity loginUser(String email, String pw) throws InvalidArgumentException {
         try {
-            String password = new UserRepositoryImpl().getPasswordByEmail(email);
-            if (password.equals(pw)) {
+            if (new UserRepositoryImpl().verifyPasswordByEmail(email, pw)) {
                 return new UserRepositoryImpl().findByEmail(email);
             }
         } catch (Exception e) {

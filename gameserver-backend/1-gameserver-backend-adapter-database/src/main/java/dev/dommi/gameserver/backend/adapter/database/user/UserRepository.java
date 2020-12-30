@@ -2,21 +2,22 @@ package dev.dommi.gameserver.backend.adapter.database.user;
 
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 public interface UserRepository {
 
-    public boolean create(String name, String email, String pw);
+    public void create(String name, String email, String pw) throws SQLException;
 
-    public String getPasswordByEmail(String email);
+    public boolean verifyPasswordByEmail(String email, String pw);
 
-    public Collection<UserEntity> getAll();
+    public Collection<UserEntity> getAll() throws SQLException;
 
-    public void update(int userId, String name, String email);
+    public void update(int userId, String name, String email, String pw) throws SQLException;
 
-    public UserEntity findByEmail(String email);
+    public UserEntity findByEmail(String email) throws SQLException;
 
-    public UserEntity findById(int userId);
+    public UserEntity findById(int userId) throws SQLException;
 
-    public void delete(int userId);
+    public void delete(int userId) throws SQLException;
 }

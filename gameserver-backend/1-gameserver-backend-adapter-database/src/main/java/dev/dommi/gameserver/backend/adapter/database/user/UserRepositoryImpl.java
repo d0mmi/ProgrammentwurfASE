@@ -1,42 +1,69 @@
 package dev.dommi.gameserver.backend.adapter.database.user;
 
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.plugin.database.user.User;
+import dev.dommi.gameserver.backend.plugin.database.user.UserController;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserRepositoryImpl implements UserRepository {
-    @Override
-    public boolean create(String name, String email, String pw) {
-        return false;
+
+    private UserController controller;
+
+    public UserRepositoryImpl() {
+        controller = new UserController();
     }
 
     @Override
-    public String getPasswordByEmail(String email) {
-        return null;
+    public void create(String name, String email, String pw) throws SQLException {
+        controller.createNewUser(new User(name, email, pw));
     }
 
     @Override
-    public Collection<UserEntity> getAll() {
-        return null;
+    public boolean verifyPasswordByEmail(String email, String pw) {
+        return controller.verifyPasswordByEmail(email, pw);
     }
 
     @Override
-    public void update(int userId, String name, String email) {
-
+    public Collection<UserEntity> getAll() throws SQLException {
+        Collection<User> users = controller.findAll();
+        return convertToUserEntityCollectionFrom(users);
     }
 
     @Override
-    public UserEntity findByEmail(String email) {
-        return null;
+    public void update(int userId, String name, String email, String pw) throws SQLException {
+        controller.modifyUser(new User(userId, name, email, pw));
     }
 
     @Override
-    public UserEntity findById(int userId) {
-        return null;
+    public UserEntity findByEmail(String email) throws SQLException {
+        User user = controller.findByEmail(email);
+        return convertToUserEntityFrom(user);
     }
 
     @Override
-    public void delete(int userId) {
-
+    public UserEntity findById(int userId) throws SQLException {
+        User user = controller.findById(userId);
+        return new UserEntity(user.id, user.name, user.email);
     }
+
+    @Override
+    public void delete(int userId) throws SQLException {
+        controller.deleteById(userId);
+    }
+
+    private UserEntity convertToUserEntityFrom(User user) {
+        return new UserEntity(user.id, user.name, user.email);
+    }
+
+    private Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) {
+        Collection<UserEntity> entities = new ArrayList<>();
+        for (User user : users) {
+            entities.add(convertToUserEntityFrom(user));
+        }
+        return entities;
+    }
+
 }

@@ -26,6 +26,7 @@ public class LoginController {
     )
     public static void register(Context ctx) {
         RegisterRequest request = ctx.bodyAsClass(RegisterRequest.class);
+
         if (LoginService.register(request.name, request.email, request.pw)) ctx.status(201);
         else ctx.status(400).json(new BadRequestResponse("Could not register User!"));
 

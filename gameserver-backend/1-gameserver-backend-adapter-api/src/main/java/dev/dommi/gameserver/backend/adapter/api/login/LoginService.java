@@ -19,7 +19,7 @@ public class LoginService {
     public static User login(String email, String pw) throws InvalidLoginException {
         try {
             UserEntity userEntity = new LoginUser().loginUser(email, pw);
-            return new User(userEntity.id, userEntity.name, userEntity.email, userEntity.pw, 1); //TODO get level from Rank
+            return new User(userEntity.id, userEntity.name, userEntity.email, 1); //TODO get level from Rank
         } catch (InvalidArgumentException e) {
             throw new InvalidLoginException(WRONG_CREDENTIALS_ERROR);
         }
