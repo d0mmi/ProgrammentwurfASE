@@ -4,8 +4,6 @@ import {
 } from "react-bootstrap";
 import '../../App.css';
 import { RouteComponentProps } from 'react-router-dom';
-import { ExampleClient } from '../../proto/ExampleServiceClientPb';
-import { ExampleRequest, ExampleResponse } from '../../proto/example_pb';
 
 interface IState {
     loaded: boolean;
@@ -35,12 +33,6 @@ class ExamplePage extends React.Component<RouteComponentProps<any>, IState>
 
     async getExample() {
 
-        var client = new ExampleClient('/api', null, null);
-        console.log(globalThis.window.location.host);
-        const request = new ExampleRequest();
-        var response = await client.getValue(request, {});
-
-        this.setState({ data: response.getValue(), loaded: true });
     }
 
 }

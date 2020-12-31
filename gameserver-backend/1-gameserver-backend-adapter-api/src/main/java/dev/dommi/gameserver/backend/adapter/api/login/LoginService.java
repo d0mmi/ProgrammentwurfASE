@@ -1,10 +1,11 @@
 package dev.dommi.gameserver.backend.adapter.api.login;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
 import dev.dommi.gameserver.backend.application.login.LoginUser;
 import dev.dommi.gameserver.backend.application.login.RegisterUser;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+
+import java.security.InvalidParameterException;
 
 public class LoginService {
 
@@ -20,7 +21,7 @@ public class LoginService {
         try {
             UserEntity userEntity = new LoginUser().loginUser(email, pw);
             return new User(userEntity.id, userEntity.name, userEntity.email, 1); //TODO get level from Rank
-        } catch (InvalidArgumentException e) {
+        } catch (InvalidParameterException e) {
             throw new InvalidLoginException(WRONG_CREDENTIALS_ERROR);
         }
     }

@@ -17,9 +17,12 @@ services:
   backend:
     container_name: backend
     environment:
-      MYSQL_ADRESS: "database:3306"
+      DB_ADRESS: "database:3306"
+      DB_USER: "root"
+      DB_PW: "example"
       API_PORT: "7001"
       JWT_SECRET: "secret"
+      BCRYPT_COST: "10"
     depends_on:
      - database
     build: ./gameserver-backend
