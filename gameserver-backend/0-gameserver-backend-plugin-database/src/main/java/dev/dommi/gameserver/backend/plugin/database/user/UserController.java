@@ -27,9 +27,7 @@ public class UserController {
             logger.severe(e.getMessage());
             return false;
         }
-
-        String bcryptHashString = BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(BCRYPT_COST)), pw.toCharArray());
-        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), bcryptHashString);
+        BCrypt.Result result = BCrypt.verifyer().verify(pw.toCharArray(), password);
 
         return result.verified;
     }

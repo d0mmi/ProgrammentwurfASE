@@ -13,13 +13,16 @@ COPY 0-gameserver-backend-plugin-api/pom.xml /usr/src/app/0-gameserver-backend-p
 COPY 0-gameserver-backend-plugin-database/src /usr/src/app/0-gameserver-backend-plugin-database/src
 COPY 0-gameserver-backend-plugin-database/pom.xml /usr/src/app/0-gameserver-backend-plugin-database
 
-COPY 1-gameserver-backend-adapters/src /usr/src/app/1-gameserver-backend-adapters/src    
-COPY 1-gameserver-backend-adapters/pom.xml /usr/src/app/1-gameserver-backend-adapters 
+COPY 1-gameserver-backend-adapter-api/src /usr/src/app/1-gameserver-backend-adapter-api/src
+COPY 1-gameserver-backend-adapter-api/pom.xml /usr/src/app/1-gameserver-backend-adapter-api 
 
-COPY 2-gameserver-backend-application/src /usr/src/app/2-gameserver-backend-application/src    
+COPY 1-gameserver-backend-adapter-database/src /usr/src/app/1-gameserver-backend-adapter-database/src
+COPY 1-gameserver-backend-adapter-database/pom.xml /usr/src/app/1-gameserver-backend-adapter-database 
+
+COPY 2-gameserver-backend-application/src /usr/src/app/2-gameserver-backend-application/src
 COPY 2-gameserver-backend-application/pom.xml /usr/src/app/2-gameserver-backend-application 
 
-COPY 3-gameserver-backend-domain/src /usr/src/app/3-gameserver-backend-domain/src    
+COPY 3-gameserver-backend-domain/src /usr/src/app/3-gameserver-backend-domain/src
 COPY 3-gameserver-backend-domain/pom.xml /usr/src/app/3-gameserver-backend-domain 
 
 # Build root

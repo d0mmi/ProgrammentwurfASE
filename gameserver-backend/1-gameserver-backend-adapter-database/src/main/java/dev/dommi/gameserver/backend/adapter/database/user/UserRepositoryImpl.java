@@ -55,13 +55,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private UserEntity convertToUserEntityFrom(User user) {
+        if (user == null) return null;
         return new UserEntity(user.id, user.name, user.email);
     }
 
     private Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) {
         Collection<UserEntity> entities = new ArrayList<>();
         for (User user : users) {
-            entities.add(convertToUserEntityFrom(user));
+            if (user != null) {
+                entities.add(convertToUserEntityFrom(user));
+            }
         }
         return entities;
     }

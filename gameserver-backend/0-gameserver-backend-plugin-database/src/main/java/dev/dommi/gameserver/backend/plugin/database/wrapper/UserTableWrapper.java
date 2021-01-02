@@ -8,8 +8,10 @@ import io.jenetics.facilejdbc.RowParser;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 public class UserTableWrapper extends TableWrapper<User> {
+    private static final Logger logger = Logger.getLogger(UserTableWrapper.class.getName());
 
     public UserTableWrapper(Connection conn) {
         super("users", conn);
@@ -71,7 +73,7 @@ public class UserTableWrapper extends TableWrapper<User> {
 
     public User findByEmail(String email) throws SQLException {
 
-        return Query.of("SELECT * FROM " + tableName + " WHERE id = :id")
+        return Query.of("SELECT * FROM " + tableName + " WHERE email = :email")
                 .on(Param.value("email", email)).as(parse().singleNull(), conn);
     }
 
