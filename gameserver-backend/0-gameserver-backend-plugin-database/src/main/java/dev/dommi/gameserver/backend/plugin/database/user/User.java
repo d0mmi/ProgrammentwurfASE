@@ -15,7 +15,7 @@ public final class User {
     }
 
     public User(String name, String email, String pw) {
-        this.id = 0;
+        this.id = -1;
         this.name = name;
         this.email = email;
         this.pw = pw;

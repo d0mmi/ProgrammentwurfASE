@@ -83,7 +83,8 @@ public class APIServer {
         Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
         if (token.isPresent()) {
             DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
-            if (decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class) >= minLevel) {
+            int tokenLevel = decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class);
+            if (tokenLevel >= minLevel) {
                 return true;
             }
         }

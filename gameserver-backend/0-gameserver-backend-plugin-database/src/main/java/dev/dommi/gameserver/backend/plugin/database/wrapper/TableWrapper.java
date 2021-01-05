@@ -1,5 +1,7 @@
 package dev.dommi.gameserver.backend.plugin.database.wrapper;
 
+import io.jenetics.facilejdbc.Param;
+import io.jenetics.facilejdbc.Query;
 import io.jenetics.facilejdbc.RowParser;
 
 import java.sql.Connection;
@@ -24,10 +26,16 @@ public abstract class TableWrapper<T> {
 
     public abstract void update(T value) throws SQLException;
 
-    public abstract T findById(int id) throws SQLException;
+    public T findById(int id) throws SQLException {
+        return Query.of("SELECT * FROM " + tableName + " WHERE id = :id").on(Param.value("id", id)).as(parse().singleNull(), conn);
+    }
 
-    public abstract void deleteById(int id) throws SQLException;
+    public void deleteById(int id) throws SQLException {
+        Query.of("DELETE FROM " + tableName + " WHERE id = :id").on(Param.value("id", id)).execute(conn);
+    }
 
-    public abstract Collection<T> findAll() throws SQLException;
+    public Collection<T> findAll() throws SQLException {
+        return Query.of("SELECT * FROM " + tableName).as(parse().list(), conn);
+    }
 
 }

@@ -2,7 +2,6 @@ package dev.dommi.gameserver.backend.plugin.database.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
-import dev.dommi.gameserver.backend.plugin.database.wrapper.UserTableWrapper;
 
 import java.sql.SQLException;
 import java.util.Collection;

@@ -1,11 +1,18 @@
 package dev.dommi.gameserver.backend.plugin.api.services.user;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
 import dev.dommi.gameserver.backend.adapter.api.user.UserService;
+import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
+import io.javalin.http.UnauthorizedResponse;
 import io.javalin.plugin.openapi.annotations.*;
+import javalinjwt.JavalinJWT;
+
+import java.util.Optional;
 
 
 public class UserController {
@@ -61,21 +68,29 @@ public class UserController {
             responses = {
                     @OpenApiResponse(status = "204"),
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)}),
+                    @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)}),
                     @OpenApiResponse(status = "404", content = {@OpenApiContent(from = NotFoundResponse.class)})
             }
     )
     public static void update(Context ctx) {
-        User user = UserService.findById(validPathParamUserId(ctx));
-        if (user == null) {
-            throw new NotFoundResponse(NOT_FOUND_RESPONSE);
-        } else {
-            UserRequest newUser = ctx.bodyAsClass(UserRequest.class);
-            if (UserService.update(user.id, newUser.name, newUser.email)) {
-                ctx.status(204);
+
+        if (validUserRequest(ctx)) {
+            User user = UserService.findById(validPathParamUserId(ctx));
+            if (user == null) {
+                throw new NotFoundResponse(NOT_FOUND_RESPONSE);
             } else {
-                throw new BadRequestResponse();
+                UserRequest newUser = ctx.bodyAsClass(UserRequest.class);
+                if (UserService.update(user.id, newUser.name, newUser.email)) {
+                    ctx.status(204);
+                } else {
+                    throw new BadRequestResponse();
+                }
             }
+        } else {
+            throw new UnauthorizedResponse();
         }
+
+
     }
 
     @OpenApi(
@@ -89,22 +104,44 @@ public class UserController {
             responses = {
                     @OpenApiResponse(status = "204"),
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)}),
+                    @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)}),
                     @OpenApiResponse(status = "404", content = {@OpenApiContent(from = NotFoundResponse.class)})
             }
     )
     public static void delete(Context ctx) {
-        User user = UserService.findById(validPathParamUserId(ctx));
-        if (user == null) {
-            throw new NotFoundResponse(NOT_FOUND_RESPONSE);
+
+        if (validUserRequest(ctx)) {
+            User user = UserService.findById(validPathParamUserId(ctx));
+            if (user == null) {
+                throw new NotFoundResponse(NOT_FOUND_RESPONSE);
+            } else {
+                UserService.delete(user.id);
+                ctx.status(204);
+            }
         } else {
-            UserService.delete(user.id);
-            ctx.status(204);
+            throw new UnauthorizedResponse();
         }
     }
 
     // Prevent duplicate validation of userId
     private static int validPathParamUserId(Context ctx) {
         return ctx.pathParam(USER_ID, Integer.class).check(id -> id > 0).get();
+    }
+
+    private static boolean validUserRequest(Context ctx) {
+        Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
+        if (token.isPresent()) {
+            DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
+            int tokenID = decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
+            int tokenLevel = decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class);
+            int requestID = validPathParamUserId(ctx);
+
+            if (requestID == tokenID || tokenLevel >= AppRole.MODERATOR.level) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
 }

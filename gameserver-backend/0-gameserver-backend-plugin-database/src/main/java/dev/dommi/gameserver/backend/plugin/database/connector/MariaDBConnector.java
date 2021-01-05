@@ -1,6 +1,8 @@
 package dev.dommi.gameserver.backend.plugin.database.connector;
 
-import dev.dommi.gameserver.backend.plugin.database.wrapper.UserTableWrapper;
+import dev.dommi.gameserver.backend.plugin.database.rank.RankTableWrapper;
+import dev.dommi.gameserver.backend.plugin.database.rank.UserRankTableWrapper;
+import dev.dommi.gameserver.backend.plugin.database.user.UserTableWrapper;
 import io.jenetics.facilejdbc.Query;
 
 import java.sql.Connection;
@@ -39,6 +41,8 @@ public class MariaDBConnector {
     private void initDatabase() {
         try {
             new UserTableWrapper(connection).initTable();
+            new RankTableWrapper(connection).initTable();
+            new UserRankTableWrapper(connection).initTable();
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
