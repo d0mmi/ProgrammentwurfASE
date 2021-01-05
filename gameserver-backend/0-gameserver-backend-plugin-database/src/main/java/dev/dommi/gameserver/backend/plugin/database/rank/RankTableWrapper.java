@@ -43,6 +43,10 @@ public class RankTableWrapper extends TableWrapper<Rank> {
         Query.of("INSERT INTO " + tableName + " (name, level) VALUES (:name, :level)").on(Param.value("name", value.name), Param.value("level", value.level)).execute(conn);
     }
 
+    public Rank findByName(String name) throws SQLException {
+        return Query.of("SELECT * FROM " + tableName + " WHERE name = :name").on(Param.value("name", name)).as(parse().singleNull(), conn);
+    }
+
     @Override
     public void update(Rank value) throws SQLException {
         StringBuilder values = new StringBuilder();

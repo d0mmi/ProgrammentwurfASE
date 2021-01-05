@@ -5,6 +5,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.services.login.LoginController;
+import dev.dommi.gameserver.backend.plugin.api.services.rank.RankController;
 import dev.dommi.gameserver.backend.plugin.api.services.user.UserController;
 import io.javalin.Javalin;
 import io.javalin.core.security.Role;
@@ -38,6 +39,10 @@ public class APIServer {
     private static final String USER_PATH = ":userId";
     private static final String LOGIN_PATH = "login";
     private static final String REGISTER_PATH = "register";
+    private static final String ADMIN_PATH = "admin";
+    private static final String RANKS_PATH = "ranks";
+    private static final String GRANT_RANK_PATH = "grant";
+    private static final String REVOKE_RANK_PATH = "revoke";
     private static final String API_VERSION = "1.0";
     private static final String API_DESCRIPTION = "UserEntity API";
     private static final String API_ANNOTATIONS_PACKAGE = "dev.dommi.gameserver.backend.plugin.api.services";
@@ -74,6 +79,17 @@ public class APIServer {
                     get(UserController::getOne, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
                     patch(UserController::update, new HashSet<>(Arrays.asList(AppRole.USER)));
                     delete(UserController::delete, new HashSet<>(Arrays.asList(AppRole.USER)));
+                });
+            });
+            path(ADMIN_PATH, () -> {
+                path(RANKS_PATH, () -> {
+                    get(RankController::getAll, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                    path(GRANT_RANK_PATH, () -> {
+                        post(RankController::grant, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                    });
+                    path(REVOKE_RANK_PATH, () -> {
+                        post(RankController::revoke, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                    });
                 });
             });
         });

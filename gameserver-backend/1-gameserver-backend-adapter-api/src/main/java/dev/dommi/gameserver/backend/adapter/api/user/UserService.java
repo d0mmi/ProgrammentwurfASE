@@ -39,7 +39,7 @@ public class UserService {
     }
 
     private static User convertToUserFrom(UserEntity user) {
-        return new User(user.id, user.name, user.email, 1); // TODO Generate Level from Rank TODO implement Ranks
+        return new User(user.id, user.name, user.email, user.rank.level);
     }
 
     private static Collection<User> convertToUserCollectionFrom(Collection<UserEntity> users) {

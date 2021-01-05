@@ -24,6 +24,10 @@ public class RankController {
         return rankWrapper.findById(userRank.rankId);
     }
 
+    public int getRankIdFrom(String name) throws SQLException {
+        return rankWrapper.findByName(name).id;
+    }
+
     public void grantRank(int userId, int rankId) throws SQLException {
         userRankWrapper.create(new UserRank(userId, rankId));
     }

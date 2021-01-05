@@ -1,6 +1,9 @@
 package dev.dommi.gameserver.backend.adapter.database.user;
 
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
+import dev.dommi.gameserver.backend.plugin.database.rank.Rank;
+import dev.dommi.gameserver.backend.plugin.database.rank.RankController;
 import dev.dommi.gameserver.backend.plugin.database.user.User;
 import dev.dommi.gameserver.backend.plugin.database.user.UserController;
 
@@ -11,9 +14,11 @@ import java.util.Collection;
 public class UserRepositoryImpl implements UserRepository {
 
     private UserController controller;
+    private RankController rankController;
 
     public UserRepositoryImpl() {
         controller = new UserController();
+        rankController = new RankController();
     }
 
     @Override
@@ -46,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserEntity findById(int userId) throws SQLException {
         User user = controller.findById(userId);
-        return new UserEntity(user.id, user.name, user.email);
+        return convertToUserEntityFrom(user);
     }
 
     @Override
@@ -54,12 +59,13 @@ public class UserRepositoryImpl implements UserRepository {
         controller.deleteById(userId);
     }
 
-    private UserEntity convertToUserEntityFrom(User user) {
+    private UserEntity convertToUserEntityFrom(User user) throws SQLException {
         if (user == null) return null;
-        return new UserEntity(user.id, user.name, user.email);
+        Rank rank = rankController.getRankFrom(user.id);
+        return new UserEntity(user.id, user.name, user.email, new RankVO(rank.name, rank.level));
     }
 
-    private Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) {
+    private Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) throws SQLException {
         Collection<UserEntity> entities = new ArrayList<>();
         for (User user : users) {
             if (user != null) {
