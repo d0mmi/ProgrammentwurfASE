@@ -62,6 +62,7 @@ public class UserRepositoryImpl implements UserRepository {
     private UserEntity convertToUserEntityFrom(User user) throws SQLException {
         if (user == null) return null;
         Rank rank = rankController.getRankFrom(user.id);
+        if (rank == null) return new UserEntity(user.id, user.name, user.email, null);
         return new UserEntity(user.id, user.name, user.email, new RankVO(rank.name, rank.level));
     }
 

@@ -22,9 +22,12 @@ public class RankController {
     )
     public static void grant(Context ctx) {
         GrantRankRequest request = ctx.bodyAsClass(GrantRankRequest.class);
-
-        RankService.grantRankTo(request.userId, request.rank);
-        ctx.status(201);
+        try {
+            RankService.grantRankTo(request.userId, request.rank);
+            ctx.status(201);
+        } catch (IllegalArgumentException e) {
+            ctx.status(400);
+        }
 
     }
 

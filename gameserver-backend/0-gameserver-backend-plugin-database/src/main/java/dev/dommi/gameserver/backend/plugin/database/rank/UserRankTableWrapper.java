@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.plugin.database.rank;
 
+import dev.dommi.gameserver.backend.plugin.database.user.UserTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;
 import io.jenetics.facilejdbc.Param;
 import io.jenetics.facilejdbc.Query;
@@ -10,9 +11,10 @@ import java.sql.SQLException;
 
 public class UserRankTableWrapper extends TableWrapper<UserRank> {
 
-    // UserId + RankID
+    public static final String DB_NAME = "UserRank";
+
     public UserRankTableWrapper(Connection conn) {
-        super("UserRank", conn);
+        super(DB_NAME, conn);
     }
 
     @Override
@@ -26,7 +28,10 @@ public class UserRankTableWrapper extends TableWrapper<UserRank> {
 
     @Override
     public void initTable() throws SQLException {
-        Query.of("CREATE TABLE IF NOT EXISTS " + tableName + " ( id int NOT NULL AUTO_INCREMENT, userId int REFERENCES User(id) NOT NULL, rankId int REFERENCES Rank(id) NOT NULL, PRIMARY KEY (id) )").execute(conn);
+        Query.of("CREATE TABLE IF NOT EXISTS " + tableName +
+                " ( id int NOT NULL AUTO_INCREMENT, userId int NOT NULL, rankId int NOT NULL, PRIMARY KEY (id), FOREIGN KEY (userId)  REFERENCES " +
+                UserTableWrapper.DB_NAME + " (id), FOREIGN KEY (rankId)  REFERENCES " +
+                RankTableWrapper.DB_NAME + " (id) )").execute(conn);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package dev.dommi.gameserver.backend.application.login;
 
+import dev.dommi.gameserver.backend.adapter.database.rank.RankRepositoryImpl;
 import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
+import dev.dommi.gameserver.backend.application.rank.RankType;
 
 import java.sql.SQLException;
 import java.util.logging.Logger;
@@ -27,7 +29,9 @@ public class RegisterUser {
             UserRepositoryImpl userRepository = new UserRepositoryImpl();
 
             if (userRepository.findByEmail(email) == null && name.matches(NAME_REGEX) && email.matches(EMAIL_REGEX) && pw.matches(PW_REGEX)) {
-                new UserRepositoryImpl().create(name, email, pw);
+                userRepository.create(name, email, pw);
+                RankRepositoryImpl repository = new RankRepositoryImpl();
+                repository.grantRank(userRepository.findByEmail(email).id, repository.getRankIdFrom(RankType.USER.value));
                 return true;
             }
 

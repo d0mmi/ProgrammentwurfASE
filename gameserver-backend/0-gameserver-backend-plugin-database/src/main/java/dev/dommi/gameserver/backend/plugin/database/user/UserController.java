@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 public class UserController {
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
-    private static final String BCRYPT_COST = "BCRYPT_COST";
+    public static final String BCRYPT_COST = "BCRYPT_COST";
     private UserTableWrapper wrapper;
 
     public UserController() {

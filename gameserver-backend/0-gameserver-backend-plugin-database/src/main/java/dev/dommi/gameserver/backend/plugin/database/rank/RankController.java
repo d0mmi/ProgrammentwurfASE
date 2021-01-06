@@ -21,6 +21,7 @@ public class RankController {
 
     public Rank getRankFrom(int userId) throws SQLException {
         UserRank userRank = userRankWrapper.findByUserId(userId);
+        if(userRank == null) return null;
         return rankWrapper.findById(userRank.rankId);
     }
 

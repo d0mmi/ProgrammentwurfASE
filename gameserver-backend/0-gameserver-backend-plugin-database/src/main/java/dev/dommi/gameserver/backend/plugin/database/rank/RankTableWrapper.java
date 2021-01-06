@@ -12,9 +12,10 @@ import java.sql.SQLException;
 
 public class RankTableWrapper extends TableWrapper<Rank> {
 
+    public static final String DB_NAME = "Ranks";
 
     public RankTableWrapper(Connection conn) {
-        super("Rank", conn);
+        super(DB_NAME, conn);
     }
 
     @Override

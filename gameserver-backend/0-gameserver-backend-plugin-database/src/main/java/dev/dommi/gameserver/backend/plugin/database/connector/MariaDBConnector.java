@@ -1,7 +1,9 @@
 package dev.dommi.gameserver.backend.plugin.database.connector;
 
 import dev.dommi.gameserver.backend.plugin.database.rank.RankTableWrapper;
+import dev.dommi.gameserver.backend.plugin.database.rank.UserRank;
 import dev.dommi.gameserver.backend.plugin.database.rank.UserRankTableWrapper;
+import dev.dommi.gameserver.backend.plugin.database.user.User;
 import dev.dommi.gameserver.backend.plugin.database.user.UserTableWrapper;
 import io.jenetics.facilejdbc.Query;
 
@@ -17,6 +19,7 @@ public class MariaDBConnector {
     private static final String DB_ADRESS = "DB_ADRESS";
     private static final String DB_USER = "DB_USER";
     private static final String DB_PW = "DB_PW";
+    private static final String ROOT_RANK = "Admin";
     private static MariaDBConnector instance;
     private Connection connection;
 
@@ -40,9 +43,18 @@ public class MariaDBConnector {
 
     private void initDatabase() {
         try {
-            new UserTableWrapper(connection).initTable();
-            new RankTableWrapper(connection).initTable();
-            new UserRankTableWrapper(connection).initTable();
+            UserTableWrapper userTableWrapper = new UserTableWrapper(connection);
+            userTableWrapper.initTable();
+            RankTableWrapper rankTableWrapper = new RankTableWrapper(connection);
+            rankTableWrapper.initTable();
+            UserRankTableWrapper userRankTableWrapper = new UserRankTableWrapper(connection);
+            userRankTableWrapper.initTable();
+
+            User root = userTableWrapper.createRootUser();
+            if (root != null) {
+                int rankId = rankTableWrapper.findByName(ROOT_RANK).id;
+                userRankTableWrapper.create(new UserRank(root.id, rankId));
+            }
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -58,6 +70,7 @@ public class MariaDBConnector {
 
     public static MariaDBConnector getInstance() {
         if (instance == null) instance = new MariaDBConnector();
+        if (instance.getConnection() == null) instance = new MariaDBConnector();
         return instance;
     }
 }

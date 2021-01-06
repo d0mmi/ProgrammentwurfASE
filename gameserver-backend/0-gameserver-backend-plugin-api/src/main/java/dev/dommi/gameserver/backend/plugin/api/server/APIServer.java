@@ -74,11 +74,11 @@ public class APIServer {
                 post(LoginController::login, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
             });
             path(USERS_PATH, () -> {
-                get(UserController::getAll, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+                get(UserController::getAll, new HashSet<>(Arrays.asList(AppRole.USER)));
                 path(USER_PATH, () -> {
-                    get(UserController::getOne, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+                    get(UserController::getOne, new HashSet<>(Arrays.asList(AppRole.USER)));
                     patch(UserController::update, new HashSet<>(Arrays.asList(AppRole.USER)));
-                    delete(UserController::delete, new HashSet<>(Arrays.asList(AppRole.USER)));
+                    delete(UserController::delete, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                 });
             });
             path(ADMIN_PATH, () -> {

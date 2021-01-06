@@ -19,7 +19,8 @@ public class RankService {
     }
 
     public static void grantRankTo(int userId, String rank) throws IllegalArgumentException {
-        new GrantRank().grantRankTo(userId, RankType.valueOf(rank));
+        RankType type = RankType.valueOf(rank.toUpperCase());
+        new GrantRank().grantRankTo(userId, type);
     }
 
     public static void revokeRankFrom(int userId) {
