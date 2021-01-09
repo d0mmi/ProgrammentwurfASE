@@ -14,6 +14,7 @@ public class RankController {
             path = "/admin/ranks/grant",
             method = HttpMethod.POST,
             tags = {"Rank"},
+            headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
             requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = GrantRankRequest.class)}),
             responses = {
                     @OpenApiResponse(status = "201"),
@@ -37,6 +38,7 @@ public class RankController {
             path = "/admin/ranks/revoke",
             method = HttpMethod.POST,
             tags = {"Rank"},
+            headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
             requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = RevokeRankRequest.class)}),
             responses = {
                     @OpenApiResponse(status = "201"),
@@ -55,6 +57,7 @@ public class RankController {
             path = "/admin/ranks",
             method = HttpMethod.GET,
             tags = {"Rank"},
+            headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
             responses = {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = Rank[].class)})
             }

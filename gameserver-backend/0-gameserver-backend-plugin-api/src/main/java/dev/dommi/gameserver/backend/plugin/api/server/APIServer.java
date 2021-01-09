@@ -6,6 +6,7 @@ import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.services.login.LoginController;
 import dev.dommi.gameserver.backend.plugin.api.services.rank.RankController;
+import dev.dommi.gameserver.backend.plugin.api.services.report.ReportController;
 import dev.dommi.gameserver.backend.plugin.api.services.user.UserController;
 import io.javalin.Javalin;
 import io.javalin.core.security.Role;
@@ -37,6 +38,10 @@ public class APIServer {
     private static final String INVALID_AUTH_ERROR = "Missing, invalid token or not enough permissions";
     private static final String USERS_PATH = "users";
     private static final String USER_PATH = ":userId";
+    private static final String REPORT_PATH = "report";
+    private static final String REPORTS_PATH = "reports";
+    private static final String REPORT_TYPES_PATH = "types";
+    private static final String REPORTS_ID_PATH = ":reportId";
     private static final String LOGIN_PATH = "login";
     private static final String REGISTER_PATH = "register";
     private static final String ADMIN_PATH = "admin";
@@ -81,6 +86,9 @@ public class APIServer {
                     delete(UserController::delete, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                 });
             });
+            path(REPORT_PATH, () -> {
+                post(ReportController::report, new HashSet<>(Arrays.asList(AppRole.USER)));
+            });
             path(ADMIN_PATH, () -> {
                 path(RANKS_PATH, () -> {
                     get(RankController::getAll, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
@@ -90,6 +98,16 @@ public class APIServer {
                     path(REVOKE_RANK_PATH, () -> {
                         post(RankController::revoke, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                     });
+                });
+                path(REPORTS_PATH, () -> {
+                    path(REPORT_TYPES_PATH, () -> {
+                        get(ReportController::getTypes, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    });
+                    path(REPORTS_ID_PATH, () -> {
+                        get(ReportController::getOne, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        post(ReportController::updateReportStatus, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    });
+                    get(ReportController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                 });
             });
         });

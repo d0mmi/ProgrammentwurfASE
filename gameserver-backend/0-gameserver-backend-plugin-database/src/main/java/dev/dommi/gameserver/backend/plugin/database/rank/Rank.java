@@ -10,4 +10,10 @@ public class Rank {
         this.name = name;
         this.level = level;
     }
+
+    public Rank(String name, int level) {
+        this.id = -1;
+        this.name = name;
+        this.level = level;
+    }
 }

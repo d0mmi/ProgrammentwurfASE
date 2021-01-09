@@ -33,9 +33,9 @@ public class RankTableWrapper extends TableWrapper<Rank> {
         ResultSet resultSet = databaseMetaData.getTables(null, null, tableName, null);
         if (!resultSet.next()) {
             Query.of("CREATE TABLE IF NOT EXISTS " + tableName + " ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, level int NOT NULL, PRIMARY KEY (id) )").execute(conn);
-            Query.of("INSERT INTO " + tableName + " (name, level) VALUES (:name, :level)").on(Param.value("name", "User"), Param.value("level", 1)).execute(conn);
-            Query.of("INSERT INTO " + tableName + " (name, level) VALUES (:name, :level)").on(Param.value("name", "Moderator"), Param.value("level", 50)).execute(conn);
-            Query.of("INSERT INTO " + tableName + " (name, level) VALUES (:name, :level)").on(Param.value("name", "Admin"), Param.value("level", 100)).execute(conn);
+            create(new Rank("User", 1));
+            create(new Rank("Moderator", 50));
+            create(new Rank("Admin", 100));
         }
     }
 
