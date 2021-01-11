@@ -64,8 +64,7 @@ public class ReportTableWrapper extends TableWrapper<Report> {
         }
         values.append("open = :open");
 
-        String valueString = values.toString();
-        Query.of(" UPDATE " + tableName + "  SET " + valueString + " WHERE id = :id").on(Param.value("id", value.id), Param.value("reason", value.reason), Param.value("typeId", value.typeId),
+        Query.of(" UPDATE " + tableName + "  SET " + values.toString() + " WHERE id = :id").on(Param.value("id", value.id), Param.value("reason", value.reason), Param.value("typeId", value.typeId),
                 Param.value("open", value.open ? 1 : 0)).execute(conn);
     }
 }

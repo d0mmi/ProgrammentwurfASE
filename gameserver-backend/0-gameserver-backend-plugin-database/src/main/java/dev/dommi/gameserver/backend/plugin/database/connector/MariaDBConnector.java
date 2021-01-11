@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.plugin.database.connector;
 
+import dev.dommi.gameserver.backend.plugin.database.ban.BanTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.rank.RankTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.rank.UserRank;
 import dev.dommi.gameserver.backend.plugin.database.rank.UserRankTableWrapper;
@@ -60,6 +61,8 @@ public class MariaDBConnector {
 
             new ReportTypeTableWrapper(connection).initTable();
             new ReportTableWrapper(connection).initTable();
+
+            new BanTableWrapper(connection).initTable();
 
         } catch (SQLException e) {
             logger.severe(e.getMessage());
