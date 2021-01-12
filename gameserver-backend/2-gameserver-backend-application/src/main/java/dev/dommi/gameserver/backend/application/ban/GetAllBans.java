@@ -12,6 +12,15 @@ import java.util.logging.Logger;
 public class GetAllBans {
     private static final Logger logger = Logger.getLogger(GetAllBans.class.getName());
 
+    public BanEntity getOne(int id){
+        try {
+            return new BanRepositoryImpl().findById(id);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return null;
+    }
+
     public Collection<BanEntity> getAll() {
         try {
             return new BanRepositoryImpl().findAll();

@@ -4,6 +4,7 @@ package dev.dommi.gameserver.backend.plugin.api.server;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.services.ban.BanController;
 import dev.dommi.gameserver.backend.plugin.api.services.login.LoginController;
 import dev.dommi.gameserver.backend.plugin.api.services.rank.RankController;
 import dev.dommi.gameserver.backend.plugin.api.services.report.ReportController;
@@ -42,6 +43,8 @@ public class APIServer {
     private static final String REPORTS_PATH = "reports";
     private static final String REPORT_TYPES_PATH = "types";
     private static final String REPORTS_ID_PATH = ":reportId";
+    private static final String BANS_PATH = "bans";
+    private static final String BANS_ID_PATH = ":banId";
     private static final String LOGIN_PATH = "login";
     private static final String REGISTER_PATH = "register";
     private static final String ADMIN_PATH = "admin";
@@ -108,6 +111,14 @@ public class APIServer {
                         post(ReportController::updateReportStatus, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                     });
                     get(ReportController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                });
+                path(BANS_PATH, () -> {
+                    path(BANS_ID_PATH, () -> {
+                        get(BanController::getOne, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        post(BanController::updateBan, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    });
+                    get(BanController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    post(BanController::ban, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                 });
             });
         });

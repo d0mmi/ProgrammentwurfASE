@@ -1,9 +1,11 @@
 package dev.dommi.gameserver.backend.plugin.api.services.login;
 
 
+import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
 import dev.dommi.gameserver.backend.adapter.api.login.InvalidLoginException;
 import dev.dommi.gameserver.backend.adapter.api.login.LoginService;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
+import dev.dommi.gameserver.backend.adapter.api.user.UserService;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
@@ -46,15 +48,18 @@ public class LoginController {
     )
     public static void login(Context ctx) {
         LoginRequest request = ctx.bodyAsClass(LoginRequest.class);
-        try {
+        if (!BanService.isUserBaned(request.email)) {
+            try {
+                User user = LoginService.login(request.email, request.pw);
+                ctx.status(201).json(new LoginResponse(JWTProvider.getInstance().generateToken(user)));
 
-            User user = LoginService.login(request.email, request.pw);
-            ctx.status(201).json(new LoginResponse(JWTProvider.getInstance().generateToken(user)));
+            } catch (InvalidLoginException e) {
 
-        } catch (InvalidLoginException e) {
+                ctx.status(401).json(new UnauthorizedResponse(e.getMessage()));
 
-            ctx.status(400).json(new UnauthorizedResponse(e.getMessage()));
-
+            }
+        } else {
+            ctx.status(401).json(new UnauthorizedResponse("You are banned!"));
         }
     }
 

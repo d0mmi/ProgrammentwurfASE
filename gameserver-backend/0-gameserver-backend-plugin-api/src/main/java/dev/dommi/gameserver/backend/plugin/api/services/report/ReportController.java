@@ -17,7 +17,7 @@ public class ReportController {
             operationId = "reportUser",
             path = "/report",
             method = HttpMethod.POST,
-            tags = {"Rank"},
+            tags = {"Report"},
             headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
             requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = ReportUserRequest.class)}),
             responses = {
@@ -36,7 +36,7 @@ public class ReportController {
             operationId = "updateReportStatus",
             path = "/admin/reports/:" + REPORT_ID,
             method = HttpMethod.POST,
-            tags = {"Rank"},
+            tags = {"Report"},
             headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
             requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = UpdateReportStatusRequest.class)}),
             responses = {
