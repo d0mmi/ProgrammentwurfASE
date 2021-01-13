@@ -1,9 +1,11 @@
 package dev.dommi.gameserver.backend.plugin.api.server;
 
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import dev.dommi.gameserver.backend.plugin.api.services.ban.BanController;
 import dev.dommi.gameserver.backend.plugin.api.services.login.LoginController;
 import dev.dommi.gameserver.backend.plugin.api.services.rank.RankController;
@@ -124,13 +126,17 @@ public class APIServer {
         });
     }
 
-    private boolean tokenValid(Context ctx, int minLevel) {
+    static boolean tokenValid(Context ctx, int minLevel) {
         Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
         if (token.isPresent()) {
-            DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
-            int tokenLevel = decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class);
-            if (tokenLevel >= minLevel) {
-                return true;
+            try {
+                DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
+                int tokenLevel = decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class);
+                if (tokenLevel >= minLevel) {
+                    return true;
+                }
+            } catch (JWTSecretMissingException | JWTDecodeException e) {
+                logger.severe(e.getMessage());
             }
         }
         return false;

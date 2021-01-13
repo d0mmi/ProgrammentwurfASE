@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.ban.Ban;
 import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
@@ -13,10 +14,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class BanController {
 
-
+    private static final Logger logger = Logger.getLogger(BanController.class.getName());
     private static final String BAN_ID = "banId";
 
     @OpenApi(
@@ -124,8 +126,13 @@ public class BanController {
     private static int getUserIDFromRequestToken(Context ctx) {
         Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
         if (token.isPresent()) {
-            DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
-            return decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
+
+            try {
+                DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
+                return decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
+            } catch (JWTSecretMissingException e) {
+                logger.severe(e.getMessage());
+            }
         }
         return -1;
     }

@@ -5,14 +5,18 @@ import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
 import dev.dommi.gameserver.backend.adapter.api.login.InvalidLoginException;
 import dev.dommi.gameserver.backend.adapter.api.login.LoginService;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
-import dev.dommi.gameserver.backend.adapter.api.user.UserService;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
+import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.UnauthorizedResponse;
 import io.javalin.plugin.openapi.annotations.*;
 
+import java.util.logging.Logger;
+
 public class LoginController {
+    private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
     @OpenApi(
             summary = "Register user",
@@ -43,7 +47,8 @@ public class LoginController {
             requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = LoginRequest.class)}),
             responses = {
                     @OpenApiResponse(status = "201", content = {@OpenApiContent(from = LoginResponse.class)}),
-                    @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)})
+                    @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)}),
+                    @OpenApiResponse(status = "500", content = {@OpenApiContent(from = InternalServerErrorResponse.class)})
             }
     )
     public static void login(Context ctx) {
@@ -57,6 +62,9 @@ public class LoginController {
 
                 ctx.status(401).json(new UnauthorizedResponse(e.getMessage()));
 
+            } catch (JWTSecretMissingException e) {
+                logger.severe(e.getMessage());
+                ctx.status(500).json(new InternalServerErrorResponse());
             }
         } else {
             ctx.status(401).json(new UnauthorizedResponse("You are banned!"));

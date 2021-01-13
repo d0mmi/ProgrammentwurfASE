@@ -5,6 +5,7 @@ import dev.dommi.gameserver.backend.adapter.api.user.User;
 import dev.dommi.gameserver.backend.adapter.api.user.UserService;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
@@ -13,10 +14,12 @@ import io.javalin.plugin.openapi.annotations.*;
 import javalinjwt.JavalinJWT;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 
 public class UserController {
 
+    private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private static final String NOT_FOUND_RESPONSE = "UserEntity not found";
     private static final String USER_ID = "userId";
 
@@ -131,13 +134,17 @@ public class UserController {
     private static boolean validUserRequest(Context ctx) {
         Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
         if (token.isPresent()) {
-            DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
-            int tokenID = decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
-            int tokenLevel = decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class);
-            int requestID = validPathParamUserId(ctx);
+            try {
+                DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
+                int tokenID = decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
+                int tokenLevel = decodedJWT.getClaims().get(JWTProvider.USER_LEVEL).as(int.class);
+                int requestID = validPathParamUserId(ctx);
 
-            if (requestID == tokenID || tokenLevel >= AppRole.MODERATOR.level) {
-                return true;
+                if (requestID == tokenID || tokenLevel >= AppRole.MODERATOR.level) {
+                    return true;
+                }
+            } catch (JWTSecretMissingException e) {
+                logger.severe(e.getMessage());
             }
 
         }
