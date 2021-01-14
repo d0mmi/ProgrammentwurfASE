@@ -14,6 +14,10 @@ public class ReportRepositoryImpl implements ReportRepository {
 
     private ReportController controller;
 
+    public ReportRepositoryImpl(ReportController controller) {
+        this.controller = controller;
+    }
+
     public ReportRepositoryImpl() {
         controller = new ReportController();
     }
@@ -54,13 +58,13 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
 
-    private ReportEntity convertToReportEntityFrom(Report report) throws SQLException {
+    ReportEntity convertToReportEntityFrom(Report report) throws SQLException {
         if (report == null) return null;
         ReportType type = controller.getReportType(report.typeId);
         return new ReportEntity(report.id, report.creator, report.reported, report.reason, convertToReportTypeEntityFrom(type), report.open);
     }
 
-    private Collection<ReportEntity> convertToReportEntityCollectionFrom(Collection<Report> reports) throws SQLException {
+    Collection<ReportEntity> convertToReportEntityCollectionFrom(Collection<Report> reports) throws SQLException {
         Collection<ReportEntity> entities = new ArrayList<>();
         for (Report report : reports) {
             if (report != null) {
@@ -71,12 +75,12 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
 
-    private ReportTypeEntity convertToReportTypeEntityFrom(ReportType type) throws SQLException {
+    static ReportTypeEntity convertToReportTypeEntityFrom(ReportType type) {
         if (type == null) return null;
         return new ReportTypeEntity(type.id, type.name);
     }
 
-    private Collection<ReportTypeEntity> convertToReportTypeEntityCollectionFrom(Collection<ReportType> types) throws SQLException {
+    static Collection<ReportTypeEntity> convertToReportTypeEntityCollectionFrom(Collection<ReportType> types) {
         Collection<ReportTypeEntity> entities = new ArrayList<>();
         for (ReportType type : types) {
             if (type != null) {

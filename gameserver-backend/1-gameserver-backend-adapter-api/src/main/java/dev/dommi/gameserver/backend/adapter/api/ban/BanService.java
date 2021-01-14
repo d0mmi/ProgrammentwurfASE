@@ -57,12 +57,12 @@ public class BanService {
         return convertToBanCollectionFrom(new GetAllBans().getAll(userId, date));
     }
 
-    private static Ban convertToBanFrom(BanEntity ban) {
+    static Ban convertToBanFrom(BanEntity ban) {
         if (ban == null) return null;
         return new Ban(ban.id, ban.userId, ban.bannedById, ban.reason, ban.until, ban.active);
     }
 
-    private static Collection<Ban> convertToBanCollectionFrom(Collection<BanEntity> entities) {
+    static Collection<Ban> convertToBanCollectionFrom(Collection<BanEntity> entities) {
         Collection<Ban> bans = new ArrayList<>();
         for (BanEntity ban : entities) {
             if (ban != null) {

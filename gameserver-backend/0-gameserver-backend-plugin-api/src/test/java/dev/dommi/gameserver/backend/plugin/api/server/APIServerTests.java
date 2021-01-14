@@ -15,7 +15,7 @@ public class APIServerTests {
     @SetEnvironmentVariable(key = JWTProvider.JWT_SECRET, value = "secret")
     public void tokenValidTest() {
 
-        Context ctx = mock(Context.class); // fix mockito
+        Context ctx = mock(Context.class);
         when(ctx.header("Authorization")).thenAnswer(I -> "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsZXZlbCI6NTAsImlkIjo1fQ.nNbH4_9pkwitj7hm4AUfrg1Zsv2KhGq595RouB8Mapg");
 
         assertTrue(APIServer.tokenValid(ctx, 1));
@@ -25,7 +25,7 @@ public class APIServerTests {
     @SetEnvironmentVariable(key = JWTProvider.JWT_SECRET, value = "secret")
     public void tokenMinLevelInvalidTest() {
 
-        Context ctx = mock(Context.class); // fix mockito
+        Context ctx = mock(Context.class);
         when(ctx.header("Authorization")).thenAnswer(I -> "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsZXZlbCI6NTAsImlkIjo1fQ.nNbH4_9pkwitj7hm4AUfrg1Zsv2KhGq595RouB8Mapg");
 
         assertFalse(APIServer.tokenValid(ctx, 100));
@@ -35,7 +35,7 @@ public class APIServerTests {
     @SetEnvironmentVariable(key = JWTProvider.JWT_SECRET, value = "secret")
     public void tokenInvalidTest() {
 
-        Context ctx = mock(Context.class); // fix mockito
+        Context ctx = mock(Context.class);
         when(ctx.header("Authorization")).thenAnswer(I -> "Bearer invalidToken");
 
         assertFalse(APIServer.tokenValid(ctx, 50));

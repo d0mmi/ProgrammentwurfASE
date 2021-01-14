@@ -31,12 +31,12 @@ public class RankService {
         return convertToRankCollectionFrom(new GetAllRanks().getAll());
     }
 
-    private static Rank convertToRankFrom(RankVO rankVO) {
+    static Rank convertToRankFrom(RankVO rankVO) {
         if (rankVO == null) return null;
         return new Rank(rankVO.name, rankVO.level);
     }
 
-    private static Collection<Rank> convertToRankCollectionFrom(Collection<RankVO> rankVOs) {
+    static Collection<Rank> convertToRankCollectionFrom(Collection<RankVO> rankVOs) {
         Collection<Rank> ranks = new ArrayList<>();
         for (RankVO rankVO : rankVOs) {
             if (rankVO != null) {

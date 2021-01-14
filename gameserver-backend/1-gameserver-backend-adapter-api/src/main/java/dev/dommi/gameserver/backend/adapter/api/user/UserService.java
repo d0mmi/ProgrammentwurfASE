@@ -38,11 +38,11 @@ public class UserService {
         new ModifyUser().deleteUserById(userId);
     }
 
-    private static User convertToUserFrom(UserEntity user) {
+    static User convertToUserFrom(UserEntity user) {
         return new User(user.id, user.name, user.email, user.rank.level);
     }
 
-    private static Collection<User> convertToUserCollectionFrom(Collection<UserEntity> users) {
+    static Collection<User> convertToUserCollectionFrom(Collection<UserEntity> users) {
         Collection<User> entities = new ArrayList<>();
         for (UserEntity user : users) {
             entities.add(convertToUserFrom(user));

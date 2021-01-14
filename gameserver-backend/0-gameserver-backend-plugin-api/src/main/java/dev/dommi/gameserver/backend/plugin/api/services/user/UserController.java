@@ -21,7 +21,7 @@ public class UserController {
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private static final String NOT_FOUND_RESPONSE = "UserEntity not found";
-    private static final String USER_ID = "userId";
+    static final String USER_ID = "userId";
 
     @OpenApi(
             summary = "Get all users",
@@ -127,11 +127,11 @@ public class UserController {
     }
 
     // Prevent duplicate validation of userId
-    private static int validPathParamUserId(Context ctx) {
+    static int validPathParamUserId(Context ctx) {
         return ctx.pathParam(USER_ID, Integer.class).check(id -> id > 0).get();
     }
 
-    private static boolean validUserRequest(Context ctx) {
+    static boolean validUserRequest(Context ctx) {
         Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
         if (token.isPresent()) {
             try {

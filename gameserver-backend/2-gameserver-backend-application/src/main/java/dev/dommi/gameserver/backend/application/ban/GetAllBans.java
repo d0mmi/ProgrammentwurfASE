@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.application.ban;
 
+import dev.dommi.gameserver.backend.adapter.database.ban.BanRepository;
 import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 
@@ -12,9 +13,19 @@ import java.util.logging.Logger;
 public class GetAllBans {
     private static final Logger logger = Logger.getLogger(GetAllBans.class.getName());
 
-    public BanEntity getOne(int id){
+    public GetAllBans(BanRepository repository) {
+        this.repository = repository;
+    }
+
+    public GetAllBans() {
+        this.repository = new BanRepositoryImpl();
+    }
+
+    private BanRepository repository;
+
+    public BanEntity getOne(int id) {
         try {
-            return new BanRepositoryImpl().findById(id);
+            return repository.findById(id);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -23,7 +34,7 @@ public class GetAllBans {
 
     public Collection<BanEntity> getAll() {
         try {
-            return new BanRepositoryImpl().findAll();
+            return repository.findAll();
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -32,7 +43,7 @@ public class GetAllBans {
 
     public Collection<BanEntity> getAll(int userId) {
         try {
-            return new BanRepositoryImpl().findAllByUser(userId);
+            return repository.findAllByUser(userId);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -41,7 +52,7 @@ public class GetAllBans {
 
     public Collection<BanEntity> getAll(boolean active) {
         try {
-            return new BanRepositoryImpl().findAllByActive(active);
+            return repository.findAllByActive(active);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -50,7 +61,7 @@ public class GetAllBans {
 
     public Collection<BanEntity> getAll(Date date) {
         try {
-            return new BanRepositoryImpl().findAllByDate(date);
+            return repository.findAllByDate(date);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -59,7 +70,7 @@ public class GetAllBans {
 
     public Collection<BanEntity> getAll(int userId, Date date) {
         try {
-            return new BanRepositoryImpl().findAllByUserAndDate(userId, date);
+            return repository.findAllByUserAndDate(userId, date);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }

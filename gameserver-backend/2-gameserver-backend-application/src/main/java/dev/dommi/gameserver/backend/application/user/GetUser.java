@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.application.user;
 
+import dev.dommi.gameserver.backend.adapter.database.user.UserRepository;
 import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
@@ -10,11 +11,20 @@ import java.util.logging.Logger;
 public class GetUser {
 
     private static final Logger logger = Logger.getLogger(GetUser.class.getName());
+    private UserRepository repository;
+
+    public GetUser(UserRepository repository) {
+        this.repository = repository;
+    }
+
+    public GetUser() {
+        repository = new UserRepositoryImpl();
+    }
 
     public UserEntity getUserById(int id) throws UserNotFoundException {
 
         try {
-            UserEntity userEntity = new UserRepositoryImpl().findById(id);
+            UserEntity userEntity = repository.findById(id);
             if (userEntity != null) {
                 return userEntity;
             }

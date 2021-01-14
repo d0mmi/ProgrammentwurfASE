@@ -58,12 +58,12 @@ public class BanRepositoryImpl implements BanRepository {
     }
 
 
-    private BanEntity convertToBanEntityFrom(Ban ban) {
+    static BanEntity convertToBanEntityFrom(Ban ban) {
         if (ban == null) return null;
         return new BanEntity(ban.id, ban.userId, ban.bannedById, ban.reason, ban.until, ban.active);
     }
 
-    private Collection<BanEntity> convertToBanEntityCollectionFrom(Collection<Ban> bans) {
+    static Collection<BanEntity> convertToBanEntityCollectionFrom(Collection<Ban> bans) {
         Collection<BanEntity> entities = new ArrayList<>();
         for (Ban ban : bans) {
             if (ban != null) {

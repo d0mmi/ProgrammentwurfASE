@@ -46,12 +46,12 @@ public class RankRepositoryImpl implements RankRepository {
         controller.revokeAllRanks(userId);
     }
 
-    private RankVO convertToRankVOFrom(Rank rank) {
+    static RankVO convertToRankVOFrom(Rank rank) {
         if (rank == null) return null;
         return new RankVO(rank.name, rank.level);
     }
 
-    private Collection<RankVO> convertToRankVOCollectionFrom(Collection<Rank> ranks) {
+    static Collection<RankVO> convertToRankVOCollectionFrom(Collection<Rank> ranks) {
         Collection<RankVO> valueObjects = new ArrayList<>();
         for (Rank rank : ranks) {
             if (rank != null) {

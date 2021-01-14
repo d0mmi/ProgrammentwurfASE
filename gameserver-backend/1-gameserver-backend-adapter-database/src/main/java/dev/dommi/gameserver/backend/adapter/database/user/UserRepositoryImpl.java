@@ -16,6 +16,11 @@ public class UserRepositoryImpl implements UserRepository {
     private UserController controller;
     private RankController rankController;
 
+    public UserRepositoryImpl(UserController controller, RankController rankController) {
+        this.controller = controller;
+        this.rankController = rankController;
+    }
+
     public UserRepositoryImpl() {
         controller = new UserController();
         rankController = new RankController();
@@ -59,14 +64,14 @@ public class UserRepositoryImpl implements UserRepository {
         controller.deleteById(userId);
     }
 
-    private UserEntity convertToUserEntityFrom(User user) throws SQLException {
+    UserEntity convertToUserEntityFrom(User user) throws SQLException {
         if (user == null) return null;
         Rank rank = rankController.getRankFrom(user.id);
         if (rank == null) return new UserEntity(user.id, user.name, user.email, null);
         return new UserEntity(user.id, user.name, user.email, new RankVO(rank.name, rank.level));
     }
 
-    private Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) throws SQLException {
+    Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) throws SQLException {
         Collection<UserEntity> entities = new ArrayList<>();
         for (User user : users) {
             if (user != null) {

@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.application.report;
 
+import dev.dommi.gameserver.backend.adapter.database.report.ReportRepository;
 import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
@@ -11,10 +12,19 @@ import java.util.logging.Logger;
 
 public class GetReports {
     private static final Logger logger = Logger.getLogger(GetReports.class.getName());
+    private ReportRepository repository;
+
+    public GetReports(ReportRepository repository) {
+        this.repository = repository;
+    }
+
+    public GetReports() {
+        repository = new ReportRepositoryImpl();
+    }
 
     public Collection<ReportEntity> getAll() {
         try {
-            return new ReportRepositoryImpl().getAllReports();
+            return repository.getAllReports();
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -23,7 +33,7 @@ public class GetReports {
 
     public Collection<ReportEntity> getReportsCreatedBy(int userId) {
         try {
-            return new ReportRepositoryImpl().getReportsCreatedBy(userId);
+            return repository.getReportsCreatedBy(userId);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -32,7 +42,7 @@ public class GetReports {
 
     public Collection<ReportEntity> getReportsFor(int userId) {
         try {
-            return new ReportRepositoryImpl().getReportsFor(userId);
+            return repository.getReportsFor(userId);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -41,7 +51,7 @@ public class GetReports {
 
     public ReportEntity getReport(int reportId) {
         try {
-            return new ReportRepositoryImpl().getReport(reportId);
+            return repository.getReport(reportId);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -51,7 +61,7 @@ public class GetReports {
 
     public Collection<ReportTypeEntity> getReportTypes() {
         try {
-            return new ReportRepositoryImpl().getReportTypes();
+            return repository.getReportTypes();
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
