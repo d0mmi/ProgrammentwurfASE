@@ -25,11 +25,11 @@ public class BanService {
     }
 
     //TODO Implement check in other Requests
-    public static boolean isUserBaned(int userId) {
+    public static boolean isUserBanned(int userId) {
         return new CheckUserBan().isBanned(userId);
     }
 
-    public static boolean isUserBaned(String email) {
+    public static boolean isUserBanned(String email) {
         return new CheckUserBan().isBanned(email);
     }
 

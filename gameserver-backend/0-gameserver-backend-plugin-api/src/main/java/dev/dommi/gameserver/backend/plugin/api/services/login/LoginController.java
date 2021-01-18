@@ -53,7 +53,7 @@ public class LoginController {
     )
     public static void login(Context ctx) {
         LoginRequest request = ctx.bodyAsClass(LoginRequest.class);
-        if (!BanService.isUserBaned(request.email)) {
+        if (!BanService.isUserBanned(request.email)) {
             try {
                 User user = LoginService.login(request.email, request.pw);
                 ctx.status(201).json(new LoginResponse(JWTProvider.getInstance().generateToken(user)));

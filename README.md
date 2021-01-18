@@ -9,13 +9,12 @@ Programmentwurf für die Vorlesung Advanced Software Engineering
 	- Moderator: Player Features + edit players + bann players
 	- Player:  edit own info, report players, (WIP: add friends, manage guilds)
 - Reports
+- Banns
 - User Management
 
 ## Planned Features:
 - Friends
 - Guilds
-- Banns
-- TODO: Testing!!!!
 
 ## Running the Project:
 - First time run "docker-compose up"

@@ -48,3 +48,19 @@
 %% Wenn sich Technologien ändern müssen, kann die Anwendung unverändert bleiben
 
 \section{Schichtarchitektur planen und begründen}
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=8cm]{schichtarchitektur}}
+    \caption{\label{flutter-1} Schichtarchitektur}
+\end{figure}
+
+Die Schichtarchitektur ist in vier Schichten unterteilt: Plugin, Adapter, Application, Domain.
+Die Plugin-Schicht wurde nochmals in API und Datenbank aufgeteilt,
+dies erhöht die übersichtlichkeit da die beiden Schichten nicht direkt miteinander interagieren sollen.
+Sie interagieren nur mit ihrem eigenen Adapter.
+Dementsprechend wurde die Adapter-Schicht auch in API und Datenbank aufgeteilt, um die jeweiligen Objekt-Formate in die der inneren Schichten zu konvertieren.
+Die Adapter rufen dann Funktionen aus der Application Schicht auf.
+In der Application-Schicht liegt dann die eigentliche Logik der Anwendung und hier werden API und Datenbank zusammen geführt.
+In der Domain Schicht befinden sich die Entities und Value Objects der Application Schicht,
+dies dient dem Ziel diese in Zukunft in weiteren Application-Schichten einheitlich verwenden zu können.

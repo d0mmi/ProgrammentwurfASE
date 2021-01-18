@@ -1,4 +1,239 @@
 \chapter{Programming Principles}
 \section{Analyse und Begründung für SOLID}
+%% 
+%% Single Responsibility Principle
+%%  - Eine Klasse sollte nur eine Ursache oder einen Grund haben sich zu ändern
+%%  - Niedrige Komplexität und Kopplung
+%%  - Jede Klasse sollte nur eine Zuständigkeit haben
+%%  - Eine Klasse erhält eine klar definierte Aufgabe
+%%  - Komplexeres Verhalten entsteht durch Kombination mehrerer Objekte
+%%  - Eine Klasse enthält Achsen auf der sichAnforderungen ändern können
+%%  - Jede Zuständigkeit fügt eine weitere Achse hinzu
+%%  - Jede Klasse sollte nur eine Achse haben
+%% 
+%% 
+%% Open Closed Principle
+%%  - Elemente der Software wie Klassen, Module, Funktionen sollten:
+%%      - offen für Erweiterungen
+%%      - geschlossen für Änderungen 
+%%  - Erweiterungen durch Vererbung bzw.Implementierung von Interfaces
+%%  - Neue Unterklasse mit angepasstem Verhaltenergänzen
+%%  - Bestehender Code wird nicht geändert
+%%  - Abstraktionen fördern die Erweiterbarkeit
+%%  - Software ist nie immun gegen Änderungen
+%%  - Der Entwickler entscheidet 
+%%      - welche Erweiterungen möglich sind
+%%      - was durch Änderungen ergänzt werden soll
+%%  - Stabilität einer Klasse ist ausschlaggebend
+%% 
+%% 
+%% 
+%% Liskov Substitution Principle
+%%  - Objekte eines abgeleiteten Typs müssen als Ersatz für Instanzen ihres Basistyps funktionieren ohne die Korrektheit des Programms zu ändern
+%%  - Starke Einschränkung der Ableitungsregeln
+%%  - Führt zur Einhaltung von Invarianzen
+%%  - Invarianzen von Klassen berücksichtigen:
+%%      - Abgeleitete Typen müssen schwächere Vorbedingungen haben
+%%      - Abgeleitete Typen müssen stärkere Nachbedingungen haben
+%%  - Design by Contractkann helfen Verstöße zufinden
+%%  - Ableitung in OOP ist mehr eine "verhält sichwie" Beziehung anstatt einer "ist ein" Beziehung
+%% 
+%% 
+%% Interface Segregation Principle
+%%  - Anwender sollten nicht von Funktionenabhängig sein, die sie nicht nutzen
+%%  - Schwere(fat) Interfaces und Klassen bündelnviel Funktionalität:
+%%      - Ein Anwender einer Methode eines Interfaces istautomatisch abhängig von Änderungen ananderen Methoden des Interfaces
+%%      - Ein Anwender hat Zugriff auf Methoden, die nichtfür ihn bestimmt sind
+%%  - Interfaces passend zu den Anwenderngestalten
+%%  - Führt dazu, dass Typen meist mehrereInterfaces implementieren
+%%  - Ein Typ bedient dadurch mehrere Anwender
+%%  - Schwere Klassen können nach wie vorbestehen, aber Anwender ist nur von leichtenInterfaces abhängig
+%% 
+%% 
+%% Dependency Inversion Principle
+%%  - Klassischerweise sind High-Level Module vonLow-Level Modulen abhängig:
+%%      - Änderung in einer Low-Level Implementierungführt zu Änderung in High-Level Modul
+%%      - Änderung in High-Level Modul führt eventuell zu Änderung in anderen Low-Level Modulen
+%%  ⇒ Umkehrung (Inversion) der Abhängigkeit
+%%  - High-Level Module sollten nicht von Low-LevelModulen abhängig sein. Beide sollten vonAbstraktionen abhängen.
+%%  - Abstraktionen sollten nicht von Detailsabhängig sein. Details sollten vonAbstraktionen abhängen.
+%%  - Regeln werden durch High-Level Modulevorgegeben
+%%  - Low-Level Module sind Implementierungender Regeln
+%%  - High-Level Module können wiederverwendet werden:
+%%      - High-Level Module bilden ein Framework
+%%  - Immer nur von Abstraktionen abhängig sein bedeutet:
+%%      - Variablen oder Member sollten eine abstrakteKlasse oder ein Interface als Typ haben
+%%      - Klassen sollten nur abstrakte Klassen oderInterfaces ableiten bzw. implementieren
+%%      - Nur abstrakte Methoden implementieren
+%%  - Beim initialen Aufbau der Anwendungwerden Instanzen konkreter Klassen erzeugt
 \section{Analyse und Begründung für GRASP} %%  (insb. Kopplung/Kohäsion)
+%% 
+%% General Responsibility Assignment Software Patterns
+%%  - Basis Prinzipien auf denen Entwurfsmuster aufbauen
+%%  - Ziel ist die Low Representational Gap (LRG)möglichst klein zu halten
+%%      - Die Lücke zwischen gedachten Domänenmodellund Softwareimplementierung (Designmodell)sollte klein sein
+%%  - Zuweisung von Verantwortlichkeiten bzw.Zuständigkeiten
+%%  - Zuständigkeiten haben 2 Typen:
+%%      - Ausführend bedeutet: Objekte erstellen, Objekte kontrollieren, Aktionen ausführen
+%%      - Wissen über: gekapselte Daten, Beziehungen zu zugehörigen Objekten, ableitbare bzw. berechenbare Informationen
+%% 
+%% 
+%% Low Coupling:
+%%  - Lose bzw. geringe Kopplung
+%%  - Kopplung bzw. Coupling beschreibt dieBeziehungen zwischen Objekten
+%%  - Kopplung ist ein Maß für die Abhängigkeitzwischen Objekten
+%%  - Positive Effekte durch geringe Kopplung:
+%%      + Geringere Abhängigkeit zu Änderungen inanderen Teilen
+%%      + Einfacher testbar
+%%      + Verständlicher, da weniger Kontext notwendig ist
+%%      + Einfacher wiederverwendbar
+%%  - Formen der Kopplung im Code z.B. in Java:
+%%      - X implementiert Interface Y
+%%      - X ist abgeleitet von Klasse Y (auch indirekt)
+%%      - X hat ein Attribut vom Typ Y
+%%      - X hat eine Methode mit Referenz zu Klasse Y (Parameter, lokale Variable oder Rückgabewert)
+%%      - X verwendet eine statische Methode von Klasse Y
+%%      - X verwendet eine polymorphe Methode von Klasse oder Interface Y
+%%  ⇒ Komponenten werden austauschbar, wenndie Kopplung lose ist
+%%  - Kopplung an konkrete oder abstrakteDatentypen (Klassen und Interfaces)
+%%  - Kopplung verschiedener Threads (Gemeinsame Sperren bzw. Locks)
+%%  - Kopplung durch Resourcen (Gemeinsame Dateien, Speicher, CPU)
+%%  ⇒ Kopplung zu stabilen Komponentenweniger problematisch
+%% 
+%% 
+%% 
+%% High Cohesion:
+%%  - Hohe bzw. starke Kohäsion
+%%  - Kohäsion ist ein Maß für den Zusammenhalteiner Klasse
+%%      - Beschreibt die semantische Nähe der Elementeeiner Klasse
+%%  - Hohe Kohäsion und Lose Kopplung als Fundament für idealen Code
+%%  + Einfacheres und verständlicheres Design 
+%%  + Komponenten werden wiederverwendbarer 
+%%  - Semantische Nähe der Attribute undMethoden bestimmen
+%%      - Semantik nur schwer automatisiert testbar
+%%      - Menschliche Einschätzung notwendig
+%%  - Automatisch bestimmte technische Metriken
+%%      - Anzahl Attribute und Methoden einer Klasse
+%%      - Häufigkeit der Verwendung der Attribute in allen Methoden
+%%      - Nicht immer treffend
+%% 
+%% 
+%% Information Expert: 
+%%  - Allgemeine Zuweisung einer Zuständigkeit zu einem Objekt
+%%  - Einfachste Möglichkeit
+%%      - Das Objekt, das die Informationen besitzt, erhält die Verantwortung dafür
+%%  - Befragung von Domänen- und Designmodell
+%%      - Wenn im Designmodell eine passende Klasseexistiert wird diese verwendet
+%%      - Ansonsten wird im Domänenmodell einepassende Repräsentation gesucht und dafür eineKlasse im Designmodell erstellt
+%%  - Objekte sind zuständig für Aufgaben über diesie Informationen besitzen
+%%      - Informationen können auch auf Teilexpertenverteilt sein
+%%      - Experte sammelt Informationen von Teilexpertenum Aufgabe zu erledigen
+%%  + Kapselung von Informationen 
+%%  + Leichtere Klassen, da Businesslogik zu denDaten verteilt wird 
+%%  - Kann zu Problemen mit anderen Prinzipienführen
+%%  - Separation of Concerns kann eine Lösung sein
+%% 
+%% Creator:
+%%  - Das Erzeuger-Prinzip legt fest, wer für dieErzeugung von Objekten zuständig ist
+%%  - Ein Objekt der Klasse B ist zuständig für dieErzeugung von Objekten der Klasse A, wenn
+%%      - B eine Aggregation von A ist
+%%      - B enthält Objekte von A
+%%      - B erfasst Objekte von A
+%%      - B nutzt Objekte von A mit starker Kopplung
+%%      - B hat sämtliche Informationen zur Initialisierungvon A (B ist Experte zur Erstellung von A)
+%%  - Allgemein gehalten kommt ein Objekt alsCreator eines anderen in Frage, wenn es zujedem erstellten Objekt eine Beziehung hat
+%%      - Eine Komposition in UML deutet auf einen Creatorhin
+%%  + Ein geeigneter Creator verringert dieKopplung von Komponenten 
+%%
+%% Indirection:
+%%  - Indirektion bzw. Delegation (<T>)
+%%  - Kann Systeme oder Teile von Systemenvoneinander entkoppeln
+%%  - Indirektion bietet mehr Freiheitsgrade alsVererbung bzw. Polymorphismus (Benötigt aber auch mehr Aufwand bzw. Code)
+%%  - Schnittstelle ist auf denAnwendungszweckangepasst
+%%  - Mehr Flexibilität
+%%  - Kompositionverschiedener Objekteerzielt das gewünschteErgebnis
+%% 
+%% Polymorphism:
+%%  - Polymorphismus
+%%  - Behandlung von Alternativen abhängig voneinem konkreten Typ
+%%  - Grundlegendes OO Prinzip zum Umgang mitVariation
+%%      - Methoden erhalten je nach Typ eine andereImplementierung
+%%  - Vermeidung von Fallunterscheidungen
+%%      - Kein If-Else bzw. Switch
+%%      - Konditionalstruktur wird im Typsystem codiert
+%%  - Abstrakte Klasse oder Interface als Basistyp
+%%      - Interfaces binden den Anwender nicht an eineKlassenhierarchie
+%%  - Führt zur Verwendung des EntwurfsmustersStrategie
+%%  - Polymorphe Methodenaufrufe werden erst zurLaufzeit gebunden
+%%  +  Einfacher erweiterbar
+%%  +  Bestehende Implementierung muss nichtverändert werden
+%%  +  Extrahierung von Frameworks wird vereinfacht
+%% 
+%% Controller:
+%%  - Verarbeitung von einkommenden Benutzereingaben
+%%  - Koordination zwischen Benutzeroberfläche und Businesslogik
+%%      - Einziger Ansprechpartner der Benutzeroberfläche
+%%  - Hauptsächlich Delegation zu anderen Objekten
+%%      - Controller enthält keine Businesslogik
+%%  - Zustand der Anwendung kann in Controllergehalten werden
+%%      - Aktion deaktivieren, während eine andere läuft
+%%  - System Controller
+%%      - 1 Controller für alle Aktionen
+%%      - Nur bei kleinen Anwendungen praktikabel
+%%  - Use Case Controller
+%%      - 1 Controller pro Use Case
+%%      - Viele kleine Controller
+%% 
+%% Pure Fabrication:
+%%  - Reine bzw. völlige Erfindung
+%%  - ReineVerhaltens-oderArbeits-Klasse
+%%      -  Klasse besitzt keinen Bezug zur Problemdomäne
+%%  - Trennung zwischen Technologie undProblemdomäne
+%%      - Kapselung von Algorithmen
+%%  + Einfach wiederverwendbar auch außerhalbder Domäne 
+%%  + Begünstigthigh cohesiondurch Kapselungspezieller Funktionalität 
+%%  ⇒ Sollte möglichst wenig vorkommen
+%% 
+%% Protected Variations:
+%%  - Sicherung vor Variation
+%%  - Kapselung verschiedener Implementierungen hinter einer einheitlichen Schnittstelle (API)
+%%  - Ursprünglich bekannt als Information Hiding
+%%  - Der Einfluss von Variabilität einzelner Komponenten soll nicht das Gesamtsystembetreffen
+%%  - Polymorphie und Delegation sind gute Schutzmöglichkeiten
+%%      - Wechsel der Implementierung ist nicht relevant für das Gesamtsystem
+%%  - Stylesheets im Webumfeld
+%%      - Schützt vor konkretem Aussehen
+%%  - Spezifikation von Schnittstellen
+%%      - Schützt vor Implementierungsdetails
+%%  - Betriebssysteme und Virtuelle Maschinen
+%%      - Schützen vor konkreter Hardware
+%%  - Begrenzt auch SQL
+%%      - Schützt vor konkreter Datenbank
+%% 
 \section{Analyse und Begründung für DRY}
+%%  - Don’t Repeat Yourself!
+%%  - Anwendbar auf alles mögliche
+%%      - Datenbankschemata
+%%      - Testpläne
+%%      - Buildsystem
+%%      - Dokumentation
+%%  - "Every piece of knowledge must have a single,unambiguous, authoritative representationwithin a system"
+%%  - Es darf nur eine Quelle der Wahrheit geben
+%%  - Alle anderen Quellen werden davon abgeleitet
+%%  - Vergleichbar zu den Normalformen bei RDBMS
+%%  - Mechanische Duplikation ist erlaubt
+%%  - Auswirkungen der Modifikation eines Teilshaben eine definierte Reichweite
+%%      - Keine unbeteiligten Teile sind betroffen
+%%      - Alle relevanten Teile ändern sich automatisch
+%%  - Singleton ist keine Umsetzung des DRY Prinzips
+%%      - Die Anzahl eines automatisch erzeugten Objektsist irrelevant
+%%  - Imposed Duplication
+%%      - Auferlegte Duplikation
+%%      - Entwickler glaubt die Duplikation ist unumgänglich
+%%  - Inadvertent Duplication
+%%      - Versehentliche Duplikation
+%%      - Entwickler bemerkt die Duplikation nicht
+%%  - Impatient Duplication
+%%      - Ungeduldige Duplikation
+%%      - Entwickler ist zu faul die Duplikation zu beseitigen
+
