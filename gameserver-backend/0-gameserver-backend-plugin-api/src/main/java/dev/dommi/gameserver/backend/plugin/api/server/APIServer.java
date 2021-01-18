@@ -170,4 +170,19 @@ public class APIServer {
                 });
         return new OpenApiPlugin(options);
     }
+
+    public static int getUserIDFromRequestToken(Context ctx) {
+        Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
+        if (token.isPresent()) {
+
+            try {
+                DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
+                return decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
+            } catch (JWTSecretMissingException e) {
+                logger.severe(e.getMessage());
+            }
+        }
+        return -1;
+    }
+
 }

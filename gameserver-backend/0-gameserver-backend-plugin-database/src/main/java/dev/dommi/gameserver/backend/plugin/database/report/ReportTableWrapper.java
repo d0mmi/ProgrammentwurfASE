@@ -8,7 +8,9 @@ import io.jenetics.facilejdbc.RowParser;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ReportTableWrapper extends TableWrapper<Report> {
 
@@ -56,15 +58,18 @@ public class ReportTableWrapper extends TableWrapper<Report> {
     @Override
     public void update(Report value) throws SQLException {
         StringBuilder values = new StringBuilder();
-
+        List<Param> params = new ArrayList<>();
+        params.add(Param.value("id", value.id));
         if (value.reason != null && !value.reason.isEmpty()) {
             values.append("reason = :reason,");
+            params.add(Param.value("reason", value.reason));
         } else if (value.typeId >= 0) {
             values.append("typeId = :typeId,");
+            params.add(Param.value("typeId", value.typeId));
         }
         values.append("open = :open");
+        params.add(Param.value("open", value.open ? 1 : 0));
 
-        Query.of(" UPDATE " + tableName + "  SET " + values.toString() + " WHERE id = :id").on(Param.value("id", value.id), Param.value("reason", value.reason), Param.value("typeId", value.typeId),
-                Param.value("open", value.open ? 1 : 0)).execute(conn);
+        Query.of(" UPDATE " + tableName + "  SET " + values.toString() + " WHERE id = :id").on(params).execute(conn);
     }
 }

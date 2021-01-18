@@ -5,6 +5,7 @@ import dev.dommi.gameserver.backend.adapter.api.ban.Ban;
 import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
+import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
@@ -36,7 +37,7 @@ public class BanController {
     )
     public static void ban(Context ctx) {
         BanUserRequest request = ctx.bodyAsClass(BanUserRequest.class);
-        int userId = getUserIDFromRequestToken(ctx);
+        int userId = APIServer.getUserIDFromRequestToken(ctx);
         if (userId >= 0) {
             BanService.banUser(request.userId, userId, request.reason, request.until);
             ctx.status(201);
@@ -95,9 +96,9 @@ public class BanController {
             }
     )
     public static void getAll(Context ctx) {
-        Boolean active = ctx.queryParam("active", Boolean.class).get();
-        Integer userId = ctx.queryParam("userId", Integer.class).get();
-        String untilDate = ctx.queryParam("untilDate", String.class).get();
+        Boolean active = ctx.queryParam("active", Boolean.class).getOrNull();
+        Integer userId = ctx.queryParam("userId", Integer.class).getOrNull();
+        String untilDate = ctx.queryParam("untilDate", String.class).getOrNull();
         Date date = null;
         try {
             if (untilDate != null && !untilDate.isEmpty()) {
@@ -121,20 +122,6 @@ public class BanController {
 
     private static int validPathParamBanId(Context ctx) {
         return ctx.pathParam(BAN_ID, Integer.class).check(id -> id > 0).get();
-    }
-
-    private static int getUserIDFromRequestToken(Context ctx) {
-        Optional<String> token = JavalinJWT.getTokenFromHeader(ctx);
-        if (token.isPresent()) {
-
-            try {
-                DecodedJWT decodedJWT = JWTProvider.getInstance().verifyToken(token.get());
-                return decodedJWT.getClaims().get(JWTProvider.USER_ID).as(int.class);
-            } catch (JWTSecretMissingException e) {
-                logger.severe(e.getMessage());
-            }
-        }
-        return -1;
     }
 
 }

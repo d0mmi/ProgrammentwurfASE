@@ -6,6 +6,8 @@ import io.jenetics.facilejdbc.Query;
 import io.jenetics.facilejdbc.RowParser;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ReportTypeTableWrapper extends TableWrapper<ReportType> {
@@ -26,10 +28,15 @@ public class ReportTypeTableWrapper extends TableWrapper<ReportType> {
 
     @Override
     public void initTable() throws SQLException {
-        Query.of("CREATE TABLE IF NOT EXISTS " + tableName + " ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, PRIMARY KEY (id) )").execute(conn);
-        create(new ReportType("Bug using"));
-        create(new ReportType("Hacking"));
-        create(new ReportType("Offensive Behaviour"));
+
+        DatabaseMetaData databaseMetaData = conn.getMetaData();
+        ResultSet resultSet = databaseMetaData.getTables(null, null, tableName, null);
+        if (!resultSet.next()) {
+            Query.of("CREATE TABLE IF NOT EXISTS " + tableName + " ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, PRIMARY KEY (id) )").execute(conn);
+            create(new ReportType("Bug using"));
+            create(new ReportType("Hacking"));
+            create(new ReportType("Offensive Behaviour"));
+        }
     }
 
     @Override

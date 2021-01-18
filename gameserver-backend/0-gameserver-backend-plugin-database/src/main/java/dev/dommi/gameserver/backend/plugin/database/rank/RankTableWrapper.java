@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RankTableWrapper extends TableWrapper<Rank> {
 
@@ -51,15 +53,18 @@ public class RankTableWrapper extends TableWrapper<Rank> {
     @Override
     public void update(Rank value) throws SQLException {
         StringBuilder values = new StringBuilder();
-
+        List<Param> params = new ArrayList<>();
+        params.add(Param.value("id", value.id));
         if (value.name != null && !value.name.isEmpty()) {
             values.append("name = :name,");
+            params.add(Param.value("name", value.name));
         } else if (value.level >= 0) {
             values.append("level = :level,");
+            params.add( Param.value("level", value.level));
         }
 
         String valueString = values.toString();
         valueString = valueString.substring(0, valueString.length() - 2);
-        Query.of(" UPDATE " + tableName + "  SET " + valueString + " WHERE id = :id").on(Param.value("id", value.id), Param.value("name", value.name), Param.value("level", value.level)).execute(conn);
+        Query.of(" UPDATE " + tableName + "  SET " + valueString + " WHERE id = :id").on(params).execute(conn);
     }
 }

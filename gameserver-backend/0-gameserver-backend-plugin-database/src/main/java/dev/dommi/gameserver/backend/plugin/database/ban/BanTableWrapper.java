@@ -8,8 +8,11 @@ import io.jenetics.facilejdbc.RowParser;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public class BanTableWrapper extends TableWrapper<Ban> {
 
@@ -40,8 +43,8 @@ public class BanTableWrapper extends TableWrapper<Ban> {
 
     @Override
     public void create(Ban value) throws SQLException {
-        Query.of("INSERT INTO " + tableName + " (userId, bannedById, reason, until, active) VALUES (:userId, :bannedById, :reason, :until, :active)")
-                .on(Param.value("userId", value.userId), Param.value("bannedById", value.bannedById), Param.value("reason", value.reason), Param.value("until", value.until),
+        Query.of("INSERT INTO " + tableName + " (userId, bannedById, reason, until, active) VALUES (:userId, :bannedById, :reason, '" + new SimpleDateFormat("yyyy-MM-dd").format(value.until) + "', :active)")
+                .on(Param.value("userId", value.userId), Param.value("bannedById", value.bannedById), Param.value("reason", value.reason),
                         Param.value("active", value.active ? 1 : 0)).execute(conn);
     }
 
@@ -55,25 +58,29 @@ public class BanTableWrapper extends TableWrapper<Ban> {
     }
 
     public Collection<Ban> findAllByDate(Date date) throws SQLException {
-        return Query.of("SELECT * FROM " + tableName + " WHERE active = :active AND until > :until").on(Param.value("active", 1), Param.value(":until", date)).as(parse().list(), conn);
+        return Query.of("SELECT * FROM " + tableName + " WHERE active = :active AND until > '" + new SimpleDateFormat("yyyy-MM-dd").format(date) + "'").on(Param.value("active", 1)).as(parse().list(), conn);
     }
 
     public Collection<Ban> findAllByUserAndDate(int userId, Date date) throws SQLException {
-        return Query.of("SELECT * FROM " + tableName + " WHERE userId = :userId AND active = :active AND until > :until").on(Param.value("userId", userId), Param.value("active", 1), Param.value(":until", date)).as(parse().list(), conn);
+        return Query.of("SELECT * FROM " + tableName + " WHERE userId = :userId AND active = :active AND until > '" + new SimpleDateFormat("yyyy-MM-dd").format(date) + "'")
+                .on(Param.value("userId", userId), Param.value("active", 1))
+                .as(parse().list(), conn);
     }
 
     @Override
     public void update(Ban value) throws SQLException {
         StringBuilder values = new StringBuilder();
-
+        List<Param> params = new ArrayList<>();
+        params.add(Param.value("id", value.id));
         if (value.reason != null && !value.reason.isEmpty()) {
             values.append("reason = :reason,");
+            params.add(Param.value("reason", value.reason));
         } else if (value.until != null) {
-            values.append("until = :until,");
+            values.append("until = '" + new SimpleDateFormat("yyyy-MM-dd").format(value.until) + "',");
         }
         values.append("active = :active");
+        params.add(Param.value("active", value.active ? 1 : 0));
 
-        Query.of(" UPDATE " + tableName + "  SET " + values.toString() + " WHERE id = :id").on(Param.value("id", value.id), Param.value("reason", value.reason), Param.value("until", value.until),
-                Param.value("active", value.active ? 1 : 0)).execute(conn);
+        Query.of(" UPDATE " + tableName + "  SET " + values.toString() + " WHERE id = :id").on(params).execute(conn);
     }
 }

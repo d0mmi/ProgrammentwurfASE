@@ -1,11 +1,18 @@
 package dev.dommi.gameserver.backend.plugin.api.services.report;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.report.Report;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportService;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportType;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
+import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
+import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
+import javalinjwt.JavalinJWT;
+
+import java.util.Optional;
 
 public class ReportController {
 
@@ -27,7 +34,8 @@ public class ReportController {
     )
     public static void report(Context ctx) {
         ReportUserRequest request = ctx.bodyAsClass(ReportUserRequest.class);
-        ReportService.reportUser(request.creatorId, request.reportedUserId, request.reason, request.reportTypeId);
+        int userId =  APIServer.getUserIDFromRequestToken(ctx);
+        ReportService.reportUser(userId, request.reportedUserId, request.reason, request.reportTypeId);
         ctx.status(201);
     }
 
@@ -81,8 +89,8 @@ public class ReportController {
             }
     )
     public static void getAll(Context ctx) {
-        Integer createdBy = ctx.queryParam("createdBy", Integer.class).get();
-        Integer reportsFor = ctx.queryParam("reportsFor", Integer.class).get();
+        Integer createdBy = ctx.queryParam("createdBy", Integer.class).getOrNull();
+        Integer reportsFor = ctx.queryParam("reportsFor", Integer.class).getOrNull();
         if (createdBy != null && createdBy >= 0) {
             ctx.json(ReportService.getReportsCreatedBy(createdBy));
         } else if (reportsFor != null && reportsFor >= 0) {
@@ -111,5 +119,9 @@ public class ReportController {
     private static int validPathParamReportId(Context ctx) {
         return ctx.pathParam(REPORT_ID, Integer.class).check(id -> id > 0).get();
     }
+
+
+
+
 
 }
