@@ -1,19 +1,13 @@
 package dev.dommi.gameserver.backend.plugin.api.services.report;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.report.Report;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportService;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportType;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
-import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
-import javalinjwt.JavalinJWT;
-
-import java.util.Optional;
 
 public class ReportController {
 

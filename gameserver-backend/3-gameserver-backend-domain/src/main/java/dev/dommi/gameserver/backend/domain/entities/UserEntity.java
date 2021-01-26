@@ -65,7 +65,7 @@ public class UserEntity {
     }
 
     public UserEntity grantRank(int rankId, RankRepository rankRepository) throws SQLException {
-        revokeRank(rankRepository);
+        rankRepository.revokeAllRanks(id);
         rankRepository.grantRank(id, rankId);
         rank = rankRepository.getRankFrom(id);
         return this;
@@ -73,7 +73,6 @@ public class UserEntity {
 
     public UserEntity revokeRank(RankRepository rankRepository) throws SQLException {
         if (rank.getName().equalsIgnoreCase(RankType.USER.value)) return this;
-        rankRepository.revokeAllRanks(id);
         int rankId = rankRepository.getRankIdFrom(RankType.USER.value);
         return grantRank(rankId, rankRepository);
     }

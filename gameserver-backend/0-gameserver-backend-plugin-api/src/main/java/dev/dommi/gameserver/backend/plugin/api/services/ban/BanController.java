@@ -1,22 +1,17 @@
 package dev.dommi.gameserver.backend.plugin.api.services.ban;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.ban.Ban;
 import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
-import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
-import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
-import javalinjwt.JavalinJWT;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class BanController {

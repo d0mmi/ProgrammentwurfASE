@@ -20,8 +20,6 @@ import dev.dommi.gameserver.backend.plugin.api.services.rank.RankController;
 import dev.dommi.gameserver.backend.plugin.api.services.report.ReportController;
 import dev.dommi.gameserver.backend.plugin.api.services.user.UserController;
 import io.javalin.Javalin;
-import io.javalin.core.security.Role;
-import io.javalin.core.util.Header;
 import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.ServiceUnavailableResponse;
@@ -33,11 +31,13 @@ import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.info.Info;
 import javalinjwt.JavalinJWT;
 
-import static io.javalin.apibuilder.ApiBuilder.*;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.logging.Logger;
+
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class APIServer {
     private static final Logger logger = Logger.getLogger(APIServer.class.getName());

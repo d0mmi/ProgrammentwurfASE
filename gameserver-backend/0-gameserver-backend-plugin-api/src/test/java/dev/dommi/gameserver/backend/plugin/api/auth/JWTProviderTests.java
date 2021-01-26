@@ -2,12 +2,11 @@ package dev.dommi.gameserver.backend.plugin.api.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.ClearEnvironmentVariable;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JWTProviderTests {
 
