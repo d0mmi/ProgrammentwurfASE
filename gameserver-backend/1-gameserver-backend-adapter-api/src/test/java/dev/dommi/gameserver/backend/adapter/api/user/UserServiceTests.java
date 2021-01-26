@@ -17,10 +17,10 @@ public class UserServiceTests {
         UserEntity entity = new UserEntity(1, "TestUser", "test@example.com", new RankVO("User", 1));
         User user = UserService.convertToUserFrom(entity);
         assertNotNull(user);
-        assertEquals(entity.id, user.id);
-        assertEquals(entity.name, user.name);
-        assertEquals(entity.email, user.email);
-        assertEquals(entity.rank.level, user.level);
+        assertEquals(entity.getId(), user.id);
+        assertEquals(entity.getName(), user.name);
+        assertEquals(entity.getEmail(), user.email);
+        assertEquals(entity.getRank().getLevel(), user.level);
     }
 
     @Test
@@ -32,10 +32,10 @@ public class UserServiceTests {
             User user = (User) users.toArray()[i];
             UserEntity entity = (UserEntity) entities.toArray()[i];
             assertNotNull(user);
-            assertEquals(entity.id, user.id);
-            assertEquals(entity.name, user.name);
-            assertEquals(entity.email, user.email);
-            assertEquals(entity.rank.level, user.level);
+            assertEquals(entity.getId(), user.id);
+            assertEquals(entity.getName(), user.name);
+            assertEquals(entity.getEmail(), user.email);
+            assertEquals(entity.getRank().getLevel(), user.level);
         }
 
     }

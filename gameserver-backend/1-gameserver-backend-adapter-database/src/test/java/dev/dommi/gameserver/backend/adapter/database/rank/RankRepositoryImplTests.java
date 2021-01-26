@@ -18,8 +18,8 @@ public class RankRepositoryImplTests {
         RankVO rankVO = RankRepositoryImpl.convertToRankVOFrom(rank);
 
         assertNotNull(rank);
-        assertEquals(rankVO.name, rank.name);
-        assertEquals(rankVO.level, rank.level);
+        assertEquals(rankVO.getName(), rank.name);
+        assertEquals(rankVO.getLevel(), rank.level);
     }
 
     @Test
@@ -32,8 +32,8 @@ public class RankRepositoryImplTests {
             RankVO rankVO = (RankVO) vos.toArray()[i];
 
             assertNotNull(rankVO);
-            assertEquals(rank.name, rankVO.name);
-            assertEquals(rank.level, rankVO.level);
+            assertEquals(rank.name, rankVO.getName());
+            assertEquals(rank.level, rankVO.getLevel());
         }
     }
 

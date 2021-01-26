@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.adapter.database.report;
+package dev.dommi.gameserver.backend.domain.repositories;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;

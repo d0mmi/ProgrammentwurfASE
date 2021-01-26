@@ -18,13 +18,13 @@ public class ReportServiceTests {
         ReportEntity entity = new ReportEntity(1, 1, 2, "ExampleReason", new ReportTypeEntity(1, "ExampleType"), true);
         Report report = ReportService.convertToReportFrom(entity);
         assertNotNull(report);
-        assertEquals(entity.id, report.id);
-        assertEquals(entity.creator, report.creator);
-        assertEquals(entity.reported, report.reported);
-        assertEquals(entity.reason, report.reason);
-        assertEquals(entity.type.id, report.type.id);
-        assertEquals(entity.type.name, report.type.name);
-        assertEquals(entity.open, report.open);
+        assertEquals(entity.getId(), report.id);
+        assertEquals(entity.getCreator(), report.creator);
+        assertEquals(entity.getReported(), report.reported);
+        assertEquals(entity.getReason(), report.reason);
+        assertEquals(entity.getType().getId(), report.type.id);
+        assertEquals(entity.getType().getName(), report.type.name);
+        assertEquals(entity.isOpen(), report.open);
     }
 
     @Test
@@ -37,13 +37,13 @@ public class ReportServiceTests {
             ReportEntity entity = (ReportEntity) entities.toArray()[i];
 
             assertNotNull(report);
-            assertEquals(entity.id, report.id);
-            assertEquals(entity.creator, report.creator);
-            assertEquals(entity.reported, report.reported);
-            assertEquals(entity.reason, report.reason);
-            assertEquals(entity.type.id, report.type.id);
-            assertEquals(entity.type.name, report.type.name);
-            assertEquals(entity.open, report.open);
+            assertEquals(entity.getId(), report.id);
+            assertEquals(entity.getCreator(), report.creator);
+            assertEquals(entity.getReported(), report.reported);
+            assertEquals(entity.getReason(), report.reason);
+            assertEquals(entity.getType().getId(), report.type.id);
+            assertEquals(entity.getType().getName(), report.type.name);
+            assertEquals(entity.isOpen(), report.open);
         }
     }
 
@@ -54,8 +54,8 @@ public class ReportServiceTests {
         ReportType type = ReportService.convertToReportTypeFrom(entity);
 
         assertNotNull(type);
-        assertEquals(entity.id, type.id);
-        assertEquals(entity.name, type.name);
+        assertEquals(entity.getId(), type.id);
+        assertEquals(entity.getName(), type.name);
     }
 
     @Test
@@ -68,8 +68,8 @@ public class ReportServiceTests {
             ReportTypeEntity entity = (ReportTypeEntity) entities.toArray()[i];
 
             assertNotNull(type);
-            assertEquals(entity.id, type.id);
-            assertEquals(entity.name, type.name);
+            assertEquals(entity.getId(), type.id);
+            assertEquals(entity.getName(), type.name);
         }
     }
 

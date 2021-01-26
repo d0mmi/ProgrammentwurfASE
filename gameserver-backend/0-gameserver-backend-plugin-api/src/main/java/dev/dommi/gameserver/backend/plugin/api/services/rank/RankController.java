@@ -2,12 +2,21 @@ package dev.dommi.gameserver.backend.plugin.api.services.rank;
 
 import dev.dommi.gameserver.backend.adapter.api.rank.Rank;
 import dev.dommi.gameserver.backend.adapter.api.rank.RankService;
+import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
 import io.javalin.plugin.openapi.annotations.*;
 
 public class RankController {
+
+    private final RankService rankService;
+
+    public RankController(RankRepository rankRepository, UserRepository userRepository) {
+        rankService = new RankService(rankRepository, userRepository);
+    }
+
     @OpenApi(
             summary = "Grant rank",
             operationId = "grantRank",
@@ -21,10 +30,10 @@ public class RankController {
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
             }
     )
-    public static void grant(Context ctx) {
+    public void grant(Context ctx) {
         GrantRankRequest request = ctx.bodyAsClass(GrantRankRequest.class);
         try {
-            RankService.grantRankTo(request.userId, request.rank);
+            rankService.grantRankTo(request.userId, request.rank);
             ctx.status(201);
         } catch (IllegalArgumentException e) {
             ctx.status(400);
@@ -45,9 +54,9 @@ public class RankController {
                     @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)})
             }
     )
-    public static void revoke(Context ctx) {
+    public void revoke(Context ctx) {
         RevokeRankRequest request = ctx.bodyAsClass(RevokeRankRequest.class);
-        RankService.revokeRankFrom(request.userId);
+        rankService.revokeRankFrom(request.userId);
         ctx.status(201);
     }
 
@@ -62,8 +71,8 @@ public class RankController {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = Rank[].class)})
             }
     )
-    public static void getAll(Context ctx) {
-        ctx.json(RankService.getAll());
+    public void getAll(Context ctx) {
+        ctx.json(rankService.getAll());
     }
 
 }

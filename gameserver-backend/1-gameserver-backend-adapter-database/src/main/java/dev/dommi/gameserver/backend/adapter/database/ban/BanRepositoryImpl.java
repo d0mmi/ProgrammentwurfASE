@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.adapter.database.ban;
 
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.plugin.database.ban.Ban;
 import dev.dommi.gameserver.backend.plugin.database.ban.BanController;
 

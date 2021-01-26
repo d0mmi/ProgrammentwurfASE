@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.adapter.database.user;
+package dev.dommi.gameserver.backend.domain.repositories;
 
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 

@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.application.rank;
+package dev.dommi.gameserver.backend.domain.entities;
 
 public enum RankType {
     USER("User"), MODERATOR("Moderator"), ADMIN("Admin");

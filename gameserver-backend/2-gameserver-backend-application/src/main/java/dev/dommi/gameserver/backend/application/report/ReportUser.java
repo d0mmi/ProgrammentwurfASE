@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.application.report;
 
-import dev.dommi.gameserver.backend.adapter.database.report.ReportRepository;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
 
 import java.sql.SQLException;
@@ -12,10 +12,6 @@ public class ReportUser {
 
     public ReportUser(ReportRepository repository) {
         this.repository = repository;
-    }
-
-    public ReportUser() {
-        repository = new ReportRepositoryImpl();
     }
 
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) {

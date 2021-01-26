@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.application.mocks;
 
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 
 import java.sql.SQLException;

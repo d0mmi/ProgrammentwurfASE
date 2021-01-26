@@ -1,6 +1,5 @@
 package dev.dommi.gameserver.backend.adapter.api.rank;
 
-import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ public class RankServiceTests {
 
     @Test
     public void invalidRankStringTest() {
-        assertThrows(IllegalArgumentException.class, () -> RankService.grantRankTo(1, "invalidRank"));
+        assertThrows(IllegalArgumentException.class, () -> new RankService(new RankRepositoryMock(), new UserRepositoryMock()).grantRankTo(1, "invalidRank"));
     }
 
     @Test
@@ -22,8 +21,8 @@ public class RankServiceTests {
         RankVO rankVO = new RankVO("User", 1);
         Rank rank = RankService.convertToRankFrom(rankVO);
         assertNotNull(rank);
-        assertEquals(rankVO.name, rank.name);
-        assertEquals(rankVO.level, rank.level);
+        assertEquals(rankVO.getName(), rank.name);
+        assertEquals(rankVO.getLevel(), rank.level);
     }
 
     @Test
@@ -35,8 +34,8 @@ public class RankServiceTests {
             Rank rank = (Rank) ranks.toArray()[i];
             RankVO rankVO = (RankVO) vos.toArray()[i];
             assertNotNull(rank);
-            assertEquals(rankVO.name, rank.name);
-            assertEquals(rankVO.level, rank.level);
+            assertEquals(rankVO.getName(), rank.name);
+            assertEquals(rankVO.getLevel(), rank.level);
         }
 
     }

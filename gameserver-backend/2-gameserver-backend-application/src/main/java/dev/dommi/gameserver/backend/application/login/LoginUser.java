@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.application.login;
 
-import dev.dommi.gameserver.backend.adapter.database.user.UserRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
@@ -12,10 +12,6 @@ public class LoginUser {
 
     public LoginUser(UserRepository repository) {
         this.repository = repository;
-    }
-
-    public LoginUser() {
-        this.repository = new UserRepositoryImpl();
     }
 
     public UserEntity loginUser(String email, String pw) throws InvalidParameterException {

@@ -2,6 +2,7 @@ package dev.dommi.gameserver.backend.adapter.database.report;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.plugin.database.report.Report;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportController;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportType;

@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.adapter.database.rank;
 
+import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 import dev.dommi.gameserver.backend.plugin.database.rank.Rank;
 import dev.dommi.gameserver.backend.plugin.database.rank.RankController;

@@ -1,13 +1,10 @@
 package dev.dommi.gameserver.backend.application.ban;
 
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepository;
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
-import dev.dommi.gameserver.backend.adapter.database.user.UserRepository;
-import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.logging.Logger;
 
 public class CheckUserBan {
@@ -22,14 +19,9 @@ public class CheckUserBan {
         this.userRepository = userRepository;
     }
 
-    public CheckUserBan() {
-        this.banRepository = new BanRepositoryImpl();
-        this.userRepository = new UserRepositoryImpl();
-    }
-
-    public boolean isBanned(int userId) {
+    private boolean isBanned(UserEntity user) {
         try {
-            return !banRepository.findAllByUserAndDate(userId, new Date()).isEmpty();
+            return user.isBanned(banRepository);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -40,7 +32,19 @@ public class CheckUserBan {
         try {
             UserEntity user = userRepository.findByEmail(email);
             if (user != null) {
-                return isBanned(user.id);
+                return isBanned(user);
+            }
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean isBanned(int userId) {
+        try {
+            UserEntity user = userRepository.findById(userId);
+            if (user != null) {
+                return isBanned(user);
             }
         } catch (SQLException e) {
             logger.severe(e.getMessage());

@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.application.report;
 
-import dev.dommi.gameserver.backend.adapter.database.report.ReportRepository;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
@@ -16,10 +16,6 @@ public class GetReports {
 
     public GetReports(ReportRepository repository) {
         this.repository = repository;
-    }
-
-    public GetReports() {
-        repository = new ReportRepositoryImpl();
     }
 
     public Collection<ReportEntity> getAll() {

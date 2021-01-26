@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.report.Report;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportService;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportType;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
@@ -18,6 +19,11 @@ public class ReportController {
 
 
     private static final String REPORT_ID = "reportId";
+    private final ReportService reportService;
+
+    public ReportController(ReportRepository reportRepository) {
+        reportService = new ReportService(reportRepository);
+    }
 
     @OpenApi(
             summary = "Report user",
@@ -32,10 +38,10 @@ public class ReportController {
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
             }
     )
-    public static void report(Context ctx) {
+    public void report(Context ctx) {
         ReportUserRequest request = ctx.bodyAsClass(ReportUserRequest.class);
-        int userId =  APIServer.getUserIDFromRequestToken(ctx);
-        ReportService.reportUser(userId, request.reportedUserId, request.reason, request.reportTypeId);
+        int userId = APIServer.getUserIDFromRequestToken(ctx);
+        reportService.reportUser(userId, request.reportedUserId, request.reason, request.reportTypeId);
         ctx.status(201);
     }
 
@@ -52,9 +58,9 @@ public class ReportController {
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
             }
     )
-    public static void updateReportStatus(Context ctx) {
+    public void updateReportStatus(Context ctx) {
         UpdateReportStatusRequest request = ctx.bodyAsClass(UpdateReportStatusRequest.class);
-        ReportService.updateReportStatus(validPathParamReportId(ctx), request.status);
+        reportService.updateReportStatus(validPathParamReportId(ctx), request.status);
         ctx.status(201);
     }
 
@@ -69,8 +75,8 @@ public class ReportController {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = Report.class)})
             }
     )
-    public static void getOne(Context ctx) {
-        ctx.json(ReportService.getReport(validPathParamReportId(ctx)));
+    public void getOne(Context ctx) {
+        ctx.json(reportService.getReport(validPathParamReportId(ctx)));
     }
 
     @OpenApi(
@@ -88,15 +94,15 @@ public class ReportController {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = Report[].class)})
             }
     )
-    public static void getAll(Context ctx) {
+    public void getAll(Context ctx) {
         Integer createdBy = ctx.queryParam("createdBy", Integer.class).getOrNull();
         Integer reportsFor = ctx.queryParam("reportsFor", Integer.class).getOrNull();
         if (createdBy != null && createdBy >= 0) {
-            ctx.json(ReportService.getReportsCreatedBy(createdBy));
+            ctx.json(reportService.getReportsCreatedBy(createdBy));
         } else if (reportsFor != null && reportsFor >= 0) {
-            ctx.json(ReportService.getReportsFor(reportsFor));
+            ctx.json(reportService.getReportsFor(reportsFor));
         } else {
-            ctx.json(ReportService.getAllReports());
+            ctx.json(reportService.getAllReports());
         }
 
     }
@@ -112,16 +118,13 @@ public class ReportController {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = ReportType[].class)})
             }
     )
-    public static void getTypes(Context ctx) {
-        ctx.json(ReportService.getReportTypes());
+    public void getTypes(Context ctx) {
+        ctx.json(reportService.getReportTypes());
     }
 
-    private static int validPathParamReportId(Context ctx) {
+    private int validPathParamReportId(Context ctx) {
         return ctx.pathParam(REPORT_ID, Integer.class).check(id -> id > 0).get();
     }
-
-
-
 
 
 }

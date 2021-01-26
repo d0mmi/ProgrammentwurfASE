@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.adapter.database.rank;
+package dev.dommi.gameserver.backend.domain.repositories;
 
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 

@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.application.user;
 
-import dev.dommi.gameserver.backend.adapter.database.user.UserRepository;
+import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.application.login.RegisterUser;
 
@@ -15,25 +16,15 @@ public class ModifyUser {
         this.repository = repository;
     }
 
-    public ModifyUser() {
-        repository = new UserRepositoryImpl();
-    }
-
     public boolean modifyUserById(int id, String name, String email, String pw) {
         try {
-            if (repository.findByEmail(email) == null && modifyValuesValid(name, email, pw)) {
-                repository.update(id, name, email, pw);
-                return true;
-            }
+            UserEntity user = repository.findById(id);
+            return user.modify(name, email, pw, repository);
 
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
         return false;
-    }
-
-    private boolean modifyValuesValid(String name, String email, String pw) {
-        return (name == null || name.matches(RegisterUser.NAME_REGEX)) && (email == null || email.matches(RegisterUser.EMAIL_REGEX)) && (pw == null || pw.matches(RegisterUser.PW_REGEX));
     }
 
     public void deleteUserById(int id) {

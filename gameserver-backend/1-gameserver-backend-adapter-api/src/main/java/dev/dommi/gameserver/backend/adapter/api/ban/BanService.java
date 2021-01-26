@@ -5,61 +5,70 @@ import dev.dommi.gameserver.backend.application.ban.CheckUserBan;
 import dev.dommi.gameserver.backend.application.ban.GetAllBans;
 import dev.dommi.gameserver.backend.application.ban.UpdateBan;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 public class BanService {
+    private final BanUser banUser;
+    private final UpdateBan updateBan;
+    private final CheckUserBan checkUserBan;
+    private final GetAllBans getAllBans;
 
-    private BanService() {
-
+    public BanService(BanRepository banRepository, UserRepository userRepository) {
+        banUser = new BanUser(banRepository);
+        updateBan = new UpdateBan(banRepository);
+        checkUserBan = new CheckUserBan(banRepository, userRepository);
+        getAllBans = new GetAllBans(banRepository);
     }
 
-    public static void banUser(int userId, int bannedById, String reason, Date until) {
-        new BanUser().banUser(userId, bannedById, reason, until);
+    public void banUser(int userId, int bannedById, String reason, Date until) {
+        banUser.banUser(userId, bannedById, reason, until);
     }
 
-    public static void update(int id, String reason, Date until, boolean active) {
-        new UpdateBan().updateBan(id, reason, until, active);
+    public void update(int id, String reason, Date until, boolean active) {
+        updateBan.updateBan(id, reason, until, active);
     }
 
     //TODO Implement check in other Requests
-    public static boolean isUserBanned(int userId) {
-        return new CheckUserBan().isBanned(userId);
+    public boolean isUserBanned(int userId) {
+        return checkUserBan.isBanned(userId);
     }
 
-    public static boolean isUserBanned(String email) {
-        return new CheckUserBan().isBanned(email);
+    public boolean isUserBanned(String email) {
+        return checkUserBan.isBanned(email);
     }
 
-    public static Ban getOne(int id) {
-        return convertToBanFrom(new GetAllBans().getOne(id));
+    public Ban getOne(int id) {
+        return convertToBanFrom(getAllBans.getOne(id));
     }
 
-    public static Collection<Ban> getAll() {
-        return convertToBanCollectionFrom(new GetAllBans().getAll());
+    public Collection<Ban> getAll() {
+        return convertToBanCollectionFrom(getAllBans.getAll());
     }
 
-    public static Collection<Ban> getAll(boolean active) {
-        return convertToBanCollectionFrom(new GetAllBans().getAll(active));
+    public Collection<Ban> getAll(boolean active) {
+        return convertToBanCollectionFrom(getAllBans.getAll(active));
     }
 
-    public static Collection<Ban> getAll(int userId) {
-        return convertToBanCollectionFrom(new GetAllBans().getAll(userId));
+    public Collection<Ban> getAll(int userId) {
+        return convertToBanCollectionFrom(getAllBans.getAll(userId));
     }
 
-    public static Collection<Ban> getAll(Date date) {
-        return convertToBanCollectionFrom(new GetAllBans().getAll(date));
+    public Collection<Ban> getAll(Date date) {
+        return convertToBanCollectionFrom(getAllBans.getAll(date));
     }
 
-    public static Collection<Ban> getAll(int userId, Date date) {
-        return convertToBanCollectionFrom(new GetAllBans().getAll(userId, date));
+    public Collection<Ban> getAll(int userId, Date date) {
+        return convertToBanCollectionFrom(getAllBans.getAll(userId, date));
     }
 
     static Ban convertToBanFrom(BanEntity ban) {
         if (ban == null) return null;
-        return new Ban(ban.id, ban.userId, ban.bannedById, ban.reason, ban.until, ban.active);
+        return new Ban(ban.getId(), ban.getUserId(), ban.getBannedById(), ban.getReason(), ban.getUntil(), ban.isActive());
     }
 
     static Collection<Ban> convertToBanCollectionFrom(Collection<BanEntity> entities) {

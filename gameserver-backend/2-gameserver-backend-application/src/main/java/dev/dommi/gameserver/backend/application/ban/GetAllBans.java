@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.application.ban;
 
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 
@@ -15,10 +15,6 @@ public class GetAllBans {
 
     public GetAllBans(BanRepository repository) {
         this.repository = repository;
-    }
-
-    public GetAllBans() {
-        this.repository = new BanRepositoryImpl();
     }
 
     private BanRepository repository;

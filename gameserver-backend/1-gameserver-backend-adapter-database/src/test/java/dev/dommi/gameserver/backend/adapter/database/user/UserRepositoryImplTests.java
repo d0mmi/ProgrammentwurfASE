@@ -30,9 +30,9 @@ public class UserRepositoryImplTests {
         UserEntity entity = new UserRepositoryImpl(userController, rankController).convertToUserEntityFrom(user);
 
         assertNotNull(entity);
-        assertEquals(user.id, entity.id);
-        assertEquals(user.name, entity.name);
-        assertEquals(user.email, entity.email);
+        assertEquals(user.id, entity.getId());
+        assertEquals(user.name, entity.getName());
+        assertEquals(user.email, entity.getEmail());
     }
 
     @Test
@@ -49,9 +49,9 @@ public class UserRepositoryImplTests {
             UserEntity entity = (UserEntity) entities.toArray()[i];
 
             assertNotNull(entity);
-            assertEquals(user.id, entity.id);
-            assertEquals(user.name, entity.name);
-            assertEquals(user.email, entity.email);
+            assertEquals(user.id, entity.getId());
+            assertEquals(user.name, entity.getName());
+            assertEquals(user.email, entity.getEmail());
         }
 
     }

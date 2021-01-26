@@ -5,53 +5,61 @@ import dev.dommi.gameserver.backend.application.report.ReportUser;
 import dev.dommi.gameserver.backend.application.report.UpdateReportStatus;
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ReportService {
 
-    private ReportService() {
+    private final GetReports getReports;
+    private final ReportUser reportUser;
+    private final UpdateReportStatus updateReportStatus;
+
+    public ReportService(ReportRepository reportRepository) {
+        getReports = new GetReports(reportRepository);
+        reportUser = new ReportUser(reportRepository);
+        updateReportStatus = new UpdateReportStatus(reportRepository);
     }
 
 
-    public static Collection<Report> getAllReports() {
-        return convertToReportCollectionFrom(new GetReports().getAll());
+    public Collection<Report> getAllReports() {
+        return convertToReportCollectionFrom(getReports.getAll());
     }
 
 
-    public static Collection<Report> getReportsCreatedBy(int userId) {
-        return convertToReportCollectionFrom(new GetReports().getReportsCreatedBy(userId));
+    public Collection<Report> getReportsCreatedBy(int userId) {
+        return convertToReportCollectionFrom(getReports.getReportsCreatedBy(userId));
     }
 
 
-    public static Collection<Report> getReportsFor(int userId) {
-        return convertToReportCollectionFrom(new GetReports().getReportsFor(userId));
+    public Collection<Report> getReportsFor(int userId) {
+        return convertToReportCollectionFrom(getReports.getReportsFor(userId));
     }
 
 
-    public static Report getReport(int reportId) {
-        return convertToReportFrom(new GetReports().getReport(reportId));
+    public Report getReport(int reportId) {
+        return convertToReportFrom(getReports.getReport(reportId));
     }
 
 
-    public static Collection<ReportType> getReportTypes() {
-        return convertToReportTypeCollectionFrom(new GetReports().getReportTypes());
+    public Collection<ReportType> getReportTypes() {
+        return convertToReportTypeCollectionFrom(getReports.getReportTypes());
     }
 
 
-    public static void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) {
-        new ReportUser().reportUser(creatorId, reportedUserId, reason, reportTypeId);
+    public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) {
+        reportUser.reportUser(creatorId, reportedUserId, reason, reportTypeId);
     }
 
 
-    public static void updateReportStatus(int reportId, boolean status) {
-        new UpdateReportStatus().updateReportStatus(reportId, status);
+    public void updateReportStatus(int reportId, boolean status) {
+        updateReportStatus.updateReportStatus(reportId, status);
     }
 
     static Report convertToReportFrom(ReportEntity report) {
         if (report == null) return null;
-        return new Report(report.id, report.creator, report.reported, report.reason, convertToReportTypeFrom(report.type), report.open);
+        return new Report(report.getId(), report.getCreator(), report.getReported(), report.getReason(), convertToReportTypeFrom(report.getType()), report.isOpen());
     }
 
     static Collection<Report> convertToReportCollectionFrom(Collection<ReportEntity> entities) {
@@ -67,7 +75,7 @@ public class ReportService {
 
     static ReportType convertToReportTypeFrom(ReportTypeEntity type) {
         if (type == null) return null;
-        return new ReportType(type.id, type.name);
+        return new ReportType(type.getId(), type.getName());
     }
 
     static Collection<ReportType> convertToReportTypeCollectionFrom(Collection<ReportTypeEntity> entities) {

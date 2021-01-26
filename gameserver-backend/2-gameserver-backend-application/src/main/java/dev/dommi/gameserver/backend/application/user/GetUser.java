@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.application.user;
 
-import dev.dommi.gameserver.backend.adapter.database.user.UserRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
@@ -15,10 +15,6 @@ public class GetUser {
 
     public GetUser(UserRepository repository) {
         this.repository = repository;
-    }
-
-    public GetUser() {
-        repository = new UserRepositoryImpl();
     }
 
     public UserEntity getUserById(int id) throws UserNotFoundException {

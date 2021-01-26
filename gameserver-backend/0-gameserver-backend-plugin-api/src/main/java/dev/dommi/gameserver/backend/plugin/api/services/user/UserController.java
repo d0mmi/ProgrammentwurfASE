@@ -3,6 +3,7 @@ package dev.dommi.gameserver.backend.plugin.api.services.user;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
 import dev.dommi.gameserver.backend.adapter.api.user.UserService;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
@@ -22,6 +23,11 @@ public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private static final String NOT_FOUND_RESPONSE = "UserEntity not found";
     static final String USER_ID = "userId";
+    private final UserService userService;
+
+    public UserController(UserRepository userRepository) {
+        userService = new UserService(userRepository);
+    }
 
     @OpenApi(
             summary = "Get all users",
@@ -33,8 +39,8 @@ public class UserController {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = User[].class)})
             }
     )
-    public static void getAll(Context ctx) {
-        ctx.json(UserService.getAll());
+    public void getAll(Context ctx) {
+        ctx.json(userService.getAll());
     }
 
     @OpenApi(
@@ -50,8 +56,8 @@ public class UserController {
                     @OpenApiResponse(status = "404", content = {@OpenApiContent(from = NotFoundResponse.class)})
             }
     )
-    public static void getOne(Context ctx) {
-        User user = UserService.findById(validPathParamUserId(ctx));
+    public void getOne(Context ctx) {
+        User user = userService.findById(validPathParamUserId(ctx));
         if (user == null) {
             throw new NotFoundResponse(NOT_FOUND_RESPONSE);
         } else {
@@ -63,7 +69,7 @@ public class UserController {
             summary = "Update user by ID",
             operationId = "updateUserById",
             path = "/users/:" + USER_ID,
-            method = HttpMethod.PATCH,
+            method = HttpMethod.POST,
             pathParams = {@OpenApiParam(name = USER_ID, type = Integer.class, description = "The user ID")},
             tags = {"UserEntity"},
             headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
@@ -75,15 +81,15 @@ public class UserController {
                     @OpenApiResponse(status = "404", content = {@OpenApiContent(from = NotFoundResponse.class)})
             }
     )
-    public static void update(Context ctx) {
+    public void update(Context ctx) {
 
         if (validUserRequest(ctx)) {
-            User user = UserService.findById(validPathParamUserId(ctx));
+            User user = userService.findById(validPathParamUserId(ctx));
             if (user == null) {
                 throw new NotFoundResponse(NOT_FOUND_RESPONSE);
             } else {
                 UserRequest newUser = ctx.bodyAsClass(UserRequest.class);
-                if (UserService.update(user.id, newUser.name, newUser.email)) {
+                if (userService.update(user.id, newUser.name, newUser.email)) {
                     ctx.status(204);
                 } else {
                     throw new BadRequestResponse();
@@ -111,14 +117,14 @@ public class UserController {
                     @OpenApiResponse(status = "404", content = {@OpenApiContent(from = NotFoundResponse.class)})
             }
     )
-    public static void delete(Context ctx) {
+    public void delete(Context ctx) {
 
         if (validUserRequest(ctx)) {
-            User user = UserService.findById(validPathParamUserId(ctx));
+            User user = userService.findById(validPathParamUserId(ctx));
             if (user == null) {
                 throw new NotFoundResponse(NOT_FOUND_RESPONSE);
             } else {
-                UserService.delete(user.id);
+                userService.delete(user.id);
                 ctx.status(204);
             }
         } else {

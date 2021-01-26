@@ -18,12 +18,12 @@ public class BanServiceTests {
         Ban ban = BanService.convertToBanFrom(entity);
 
         assertNotNull(ban);
-        assertEquals(entity.id, ban.id);
-        assertEquals(entity.userId, ban.userId);
-        assertEquals(entity.bannedById, ban.bannedById);
-        assertEquals(entity.reason, ban.reason);
-        assertEquals(entity.until, ban.until);
-        assertEquals(entity.active, ban.active);
+        assertEquals(entity.getId(), ban.id);
+        assertEquals(entity.getUserId(), ban.userId);
+        assertEquals(entity.getBannedById(), ban.bannedById);
+        assertEquals(entity.getReason(), ban.reason);
+        assertEquals(entity.getUntil(), ban.until);
+        assertEquals(entity.isActive(), ban.active);
     }
 
     @Test
@@ -36,12 +36,12 @@ public class BanServiceTests {
             BanEntity entity = (BanEntity) entities.toArray()[i];
 
             assertNotNull(ban);
-            assertEquals(entity.id, ban.id);
-            assertEquals(entity.userId, ban.userId);
-            assertEquals(entity.bannedById, ban.bannedById);
-            assertEquals(entity.reason, ban.reason);
-            assertEquals(entity.until, ban.until);
-            assertEquals(entity.active, ban.active);
+            assertEquals(entity.getId(), ban.id);
+            assertEquals(entity.getUserId(), ban.userId);
+            assertEquals(entity.getBannedById(), ban.bannedById);
+            assertEquals(entity.getReason(), ban.reason);
+            assertEquals(entity.getUntil(), ban.until);
+            assertEquals(entity.isActive(), ban.active);
         }
     }
 

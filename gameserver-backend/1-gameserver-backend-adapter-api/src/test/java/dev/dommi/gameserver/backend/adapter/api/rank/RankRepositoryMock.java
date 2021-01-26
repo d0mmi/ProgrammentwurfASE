@@ -1,26 +1,25 @@
-package dev.dommi.gameserver.backend.application.mocks;
+package dev.dommi.gameserver.backend.adapter.api.rank;
 
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class RankRepositoryMock implements RankRepository {
     @Override
     public Collection<RankVO> getAllRanks() throws SQLException {
-        return Arrays.asList(new RankVO("User", 1));
+        return null;
     }
 
     @Override
     public RankVO getRankFrom(int userId) throws SQLException {
-        return new RankVO("User", 1);
+        return null;
     }
 
     @Override
     public int getRankIdFrom(String name) throws SQLException {
-        return 1;
+        return 0;
     }
 
     @Override

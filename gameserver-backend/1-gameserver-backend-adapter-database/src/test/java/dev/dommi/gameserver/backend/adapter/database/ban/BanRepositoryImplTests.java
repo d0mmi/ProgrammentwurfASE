@@ -20,12 +20,12 @@ public class BanRepositoryImplTests {
         BanEntity entity = BanRepositoryImpl.convertToBanEntityFrom(ban);
 
         assertNotNull(entity);
-        assertEquals(ban.id, entity.id);
-        assertEquals(ban.userId, entity.userId);
-        assertEquals(ban.bannedById, entity.bannedById);
-        assertEquals(ban.reason, entity.reason);
-        assertEquals(ban.until, ban.until);
-        assertEquals(ban.active, entity.active);
+        assertEquals(ban.id, entity.getId());
+        assertEquals(ban.userId, entity.getUserId());
+        assertEquals(ban.bannedById, entity.getBannedById());
+        assertEquals(ban.reason, entity.getReason());
+        assertEquals(ban.until, entity.getUntil());
+        assertEquals(ban.active, entity.isActive());
     }
 
     @Test
@@ -38,12 +38,12 @@ public class BanRepositoryImplTests {
             BanEntity entity = (BanEntity) entities.toArray()[i];
 
             assertNotNull(entity);
-            assertEquals(ban.id, entity.id);
-            assertEquals(ban.userId, entity.userId);
-            assertEquals(ban.bannedById, entity.bannedById);
-            assertEquals(ban.reason, entity.reason);
-            assertEquals(ban.until, ban.until);
-            assertEquals(ban.active, entity.active);
+            assertEquals(ban.id, entity.getId());
+            assertEquals(ban.userId, entity.getUserId());
+            assertEquals(ban.bannedById, entity.getBannedById());
+            assertEquals(ban.reason, entity.getReason());
+            assertEquals(ban.until, entity.getUntil());
+            assertEquals(ban.active, entity.isActive());
         }
     }
 

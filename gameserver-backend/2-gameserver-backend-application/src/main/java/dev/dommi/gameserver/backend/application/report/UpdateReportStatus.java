@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.application.report;
 
-import dev.dommi.gameserver.backend.adapter.database.report.ReportRepository;
+import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
 
 import java.sql.SQLException;
@@ -14,14 +15,11 @@ public class UpdateReportStatus {
         this.repository = repository;
     }
 
-    public UpdateReportStatus() {
-        repository = new ReportRepositoryImpl();
-    }
-
 
     public void updateReportStatus(int reportId, boolean status) {
         try {
-            repository.updateReportStatus(reportId, status);
+            ReportEntity report = repository.getReport(reportId);
+            report.updateStatus(status, repository);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }

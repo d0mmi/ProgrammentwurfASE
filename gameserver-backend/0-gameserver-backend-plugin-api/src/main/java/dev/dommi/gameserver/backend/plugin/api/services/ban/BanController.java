@@ -3,6 +3,8 @@ package dev.dommi.gameserver.backend.plugin.api.services.ban;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.ban.Ban;
 import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
 import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
@@ -22,6 +24,12 @@ public class BanController {
     private static final Logger logger = Logger.getLogger(BanController.class.getName());
     private static final String BAN_ID = "banId";
 
+    private final BanService banService;
+
+    public BanController(BanRepository banRepository, UserRepository userRepository) {
+        banService = new BanService(banRepository, userRepository);
+    }
+
     @OpenApi(
             summary = "Ban user",
             operationId = "banUser",
@@ -35,11 +43,11 @@ public class BanController {
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
             }
     )
-    public static void ban(Context ctx) {
+    public void ban(Context ctx) {
         BanUserRequest request = ctx.bodyAsClass(BanUserRequest.class);
         int userId = APIServer.getUserIDFromRequestToken(ctx);
         if (userId >= 0) {
-            BanService.banUser(request.userId, userId, request.reason, request.until);
+            banService.banUser(request.userId, userId, request.reason, request.until);
             ctx.status(201);
         } else ctx.status(400).json(new BadRequestResponse("No valid UserId in token found!"));
     }
@@ -57,9 +65,9 @@ public class BanController {
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
             }
     )
-    public static void updateBan(Context ctx) {
+    public void updateBan(Context ctx) {
         UpdateBanRequest request = ctx.bodyAsClass(UpdateBanRequest.class);
-        BanService.update(validPathParamBanId(ctx), request.reason, request.until, request.active);
+        banService.update(validPathParamBanId(ctx), request.reason, request.until, request.active);
         ctx.status(201);
     }
 
@@ -74,8 +82,8 @@ public class BanController {
                     @OpenApiResponse(status = "200", content = {@OpenApiContent(from = Ban.class)})
             }
     )
-    public static void getOne(Context ctx) {
-        ctx.json(BanService.getOne(validPathParamBanId(ctx)));
+    public void getOne(Context ctx) {
+        ctx.json(banService.getOne(validPathParamBanId(ctx)));
     }
 
     @OpenApi(
@@ -95,7 +103,7 @@ public class BanController {
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)})
             }
     )
-    public static void getAll(Context ctx) {
+    public void getAll(Context ctx) {
         Boolean active = ctx.queryParam("active", Boolean.class).getOrNull();
         Integer userId = ctx.queryParam("userId", Integer.class).getOrNull();
         String untilDate = ctx.queryParam("untilDate", String.class).getOrNull();
@@ -105,22 +113,22 @@ public class BanController {
                 date = DateFormat.getInstance().parse(untilDate);
             }
             if (date != null && userId != null && userId >= 0) {
-                ctx.json(BanService.getAll(userId, date));
+                ctx.json(banService.getAll(userId, date));
             } else if (userId != null && userId >= 0) {
-                ctx.json(BanService.getAll(userId));
+                ctx.json(banService.getAll(userId));
             } else if (date != null) {
-                ctx.json(BanService.getAll(date));
+                ctx.json(banService.getAll(date));
             } else if (active != null) {
-                ctx.json(BanService.getAll(active));
+                ctx.json(banService.getAll(active));
             } else {
-                ctx.json(BanService.getAll());
+                ctx.json(banService.getAll());
             }
         } catch (ParseException e) {
             ctx.status(400).json(new BadRequestResponse("Could not parse Date!"));
         }
     }
 
-    private static int validPathParamBanId(Context ctx) {
+    private int validPathParamBanId(Context ctx) {
         return ctx.pathParam(BAN_ID, Integer.class).check(id -> id > 0).get();
     }
 

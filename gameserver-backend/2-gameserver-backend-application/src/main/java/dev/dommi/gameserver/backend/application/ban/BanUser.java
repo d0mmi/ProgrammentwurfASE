@@ -1,7 +1,6 @@
 package dev.dommi.gameserver.backend.application.ban;
 
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepository;
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -13,10 +12,6 @@ public class BanUser {
 
     public BanUser(BanRepository repository) {
         this.repository = repository;
-    }
-
-    public BanUser() {
-        this(new BanRepositoryImpl());
     }
 
     private static final Logger logger = Logger.getLogger(BanUser.class.getName());

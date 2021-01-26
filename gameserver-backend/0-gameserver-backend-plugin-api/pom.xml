@@ -20,11 +20,21 @@
     </repositories>
 
     <dependencies>
+
         <dependency>
             <groupId>dev.dommi.gameserver-backend</groupId>
             <artifactId>1-gameserver-backend-adapter-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>dev.dommi.gameserver-backend</groupId>
+            <artifactId>1-gameserver-backend-adapter-database</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- External dependencies -->
+
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>

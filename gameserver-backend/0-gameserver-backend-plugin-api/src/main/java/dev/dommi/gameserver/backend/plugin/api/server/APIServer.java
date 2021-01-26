@@ -3,6 +3,14 @@ package dev.dommi.gameserver.backend.plugin.api.server;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
+import dev.dommi.gameserver.backend.adapter.database.rank.RankRepositoryImpl;
+import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
+import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
+import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
@@ -62,6 +70,18 @@ public class APIServer {
 
     public APIServer() {
         this.port = Integer.parseInt(System.getenv(API_PORT));
+
+        UserRepository userRepository = new UserRepositoryImpl();
+        RankRepository rankRepository = new RankRepositoryImpl();
+        ReportRepository reportRepository = new ReportRepositoryImpl();
+        BanRepository banRepository = new BanRepositoryImpl();
+
+        LoginController loginController = new LoginController(userRepository, rankRepository, banRepository);
+        BanController banController = new BanController(banRepository, userRepository);
+        RankController rankController = new RankController(rankRepository, userRepository);
+        ReportController reportController = new ReportController(reportRepository);
+        UserController userController = new UserController(userRepository);
+
         server = Javalin.create(config -> {
             config.registerPlugin(getConfiguredOpenApiPlugin());
             config.defaultContentType = DEFAULT_CONTENT_TYPE;
@@ -78,49 +98,49 @@ public class APIServer {
             });
         }).routes(() -> {
             path(REGISTER_PATH, () -> {
-                post(LoginController::register, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+                post(loginController::register, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
             });
             path(LOGIN_PATH, () -> {
-                post(LoginController::login, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
+                post(loginController::login, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
             });
             path(USERS_PATH, () -> {
-                get(UserController::getAll, new HashSet<>(Arrays.asList(AppRole.USER)));
+                get(userController::getAll, new HashSet<>(Arrays.asList(AppRole.USER)));
                 path(USER_PATH, () -> {
-                    get(UserController::getOne, new HashSet<>(Arrays.asList(AppRole.USER)));
-                    patch(UserController::update, new HashSet<>(Arrays.asList(AppRole.USER)));
-                    delete(UserController::delete, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                    get(userController::getOne, new HashSet<>(Arrays.asList(AppRole.USER)));
+                    post(userController::update, new HashSet<>(Arrays.asList(AppRole.USER)));
+                    delete(userController::delete, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                 });
             });
             path(REPORT_PATH, () -> {
-                post(ReportController::report, new HashSet<>(Arrays.asList(AppRole.USER)));
+                post(reportController::report, new HashSet<>(Arrays.asList(AppRole.USER)));
             });
             path(ADMIN_PATH, () -> {
                 path(RANKS_PATH, () -> {
-                    get(RankController::getAll, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                    get(rankController::getAll, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                     path(GRANT_RANK_PATH, () -> {
-                        post(RankController::grant, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                        post(rankController::grant, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                     });
                     path(REVOKE_RANK_PATH, () -> {
-                        post(RankController::revoke, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
+                        post(rankController::revoke, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));
                     });
                 });
                 path(REPORTS_PATH, () -> {
                     path(REPORT_TYPES_PATH, () -> {
-                        get(ReportController::getTypes, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        get(reportController::getTypes, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                     });
                     path(REPORTS_ID_PATH, () -> {
-                        get(ReportController::getOne, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
-                        post(ReportController::updateReportStatus, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        get(reportController::getOne, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        post(reportController::updateReportStatus, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                     });
-                    get(ReportController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    get(reportController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                 });
                 path(BANS_PATH, () -> {
                     path(BANS_ID_PATH, () -> {
-                        get(BanController::getOne, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
-                        post(BanController::updateBan, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        get(banController::getOne, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                        post(banController::updateBan, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                     });
-                    get(BanController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
-                    post(BanController::ban, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    get(banController::getAll, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
+                    post(banController::ban, new HashSet<>(Arrays.asList(AppRole.MODERATOR)));
                 });
             });
         });

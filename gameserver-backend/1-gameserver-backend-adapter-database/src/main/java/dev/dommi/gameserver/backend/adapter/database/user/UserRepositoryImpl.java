@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.adapter.database.user;
 
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 import dev.dommi.gameserver.backend.plugin.database.rank.Rank;
 import dev.dommi.gameserver.backend.plugin.database.rank.RankController;

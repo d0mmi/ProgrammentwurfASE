@@ -5,6 +5,7 @@ import dev.dommi.gameserver.backend.application.user.GetUser;
 import dev.dommi.gameserver.backend.application.user.ModifyUser;
 import dev.dommi.gameserver.backend.application.user.UserNotFoundException;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,32 +15,39 @@ public class UserService {
 
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
-    private UserService() {
+    private final GetAllUsers getAllUsers;
+    private final ModifyUser modifyUser;
+    private final GetUser getUser;
+
+    public UserService(UserRepository userRepository) {
+        getAllUsers = new GetAllUsers(userRepository);
+        modifyUser = new ModifyUser(userRepository);
+        getUser = new GetUser(userRepository);
     }
 
-    public static Collection<User> getAll() {
-        return convertToUserCollectionFrom(new GetAllUsers().getAllUsers());
+    public Collection<User> getAll() {
+        return convertToUserCollectionFrom(getAllUsers.getAllUsers());
     }
 
-    public static boolean update(int userId, String name, String email) {
-        return new ModifyUser().modifyUserById(userId, name, email, null);
+    public boolean update(int userId, String name, String email) {
+        return modifyUser.modifyUserById(userId, name, email, null);
     }
 
-    public static User findById(int userId) {
+    public User findById(int userId) {
         try {
-            return convertToUserFrom(new GetUser().getUserById(userId));
+            return convertToUserFrom(getUser.getUserById(userId));
         } catch (UserNotFoundException e) {
             logger.severe(e.getMessage());
         }
         return null;
     }
 
-    public static void delete(int userId) {
-        new ModifyUser().deleteUserById(userId);
+    public void delete(int userId) {
+        modifyUser.deleteUserById(userId);
     }
 
     static User convertToUserFrom(UserEntity user) {
-        return new User(user.id, user.name, user.email, user.rank.level);
+        return new User(user.getId(), user.getName(), user.getEmail(), user.getRank().getLevel());
     }
 
     static Collection<User> convertToUserCollectionFrom(Collection<UserEntity> users) {
