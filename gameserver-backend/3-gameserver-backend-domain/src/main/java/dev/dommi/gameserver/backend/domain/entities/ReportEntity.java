@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.domain.entities;
 
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 
 import java.sql.SQLException;
 
@@ -9,10 +10,10 @@ public class ReportEntity {
     private int creator;
     private int reported;
     private String reason;
-    private ReportTypeEntity type;
+    private ReportTypeVO type;
     private boolean open;
 
-    public ReportEntity(int id, int creator, int reported, String reason, ReportTypeEntity type, boolean open) {
+    public ReportEntity(int id, int creator, int reported, String reason, ReportTypeVO type, boolean open) {
         this.id = id;
         this.creator = creator;
         this.reported = reported;
@@ -37,7 +38,7 @@ public class ReportEntity {
         return reason;
     }
 
-    public ReportTypeEntity getType() {
+    public ReportTypeVO getType() {
         return type;
     }
 

@@ -1,9 +1,8 @@
 package dev.dommi.gameserver.backend.application.report;
 
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
-import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class GetReports {
     }
 
 
-    public Collection<ReportTypeEntity> getReportTypes() {
+    public Collection<ReportTypeVO> getReportTypes() {
         try {
             return repository.getReportTypes();
         } catch (SQLException e) {

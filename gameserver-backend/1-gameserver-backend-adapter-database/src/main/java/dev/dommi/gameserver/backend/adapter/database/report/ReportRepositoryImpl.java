@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.adapter.database.report;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
-import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.plugin.database.report.Report;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportController;
@@ -44,7 +44,7 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
-    public Collection<ReportTypeEntity> getReportTypes() throws SQLException {
+    public Collection<ReportTypeVO> getReportTypes() throws SQLException {
         return convertToReportTypeEntityCollectionFrom(controller.getReportTypes());
     }
 
@@ -76,13 +76,13 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
 
-    static ReportTypeEntity convertToReportTypeEntityFrom(ReportType type) {
+    static ReportTypeVO convertToReportTypeEntityFrom(ReportType type) {
         if (type == null) return null;
-        return new ReportTypeEntity(type.id, type.name);
+        return new ReportTypeVO(type.name);
     }
 
-    static Collection<ReportTypeEntity> convertToReportTypeEntityCollectionFrom(Collection<ReportType> types) {
-        Collection<ReportTypeEntity> entities = new ArrayList<>();
+    static Collection<ReportTypeVO> convertToReportTypeEntityCollectionFrom(Collection<ReportType> types) {
+        Collection<ReportTypeVO> entities = new ArrayList<>();
         for (ReportType type : types) {
             if (type != null) {
                 entities.add(convertToReportTypeEntityFrom(type));

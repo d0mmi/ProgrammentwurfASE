@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.domain.repositories;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
-import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -16,7 +16,7 @@ public interface ReportRepository {
 
     public ReportEntity getReport(int reportId) throws SQLException;
 
-    public Collection<ReportTypeEntity> getReportTypes() throws SQLException;
+    public Collection<ReportTypeVO> getReportTypes() throws SQLException;
 
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) throws SQLException;
 

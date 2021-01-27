@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.domain.mocks;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
-import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 
 import java.sql.SQLException;
@@ -29,7 +29,7 @@ public class ReportRepositoryMock implements ReportRepository {
     }
 
     @Override
-    public Collection<ReportTypeEntity> getReportTypes() throws SQLException {
+    public Collection<ReportTypeVO> getReportTypes() throws SQLException {
         return null;
     }
 

@@ -14,20 +14,20 @@
 %% - Mehrdeutigkeiten und Unklarheiten beseitigt
 
 \begin{center}
-    \begin{tabular}{ | l | l | }
+    \begin{tabular}{ | l | m{8cm} | }
         \hline
-        Wort                         & Bedeutung                                                                                          \\ \hline
-        User                         & User spielen auf dem Game-Server                                                                   \\
-        Register / Registrieren      & Ein neuer User legt einen Account an                                                               \\ \hline
-        Login / Einloggen / Anmelden & Ein bestehender User meldet sich mit seinem Account an                                             \\ \hline
-        Level                        & Gibt an wie hoch die Zugriffsrechte eines Users sind                                               \\ \hline
-        Report                       & durch einen Report kann ein User einen anderen User zum Beispiel für einen Regelverstoß melden     \\ \hline
-        Report Type                  & Gibt eine grobe Kategorie eines Reports an                                                         \\ \hline
-        Rank / Rang                  & Der Rang des Users, möglich: User, Moderator, Admin                                                \\ \hline
-        Moderator                    & Verwaltet User, User Reports und User Bans                                                         \\ \hline
-        Ban                          & Wenn ein User gegen Regeln verstößt kann er gebannt werden und ist dadurch eine Zeit lang gesperrt \\ \hline
-        Admin                        & Verwaltet die Ränge der User                                                                       \\ \hline
-        todo                         & todo                                                                                               \\ \hline
+        Wort                         & Bedeutung                                                                                            \\ \hline
+        User                         & User spielen auf dem Game-Server                                                                     \\ \hline
+        Register / Registrieren      & Ein neuer User legt einen Account an                                                                 \\ \hline
+        Login / Einloggen / Anmelden & Ein bestehender User meldet sich mit seinem Account an                                               \\ \hline
+        Level                        & Gibt an wie hoch die Zugriffsrechte eines Users sind                                                 \\ \hline
+        Report                       & durch einen Report kann ein User einen anderen User zum Beispiel für einen Regelverstoß melden       \\ \hline
+        Report Type                  & Gibt eine grobe Kategorie eines Reports an                                                           \\ \hline
+        Rank / Rang                  & Der Rang des Users, verschiedene Ränge haben verschieden hohe Level, möglich: User, Moderator, Admin \\ \hline
+        Moderator                    & Verwaltet User, User Reports und User Bans                                                           \\ \hline
+        Admin                        & Verwaltet die Ränge der User                                                                         \\ \hline
+        Ban                          & Wenn ein User gegen Regeln verstößt kann er gebannt werden und ist dadurch eine Zeit lang gesperrt   \\ \hline
+        todo                         & todo                                                                                                 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -64,6 +64,10 @@
 %% Unveränderliche Rückgabewerte (immutable) oder
 %% Defensive Kopien
 
+Value Objects wurden für die Ranks und ReportTypes verwendet, da diese zwar in der Datenbank eine ID besitzten aber im restlichen Code diese nicht benötigen.
+Dadurch profitieren die Klassen von der Unveränderlichkeit, dies bedeutet das ein Objekt welches gültig konstruiert wurde danach nicht mehr ungültig werden kann.
+Dadurch kann der Code weniger ungewollte Seiteneffekte erzeugen und ist leicht testbar.
+
 
 \subsection{Entities}
 
@@ -72,10 +76,10 @@
 %% Zwei Entities sind verschieden, wenn sie verschiedene IDs haben; ihre Eigenschaften sind unerheblich
 %% Eine Entity hat einen Lebenszyklus und verändert sich während ihrer Lebenszeit
 %% Wie auch VO sollen Entities die Einhaltung der für sie geltenden Domänenregeln (Invarianten) forcieren:
-%% Es darf nicht möglich sein, eine Entity mit ungültigen Werten zu erzeugen
-%% Es darf nicht möglich sein, eine Entity nach Konstruktion in einen ungültigen Zustand zu versetzen
-%% Entities sollten so viel Verhalten wie möglich in VO auslagern
-%% (mindestens) die öffentlichen Methoden einer Entity sollten Verhalten beschreiben und nicht nur einfache getter/setter darstellen
+%%  - Es darf nicht möglich sein, eine Entity mit ungültigen Werten zu erzeugen
+%%  - Es darf nicht möglich sein, eine Entity nach Konstruktion in einen ungültigen Zustand zu versetzen
+%%  - Entities sollten so viel Verhalten wie möglich in VO auslagern
+%%  - (mindestens) die öffentlichen Methoden einer Entity sollten Verhalten beschreiben und nicht nur einfache getter/setter darstellen
 
 %% Strategien für einzigartige Identitäten
 %% Es gibt mehrere Strategien, um eine Entity eindeutig identifizierbar zu machen
@@ -89,6 +93,11 @@
 %% Value Objects vs Entities
 %% http://prntscr.com/w4mgu2
 
+Für die User, Ranks, Reports und Bans wurden Entities angelegt,
+da es für diese wichtig ist eine eindeutige ID zu besitzen und basierend auf dieser unterschieden zu werden.
+Im gegensatz zu den Value Objects haben die Entities einen Lebenszyklus und verändert ihre Werte während iherer Lebenszeit.
+Aber die Entity sorgt auch dafür, dass keine ungültigen Werte gesetzt werden und sie nicht in einen ungüligen Zustand versetzt werden kann.
+Zuletzt besitzen sie noch Methoden die verschiedenes Verhalten der Entities beschreiben.
 
 
 \subsection{Aggregates}
@@ -134,6 +143,8 @@
 %% sichern Entity-/VO-übergreifende Domänenregeln zu
 %% Aggregate sind mächtig, aber auch schwierig
 
+Aggregate wurden keine verwendet, da die Komplexität der Entities und Value Objects nicht sehr hoch war.
+%% TODO mehr
 
 \subsection{Repositories}
 
@@ -169,6 +180,12 @@
 %% Anti-Corruption-Layer zur Persistenzschicht
 %% Repositories bieten passend für die Domäne Abfragemöglichkeiten auf den Datenbestand
 %% Adapter zwischen Anwendung und Datenbank
+
+Repositories wurden für User, Ranks, Reports und Bans angelegt.
+Dadurch erhält der Domain Code Zugriff auf den persistenten Speicher, deren Implementierung wird der Domäne aber verborgern und ist somit flexibler.
+Sie bilden eine Art Anti-Corruption-Layer zur Persistenzschicht und wurden im Datenbank-Adapter Implementiert.
+Ein großer Vorteil ergibt sich dadurch, dass in Zukunft auch weitere Adapter für zum Beispiel andere Datenbanken hinzugefügt oder der alte ausgetauscht werden können,
+ohne das der Domain Code davon beeinflusst wird.
 
 
 %% Factories 
@@ -211,6 +228,9 @@
 %% Der Domain Service selbst ist zustandlos
 %% Jede konkrete Instanz des Domain Service kann verwendet werden (alt oder neu)
 %% Er darf aber (global sichtbare) Seiteneffekte haben
+
+Domain Services wurden auch keine verwendet, da es kein Domänenweites komplexes Verhalten gab, welches nicht in Entities oder Value Objects abgebildet werden konnte.
+
 
 
 

@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.adapter.database.report;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
-import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 import dev.dommi.gameserver.backend.plugin.database.report.Report;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportController;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportType;
@@ -32,7 +32,6 @@ public class ReportRepositoryImplTests {
         assertEquals(report.creator, entity.getCreator());
         assertEquals(report.reported, entity.getReported());
         assertEquals(report.reason, entity.getReason());
-        assertEquals(report.typeId, entity.getType().getId());
         assertEquals(report.open, entity.isOpen());
     }
 
@@ -63,24 +62,22 @@ public class ReportRepositoryImplTests {
     @Test
     public void convertToReportTypeEntityFromTest() {
         ReportType type = new ReportType(1, "ExampleType");
-        ReportTypeEntity entity = ReportRepositoryImpl.convertToReportTypeEntityFrom(type);
+        ReportTypeVO entity = ReportRepositoryImpl.convertToReportTypeEntityFrom(type);
 
         assertNotNull(entity);
-        assertEquals(type.id, entity.getId());
         assertEquals(type.name, entity.getName());
     }
 
     @Test
     public void convertToReportTypeEntityCollectionFromTest() {
         Collection<ReportType> types = createReportTypes();
-        Collection<ReportTypeEntity> entities = ReportRepositoryImpl.convertToReportTypeEntityCollectionFrom(types);
+        Collection<ReportTypeVO> entities = ReportRepositoryImpl.convertToReportTypeEntityCollectionFrom(types);
 
         for (int i = 0; i < types.size(); i++) {
             ReportType type = (ReportType) types.toArray()[i];
-            ReportTypeEntity entity = (ReportTypeEntity) entities.toArray()[i];
+            ReportTypeVO entity = (ReportTypeVO) entities.toArray()[i];
 
             assertNotNull(entity);
-            assertEquals(type.id, entity.getId());
             assertEquals(type.name, entity.getName());
         }
     }

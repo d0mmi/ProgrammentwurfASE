@@ -4,7 +4,7 @@ import dev.dommi.gameserver.backend.application.report.GetReports;
 import dev.dommi.gameserver.backend.application.report.ReportUser;
 import dev.dommi.gameserver.backend.application.report.UpdateReportStatus;
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
-import dev.dommi.gameserver.backend.domain.entities.ReportTypeEntity;
+import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 
 import java.util.ArrayList;
@@ -73,14 +73,14 @@ public class ReportService {
     }
 
 
-    static ReportType convertToReportTypeFrom(ReportTypeEntity type) {
+    static ReportType convertToReportTypeFrom(ReportTypeVO type) {
         if (type == null) return null;
-        return new ReportType(type.getId(), type.getName());
+        return new ReportType(type.getName());
     }
 
-    static Collection<ReportType> convertToReportTypeCollectionFrom(Collection<ReportTypeEntity> entities) {
+    static Collection<ReportType> convertToReportTypeCollectionFrom(Collection<ReportTypeVO> entities) {
         Collection<ReportType> types = new ArrayList<>();
-        for (ReportTypeEntity entity : entities) {
+        for (ReportTypeVO entity : entities) {
             if (entity != null) {
                 types.add(convertToReportTypeFrom(entity));
             }
