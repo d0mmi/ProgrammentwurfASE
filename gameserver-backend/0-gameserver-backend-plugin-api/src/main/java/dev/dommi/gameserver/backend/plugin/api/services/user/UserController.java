@@ -7,6 +7,7 @@ import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
+import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
@@ -62,6 +63,33 @@ public class UserController {
             throw new NotFoundResponse(NOT_FOUND_RESPONSE);
         } else {
             ctx.json(user);
+        }
+    }
+
+    @OpenApi(
+            summary = "Get user by LoginSession",
+            operationId = "getUserBySession",
+            path = "/user",
+            method = HttpMethod.GET,
+            tags = {"UserEntity"},
+            headers = {@OpenApiParam(name = "Authorization", required = true, description = "Example: 'Bearer <token>'")},
+            responses = {
+                    @OpenApiResponse(status = "200", content = {@OpenApiContent(from = User.class)}),
+                    @OpenApiResponse(status = "400", content = {@OpenApiContent(from = BadRequestResponse.class)}),
+                    @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)}),
+            }
+    )
+    public void getLoggedIn(Context ctx) {
+        int userId = APIServer.getUserIDFromRequestToken(ctx);
+        if (userId > -1) {
+            User user = userService.findById(userId);
+            if (user == null) {
+                throw new NotFoundResponse(NOT_FOUND_RESPONSE);
+            } else {
+                ctx.json(user);
+            }
+        } else {
+            throw new UnauthorizedResponse();
         }
     }
 

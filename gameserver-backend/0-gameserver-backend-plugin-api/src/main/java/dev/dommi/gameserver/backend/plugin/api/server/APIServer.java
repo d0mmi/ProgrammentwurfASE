@@ -47,8 +47,9 @@ public class APIServer {
     private static final String API_PORT = "API_PORT";
     private static final String DEFAULT_CONTENT_TYPE = "application/json";
     private static final String INVALID_AUTH_ERROR = "Missing, invalid token or not enough permissions";
+    private static final String USER_PATH = "user";
     private static final String USERS_PATH = "users";
-    private static final String USER_PATH = ":userId";
+    private static final String USER_ID_PATH = ":userId";
     private static final String REPORT_PATH = "report";
     private static final String REPORTS_PATH = "reports";
     private static final String REPORT_TYPES_PATH = "types";
@@ -103,9 +104,12 @@ public class APIServer {
             path(LOGIN_PATH, () -> {
                 post(loginController::login, new HashSet<>(Arrays.asList(AppRole.ANYONE)));
             });
+            path(USER_PATH, () -> {
+                get(userController::getLoggedIn, new HashSet<>(Arrays.asList(AppRole.USER)));
+            });
             path(USERS_PATH, () -> {
                 get(userController::getAll, new HashSet<>(Arrays.asList(AppRole.USER)));
-                path(USER_PATH, () -> {
+                path(USER_ID_PATH, () -> {
                     get(userController::getOne, new HashSet<>(Arrays.asList(AppRole.USER)));
                     post(userController::update, new HashSet<>(Arrays.asList(AppRole.USER)));
                     delete(userController::delete, new HashSet<>(Arrays.asList(AppRole.ADMINISTRATOR)));

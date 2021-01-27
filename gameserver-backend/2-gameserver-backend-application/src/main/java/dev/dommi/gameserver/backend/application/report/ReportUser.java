@@ -1,7 +1,6 @@
 package dev.dommi.gameserver.backend.application.report;
 
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
 
 import java.sql.SQLException;
 import java.util.logging.Logger;

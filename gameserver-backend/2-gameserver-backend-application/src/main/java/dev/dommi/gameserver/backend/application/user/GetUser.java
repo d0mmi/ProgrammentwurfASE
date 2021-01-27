@@ -1,7 +1,6 @@
 package dev.dommi.gameserver.backend.application.user;
 
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
-import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
 import java.sql.SQLException;

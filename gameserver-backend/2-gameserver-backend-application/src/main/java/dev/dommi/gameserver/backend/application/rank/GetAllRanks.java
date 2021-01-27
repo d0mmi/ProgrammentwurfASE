@@ -1,7 +1,6 @@
 package dev.dommi.gameserver.backend.application.rank;
 
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
-import dev.dommi.gameserver.backend.adapter.database.rank.RankRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 
 import java.sql.SQLException;

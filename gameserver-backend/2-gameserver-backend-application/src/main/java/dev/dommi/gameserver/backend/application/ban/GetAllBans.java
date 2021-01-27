@@ -1,7 +1,6 @@
 package dev.dommi.gameserver.backend.application.ban;
 
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
-import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 
 import java.sql.SQLException;

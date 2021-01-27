@@ -6,44 +6,82 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import {
-  Button,
-  ButtonGroup
-} from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'fontsource-roboto';
 import ExamplePage from './pages/example/ExamplePage';
-import RegisterPage from './pages/login/RegisterPage';
 import LoginPage from './pages/login/LoginPage';
+import { AppBar, Button, createMuiTheme, createStyles, IconButton, makeStyles, Theme, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
+import { MenuIcon } from '@material-ui/data-grid';
+
+const darkTheme = createMuiTheme({
+  palette: {
+    type: "dark",
+    background: {
+      default: "#282c34"
+    }
+  }
+});
+const lightTheme = createMuiTheme({
+  palette: {
+    type: "light",
+  }
+});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Router>
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      header: {
+        background: darkTheme.palette.background.default,
+        color: "white"
+      },
+      root: {
+      },
+      menuButton: {
+        marginRight: theme.spacing(2),
+      },
+      title: {
+        flexGrow: 1,
+      },
+      appbar: {
+        top: 0
+      },
+      navButton: {
+        margin: "1px",
+        color: "white",
+        textDecoration: "none"
+      }
+    }));
 
-          <div>
-            <ButtonGroup>
-              <Link to="/"><Button size="lg" variant="secondary">Home</Button></Link>
-              <Link to="/example"><Button size="lg" variant="secondary">Example</Button></Link>
-              <Link to="/register"><Button size="lg" variant="secondary">Register</Button></Link>
-              <Link to="/login"><Button size="lg" variant="secondary">Login</Button></Link>
-            </ButtonGroup >
+  const classes = useStyles();
+
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <div className="App">
+        <header className={classes.header + " App-header"}>
+          <Router>
+            <AppBar position="fixed" className={classes.appbar}>
+              <Toolbar>
+                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                  {/*TODO Add Name*/}
+                </Typography>
+                <Link to="/"><Button color="inherit" className={classes.navButton}>Home</Button></Link>
+                <Link to="/login"><Button color="inherit" className={classes.navButton}>Login</Button></Link>
+              </Toolbar>
+            </AppBar>
 
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
-              <Route path="/example" render={(props) => <ExamplePage {...props} />} />
-              <Route path="/register" render={(props) => <RegisterPage {...props} />} />
-              <Route path="/login" render={(props) => <LoginPage {...props} />} />
-              <Route path="/">
-                <Home />
-              </Route>
+              <Route path="/example" component={ExamplePage} />
+              <Route path="/login" component={LoginPage} />
+              <Route path="/" component={Home} />
             </Switch>
-          </div>
-        </Router>
-      </header>
-
-    </div>
+          </Router>
+        </header>
+      </div>
+    </ThemeProvider>
   );
 }
 
