@@ -61,13 +61,14 @@ public class UserRankTableWrapper extends TableWrapper<UserRank> {
         if (value.userId >= 0) {
             values.append("userId = :userId,");
             params.add(Param.value("userId", value.userId));
-        } else if (value.rankId >= 0) {
+        }
+        if (value.rankId >= 0) {
             values.append("rankId = :rankId,");
             params.add(Param.value("rankId", value.rankId));
         }
 
         String valueString = values.toString();
-        valueString = valueString.substring(0, valueString.length() - 2);
+        valueString = valueString.substring(0, valueString.length() - 1);
         Query.of(" UPDATE " + tableName + "  SET " + valueString + " WHERE id = :id").on(params).execute(conn);
     }
 }

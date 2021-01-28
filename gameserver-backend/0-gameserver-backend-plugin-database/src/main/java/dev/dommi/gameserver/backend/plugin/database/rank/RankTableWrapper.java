@@ -58,13 +58,14 @@ public class RankTableWrapper extends TableWrapper<Rank> {
         if (value.name != null && !value.name.isEmpty()) {
             values.append("name = :name,");
             params.add(Param.value("name", value.name));
-        } else if (value.level >= 0) {
+        }
+        if (value.level >= 0) {
             values.append("level = :level,");
-            params.add( Param.value("level", value.level));
+            params.add(Param.value("level", value.level));
         }
 
         String valueString = values.toString();
-        valueString = valueString.substring(0, valueString.length() - 2);
+        valueString = valueString.substring(0, valueString.length() - 1);
         Query.of(" UPDATE " + tableName + "  SET " + valueString + " WHERE id = :id").on(params).execute(conn);
     }
 }

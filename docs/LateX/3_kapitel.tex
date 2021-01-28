@@ -7,11 +7,15 @@
 %%  - Jede Klasse sollte nur eine Zuständigkeit haben
 %%  - Eine Klasse erhält eine klar definierte Aufgabe
 %%  - Komplexeres Verhalten entsteht durch Kombination mehrerer Objekte
-%%  - Eine Klasse enthält Achsen auf der sichAnforderungen ändern können
+%%  - Eine Klasse enthält Achsen auf der sich Anforderungen ändern können
 %%  - Jede Zuständigkeit fügt eine weitere Achse hinzu
 %%  - Jede Klasse sollte nur eine Achse haben
-%% 
-%% 
+
+\subsection{Single Responsibility Principle}
+Das Single Responsibility Principle sagt aus, dass eine Klasse nur eine Zuständigkeit haben sollte.
+Somit hat jede Klasse eine klar definierte Aufgabe und es entsteht eine niedrige Komplexität des Codes.
+Und um so niedriger die Komplexität des Codes desto besser lässt er sich warten und erweitern.
+
 %% Open Closed Principle
 %%  - Elemente der Software wie Klassen, Module, Funktionen sollten:
 %%      - offen für Erweiterungen
@@ -25,9 +29,13 @@
 %%      - welche Erweiterungen möglich sind
 %%      - was durch Änderungen ergänzt werden soll
 %%  - Stabilität einer Klasse ist ausschlaggebend
-%% 
-%% 
-%% 
+
+\subsection{Open Closed Principle}
+Durch das Open Closed Principle wird die Software offen für Erweiterungen aber geschlossen für Änderungen.
+Das bedeutet der Code wird nur durch Vererbung bzw.Implementierung von Interfaces erweitert.
+Dies führt dazu das bestehender Code nicht geändert wird, wodurch die Anwendung für eine gute kompatibilität über die Versionen sorgt.
+Hierbei ist es wichtig viele Abstraktionen zu nutzen um die Erweiterbarkeit zu fördern.
+
 %% Liskov Substitution Principle
 %%  - Objekte eines abgeleiteten Typs müssen als Ersatz für Instanzen ihres Basistyps funktionieren ohne die Korrektheit des Programms zu ändern
 %%  - Starke Einschränkung der Ableitungsregeln
@@ -35,37 +43,52 @@
 %%  - Invarianzen von Klassen berücksichtigen:
 %%      - Abgeleitete Typen müssen schwächere Vorbedingungen haben
 %%      - Abgeleitete Typen müssen stärkere Nachbedingungen haben
-%%  - Design by Contractkann helfen Verstöße zufinden
-%%  - Ableitung in OOP ist mehr eine "verhält sichwie" Beziehung anstatt einer "ist ein" Beziehung
-%% 
-%% 
+%%  - Design by Contract kann helfen Verstöße zufinden
+%%  - Ableitung in OOP ist mehr eine "verhält sich wie" Beziehung anstatt einer "ist ein" Beziehung
+
+\subsection{Liskov Substitution Principle}
+Im Liskov Substitution Principle werden Ableitungsregeln stark eingeschränkt was zu einer Einhaltung von Invarianzen führt.
+Hierbei müssen abgeleitete Typen schwächere Vorbedingungen und stärkere Nachbedingungen haben.
+Durch dieses Prinzip ergeben sich somit im OOP "verhält sich wie" Beziehungen statt den üblichen "ist ein" Beziehungen.
+Somit kann man sich auf ein bestimmtes Verhalten der abgeleiteten Typen verlassen, wenn man das Verhalten des Basistyps kennt.
+
 %% Interface Segregation Principle
-%%  - Anwender sollten nicht von Funktionenabhängig sein, die sie nicht nutzen
+%%  - Anwender sollten nicht von Funktionen abhängig sein, die sie nicht nutzen
 %%  - Schwere(fat) Interfaces und Klassen bündelnviel Funktionalität:
 %%      - Ein Anwender einer Methode eines Interfaces istautomatisch abhängig von Änderungen ananderen Methoden des Interfaces
 %%      - Ein Anwender hat Zugriff auf Methoden, die nichtfür ihn bestimmt sind
 %%  - Interfaces passend zu den Anwenderngestalten
-%%  - Führt dazu, dass Typen meist mehrereInterfaces implementieren
+%%  - Führt dazu, dass Typen meist mehrere Interfaces implementieren
 %%  - Ein Typ bedient dadurch mehrere Anwender
-%%  - Schwere Klassen können nach wie vorbestehen, aber Anwender ist nur von leichtenInterfaces abhängig
-%% 
-%% 
+%%  - Schwere Klassen können nach wie vorbestehen, aber Anwender ist nur von leichten Interfaces abhängig
+\subsection{Interface Segregation Principle}
+Das Interface Segregation Principle sorgt dafür, dass Anwender nicht von Funktionen abhängig sind die sie gar nicht nutzen.
+Dies wird ermöglicht indem man statt einzelnen großen schweren Interfaces mit vielen Funktionen, viele kleine leichte Interfaces mit wenigen Funktionen implementiert.
+Somit kann man seine Klasse passend für den Anwendungszweck anpassen ohne unnötige extrafunktionen mit zu schleppen.
+
 %% Dependency Inversion Principle
-%%  - Klassischerweise sind High-Level Module vonLow-Level Modulen abhängig:
+%%  - Klassischerweise sind High-Level Module von Low-Level Modulen abhängig:
 %%      - Änderung in einer Low-Level Implementierungführt zu Änderung in High-Level Modul
 %%      - Änderung in High-Level Modul führt eventuell zu Änderung in anderen Low-Level Modulen
 %%  ⇒ Umkehrung (Inversion) der Abhängigkeit
-%%  - High-Level Module sollten nicht von Low-LevelModulen abhängig sein. Beide sollten vonAbstraktionen abhängen.
-%%  - Abstraktionen sollten nicht von Detailsabhängig sein. Details sollten vonAbstraktionen abhängen.
+%%  - High-Level Module sollten nicht von Low-Level Modulen abhängig sein. Beide sollten von Abstraktionen abhängen.
+%%  - Abstraktionen sollten nicht von Detailsabhängig sein. Details sollten von Abstraktionen abhängen.
 %%  - Regeln werden durch High-Level Modulevorgegeben
 %%  - Low-Level Module sind Implementierungender Regeln
 %%  - High-Level Module können wiederverwendet werden:
 %%      - High-Level Module bilden ein Framework
 %%  - Immer nur von Abstraktionen abhängig sein bedeutet:
-%%      - Variablen oder Member sollten eine abstrakteKlasse oder ein Interface als Typ haben
-%%      - Klassen sollten nur abstrakte Klassen oderInterfaces ableiten bzw. implementieren
+%%      - Variablen oder Member sollten eine abstrakte Klasse oder ein Interface als Typ haben
+%%      - Klassen sollten nur abstrakte Klassen oder Interfaces ableiten bzw. implementieren
 %%      - Nur abstrakte Methoden implementieren
-%%  - Beim initialen Aufbau der Anwendungwerden Instanzen konkreter Klassen erzeugt
+%%  - Beim initialen Aufbau der Anwendung werden Instanzen konkreter Klassen erzeugt
+\subsection{Dependency Inversion Principle}
+Im Dependency Inversion Principle wird die klassische Struktur in der High-Level Module von Low-Level Modulen abhängig sind umgekehrt.
+Denn Abstraktionen sollten nicht von Details abhängig sein, daher werden hierbei die Regeln durch High-Level Module vorgegeben und in Low-Level Modulen Implementiert.
+Dadurch bilden die High-Level Module ein Framework und es werden nur noch abtrakte Abhängigkeiten genutzt.
+Ein großer Vorteil der dieses Prinzip ist die hohe Fexibilität der Software, denn Low-Level Module können somit einfach ausgetauscht werden ohne die High-Level Module zu beinflussen.
+
+
 \section{Analyse und Begründung für GRASP} %%  (insb. Kopplung/Kohäsion)
 %% 
 %% General Responsibility Assignment Software Patterns

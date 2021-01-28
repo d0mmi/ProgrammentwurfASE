@@ -70,6 +70,13 @@ public class MariaDBConnector {
     }
 
     public Connection getConnection() {
+        try{
+            if(connection.isClosed()){
+                connection = DriverManager.getConnection(buildConnectionString(System.getenv(DB_ADRESS), System.getenv(DB_USER), System.getenv(DB_PW), true));
+            }
+        }catch (SQLException e){
+            logger.severe(e.getMessage());
+        }
         return connection;
     }
 

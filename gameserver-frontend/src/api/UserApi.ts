@@ -1,4 +1,4 @@
-import { APIManager } from "./APIManager";
+import { APIManager, Error } from "./APIManager";
 
 export type LoginResponse = {
 
@@ -25,27 +25,27 @@ export class UserApi {
         }, false);
     }
 
-    public static async login(email: string, pw: string): Promise<LoginResponse> {
-        var login = await APIManager.post("login", {
+    public static async login(email: string, pw: string): Promise<LoginResponse | Error> {
+        return await APIManager.post("login", {
             "email": email,
             "pw": pw
-        }, false) as LoginResponse;
-        return login;
+        }, false);;
     }
 
-    public static async getAll(): Promise<User[]> {
-        var login = await APIManager.get("users") as User[];
-        return login;
+    public static async getAll(): Promise<User[] | Error> {
+        return await APIManager.get("users");
     }
-    public static async getById(id: number): Promise<User> {
-        var login = await APIManager.get("users/" + id) as User;
-        return login;
+    public static async get(): Promise<User | Error> {
+        return await APIManager.get("user");
+    }
+    public static async getById(id: number): Promise<User | Error> {
+        return await APIManager.get("users/" + id);
     }
     public static async deleteById(id: number) {
         await APIManager.delete("users/" + id);
     }
-    public static async updateById(id: number, name: string, email: string) {
-        await APIManager.patch("users/" + id, {
+    public static async updateById(id: number, name: string | null, email: string | null) {
+        await APIManager.post("users/" + id, {
             "name": name,
             "email": email
         });

@@ -1,13 +1,17 @@
 import React from 'react';
 import '../../App.css';
-import { UserApi } from '../../api/UserApi';
-import { Button, Grid, Paper, TextField, Theme, withStyles } from '@material-ui/core';
+import { UserApi, LoginResponse } from '../../api/UserApi';
+import { Button, Grid, Paper, Snackbar, TextField, Theme, withStyles } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import { withCookies, Cookies } from 'react-cookie';
 
 interface IState {
     name: string;
     email: string;
     password: string;
     login: boolean;
+    sucessOpen: boolean;
+    errorOpen: boolean;
 }
 
 const styles = (theme: Theme) => ({
@@ -29,16 +33,21 @@ const styles = (theme: Theme) => ({
     },
 });
 
+
 class LoginPage extends React.Component<any, IState>
 {
     classes: any;
+    cookies: Cookies;
 
     constructor(props: any) {
         super(props);
+        console.log(props);
         this.classes = this.props.classes;
-        this.state = { name: "", email: "", password: "", login: true };
+        this.cookies = this.props.cookies
+        this.state = { name: "", email: "", password: "", login: true, sucessOpen: false, errorOpen: false };
         this.onLogin = this.onLogin.bind(this);
         this.onRegister = this.onRegister.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
     render() {
         return (
@@ -55,7 +64,7 @@ class LoginPage extends React.Component<any, IState>
                             }
 
                             <TextField required className={this.classes.input} id="outlined-basic" label="Email" variant="outlined" onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ email: e.target.value })} />
-                            <TextField required className={this.classes.input} id="outlined-basic" label="Password" variant="outlined" onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ password: e.target.value })} />
+                            <TextField required className={this.classes.input} id="outlined-basic" label="Password" type="password" variant="outlined" onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ password: e.target.value })} />
                             {this.state.login ?
                                 (<Button className={this.classes.input} variant="contained" color="primary" onClick={this.onLogin}>Login</Button>) :
                                 (<Button className={this.classes.input} variant="contained" color="primary" onClick={this.onRegister}>Register</Button>)
@@ -64,24 +73,35 @@ class LoginPage extends React.Component<any, IState>
 
                     </Grid>
                 </Grid>
+                <Snackbar open={this.state.sucessOpen} autoHideDuration={6000} onClose={this.handleClose}>
+                    <Alert onClose={this.handleClose} variant="filled" severity="success"> This is a success message!</Alert>
+                </Snackbar>
+                <Snackbar open={this.state.errorOpen} autoHideDuration={6000} onClose={this.handleClose}>
+                    <Alert onClose={this.handleClose} variant="filled" severity="error">This is an error message!</Alert>
+                </Snackbar>
             </Grid>
         );
 
     }
 
-
-    onLogin() {
-        //UserApi.login(this.state.email, this.state.password);
-        console.log(this.state.email);
-        console.log(this.state.password);
+    handleClose() {
+        this.setState({ sucessOpen: false, errorOpen: false });
     }
 
-    onRegister() {
-        //UserApi.register(this.state.name, this.state.email, this.state.password);
-        console.log(this.state.name);
-        console.log(this.state.email);
-        console.log(this.state.password);
+    async onLogin() {
+        var response = await UserApi.login(this.state.email, this.state.password);
+        if ((response as LoginResponse).token !== undefined) {
+            this.setState({ sucessOpen: true });
+            this.cookies.set("session", (response as LoginResponse).token);
+            window.location.href = window.location.protocol + "//" + window.location.host + "/";
+        } else {
+            this.setState({ errorOpen: true });
+        }
+    }
+
+    async onRegister() {
+        UserApi.register(this.state.name, this.state.email, this.state.password);
     }
 }
 
-export default withStyles(styles, { withTheme: true })(LoginPage);
+export default withStyles(styles, { withTheme: true })(withCookies(LoginPage));

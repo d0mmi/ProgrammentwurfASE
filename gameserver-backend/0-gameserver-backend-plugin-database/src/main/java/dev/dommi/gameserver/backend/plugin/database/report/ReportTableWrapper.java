@@ -63,7 +63,8 @@ public class ReportTableWrapper extends TableWrapper<Report> {
         if (value.reason != null && !value.reason.isEmpty()) {
             values.append("reason = :reason,");
             params.add(Param.value("reason", value.reason));
-        } else if (value.typeId >= 0) {
+        }
+        if (value.typeId >= 0) {
             values.append("typeId = :typeId,");
             params.add(Param.value("typeId", value.typeId));
         }
