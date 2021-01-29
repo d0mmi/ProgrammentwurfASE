@@ -20,6 +20,7 @@ import { APIManager } from './api/APIManager';
 import ProfilePage from './pages/profile/ProfilePage';
 import { User } from './api/UserApi';
 import UserListPage from './pages/users/UserListPage';
+import ReportListPage from './pages/reports/ReportListPage';
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -55,6 +56,7 @@ function App() {
               <Route path="/example" component={ExamplePage} />
               <Route path="/login" component={LoginPage} />
               <Route path="/users" component={UserListPage} />
+              <Route path="/reports" component={ReportListPage} />
               <Route exact path="/" component={Home} />
             </Switch>
           </Router>
@@ -96,7 +98,11 @@ function SideBar() {
         top: 0
       },
       navButton: {
-        marginLeft: "1px",
+        margin: "1px",
+        color: "white",
+        textDecoration: "none"
+      },
+      drawerButton: {
         color: "white",
         textDecoration: "none"
       },
@@ -117,8 +123,8 @@ function SideBar() {
   var content: any[] = [];
   if (user !== null && user !== undefined) {
     if (user.level >= 50) {
-      content.push(<Link to="/users" className={classes.navButton}><ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem></Link>);
-      content.push(<ListItem button key={2}><ListItemIcon><ReportIcon /></ListItemIcon><ListItemText primary={"Reports"} /></ListItem>);
+      content.push(<Link to="/users" className={classes.drawerButton}><ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem></Link>);
+      content.push(<Link to="/reports" className={classes.drawerButton}><ListItem button key={2}><ListItemIcon><ReportIcon /></ListItemIcon><ListItemText primary={"Reports"} /></ListItem></Link>);
       content.push(<ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem>);
     }
     if (user.level >= 100) {

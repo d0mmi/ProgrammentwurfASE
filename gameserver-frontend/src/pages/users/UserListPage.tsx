@@ -4,7 +4,6 @@ import { UserApi, User } from '../../api/UserApi';
 import { CircularProgress, Grid, IconButton, Paper, Theme, withStyles } from '@material-ui/core';
 import ReportIcon from '@material-ui/icons/Report';
 import BanIcon from '@material-ui/icons/Gavel';
-import { withCookies } from 'react-cookie';
 import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
 import ReportDialog from './dialogs/ReportDialog';
@@ -36,7 +35,7 @@ const styles = (theme: Theme) => ({
 });
 
 
-class LoginPage extends React.Component<any, IState>
+class UserListPage extends React.Component<any, IState>
 {
     classes: any;
 
@@ -147,4 +146,4 @@ class LoginPage extends React.Component<any, IState>
 
 }
 
-export default withStyles(styles, { withTheme: true })(withCookies(LoginPage));
+export default withStyles(styles, { withTheme: true })(UserListPage);
