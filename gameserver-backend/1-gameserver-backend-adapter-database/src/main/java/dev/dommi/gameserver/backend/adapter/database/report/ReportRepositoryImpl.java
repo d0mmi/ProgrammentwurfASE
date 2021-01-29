@@ -49,6 +49,11 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
+    public int getReportTypeIdByName(String name) throws SQLException {
+        return controller.getReportTypeIdByName(name);
+    }
+
+    @Override
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) throws SQLException {
         controller.reportUser(creatorId, reportedUserId, reason, reportTypeId);
     }

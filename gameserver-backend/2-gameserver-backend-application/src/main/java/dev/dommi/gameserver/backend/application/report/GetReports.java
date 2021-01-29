@@ -62,4 +62,13 @@ public class GetReports {
         }
         return new ArrayList<>();
     }
+
+    public int getReportTypeIdByName(String name){
+        try {
+            return repository.getReportTypeIdByName(name);
+        } catch (SQLException | NullPointerException e) {
+            logger.severe(e.getMessage());
+        }
+        return -1;
+    }
 }

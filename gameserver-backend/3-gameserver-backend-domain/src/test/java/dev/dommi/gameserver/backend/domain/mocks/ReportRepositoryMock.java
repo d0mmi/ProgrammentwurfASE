@@ -39,6 +39,11 @@ public class ReportRepositoryMock implements ReportRepository {
     }
 
     @Override
+    public int getReportTypeIdByName(String name) throws SQLException {
+        return 0;
+    }
+
+    @Override
     public void updateReportStatus(int reportId, boolean status) throws SQLException {
 
     }

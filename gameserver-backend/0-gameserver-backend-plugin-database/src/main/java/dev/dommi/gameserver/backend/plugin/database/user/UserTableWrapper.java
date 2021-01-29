@@ -1,12 +1,12 @@
 package dev.dommi.gameserver.backend.plugin.database.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;
 import io.jenetics.facilejdbc.Param;
 import io.jenetics.facilejdbc.Query;
 import io.jenetics.facilejdbc.RowParser;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class UserTableWrapper extends TableWrapper<User> {
     private static final String API_ROOT_PW = "API_ROOT_PW";
     public static final String DB_NAME = "User";
 
-    public UserTableWrapper(Connection conn) {
+    public UserTableWrapper(MariaDBConnector conn) {
         super(DB_NAME, conn);
     }
 
@@ -35,12 +35,12 @@ public class UserTableWrapper extends TableWrapper<User> {
 
     @Override
     public void initTable() throws SQLException {
-        Query.of("CREATE TABLE IF NOT EXISTS " + tableName + " ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, email varchar(255) NOT NULL, pw varchar(255) NOT NULL, PRIMARY KEY (id) )").execute(conn);
+        Query.of("CREATE TABLE IF NOT EXISTS " + tableName + " ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, email varchar(255) NOT NULL, pw varchar(255) NOT NULL, PRIMARY KEY (id) )").execute(conn.getConnection());
     }
 
     @Override
     public void create(User value) throws SQLException {
-        Query.of("INSERT INTO " + tableName + " (name, email, pw) VALUES (:name, :email, :pw)").on(Param.value("name", value.name), Param.value("email", value.email), Param.value("pw", value.pw)).execute(conn);
+        Query.of("INSERT INTO " + tableName + " (name, email, pw) VALUES (:name, :email, :pw)").on(Param.value("name", value.name), Param.value("email", value.email), Param.value("pw", value.pw)).execute(conn.getConnection());
     }
 
     public User createRootUser() throws SQLException {
@@ -84,13 +84,10 @@ public class UserTableWrapper extends TableWrapper<User> {
         String valueString = values.toString();
         valueString = valueString.substring(0, valueString.length() - 1);
 
-        Query q = Query.of(" UPDATE " + tableName + " SET " + valueString + " WHERE id = :id").on(params);
-        System.out.println(q.rawSql());
-        System.out.println(q.sql());
-        q.execute(conn);
+        Query.of(" UPDATE " + tableName + " SET " + valueString + " WHERE id = :id").on(params).execute(conn.getConnection());
     }
 
     public User findByEmail(String email) throws SQLException {
-        return Query.of("SELECT * FROM " + tableName + " WHERE email = :email").on(Param.value("email", email)).as(parse().singleNull(), conn);
+        return Query.of("SELECT * FROM " + tableName + " WHERE email = :email").on(Param.value("email", email)).as(parse().singleNull(), conn.getConnection());
     }
 }

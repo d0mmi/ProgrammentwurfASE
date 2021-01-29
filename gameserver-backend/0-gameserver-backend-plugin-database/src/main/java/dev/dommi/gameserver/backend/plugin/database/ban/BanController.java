@@ -11,7 +11,7 @@ public class BanController {
     private BanTableWrapper wrapper;
 
     public BanController() {
-        wrapper = new BanTableWrapper(MariaDBConnector.getInstance().getConnection());
+        wrapper = new BanTableWrapper(MariaDBConnector.getInstance());
     }
 
     public void create(Ban value) throws SQLException {

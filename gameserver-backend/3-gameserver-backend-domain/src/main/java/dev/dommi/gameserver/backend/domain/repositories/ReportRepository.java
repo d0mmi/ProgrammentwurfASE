@@ -18,6 +18,8 @@ public interface ReportRepository {
 
     public Collection<ReportTypeVO> getReportTypes() throws SQLException;
 
+    public int getReportTypeIdByName(String name) throws SQLException;
+
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) throws SQLException;
 
     public void updateReportStatus(int reportId, boolean status) throws SQLException;

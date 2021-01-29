@@ -96,7 +96,7 @@ function SideBar() {
         top: 0
       },
       navButton: {
-        margin: "1px",
+        marginLeft: "1px",
         color: "white",
         textDecoration: "none"
       },
@@ -117,7 +117,7 @@ function SideBar() {
   var content: any[] = [];
   if (user !== null && user !== undefined) {
     if (user.level >= 50) {
-      content.push(<ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem>);
+      content.push(<Link to="/users" className={classes.navButton}><ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem></Link>);
       content.push(<ListItem button key={2}><ListItemIcon><ReportIcon /></ListItemIcon><ListItemText primary={"Reports"} /></ListItem>);
       content.push(<ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem>);
     }

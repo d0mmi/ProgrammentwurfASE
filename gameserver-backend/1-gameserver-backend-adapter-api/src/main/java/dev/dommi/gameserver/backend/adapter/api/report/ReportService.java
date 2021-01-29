@@ -47,6 +47,10 @@ public class ReportService {
         return convertToReportTypeCollectionFrom(getReports.getReportTypes());
     }
 
+    public int getReportTypeIdByName(String name){
+        return getReports.getReportTypeIdByName(name);
+    }
+
 
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) {
         reportUser.reportUser(creatorId, reportedUserId, reason, reportTypeId);

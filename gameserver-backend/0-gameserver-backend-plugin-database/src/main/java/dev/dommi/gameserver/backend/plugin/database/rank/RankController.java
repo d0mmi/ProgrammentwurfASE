@@ -11,8 +11,8 @@ public class RankController {
     private UserRankTableWrapper userRankWrapper;
 
     public RankController() {
-        rankWrapper = new RankTableWrapper(MariaDBConnector.getInstance().getConnection());
-        userRankWrapper = new UserRankTableWrapper(MariaDBConnector.getInstance().getConnection());
+        rankWrapper = new RankTableWrapper(MariaDBConnector.getInstance());
+        userRankWrapper = new UserRankTableWrapper(MariaDBConnector.getInstance());
     }
 
     public Collection<Rank> getAllRanks() throws SQLException {

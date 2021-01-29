@@ -14,7 +14,7 @@ public class UserController {
     private UserTableWrapper wrapper;
 
     public UserController() {
-        wrapper = new UserTableWrapper(MariaDBConnector.getInstance().getConnection());
+        wrapper = new UserTableWrapper(MariaDBConnector.getInstance());
     }
 
     public boolean verifyPasswordByEmail(String email, String pw) {

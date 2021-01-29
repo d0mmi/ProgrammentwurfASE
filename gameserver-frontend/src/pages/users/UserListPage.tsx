@@ -1,12 +1,17 @@
 import React from 'react';
 import '../../App.css';
 import { UserApi, User } from '../../api/UserApi';
-import { Button, CircularProgress, Grid, IconButton, Paper, TextField, Theme, Typography, withStyles } from '@material-ui/core';
-import { withCookies, Cookies } from 'react-cookie';
+import { CircularProgress, Grid, IconButton, Paper, Theme, withStyles } from '@material-ui/core';
+import ReportIcon from '@material-ui/icons/Report';
+import BanIcon from '@material-ui/icons/Gavel';
+import { withCookies } from 'react-cookie';
 import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
+import ReportDialog from './dialogs/ReportDialog';
 
 interface IState {
+    selectedUser: User | null;
+    reportState: boolean;
     users: User[];
     loading: boolean;
 }
@@ -40,16 +45,65 @@ class LoginPage extends React.Component<any, IState>
         console.log(props);
         this.classes = this.props.classes;
         this.fetchUsers = this.fetchUsers.bind(this);
+        this.onReport = this.onReport.bind(this);
+        this.onReportClose = this.onReportClose.bind(this);
+        this.onBan = this.onBan.bind(this);
+        this.getUserFromParams = this.getUserFromParams.bind(this);
 
-        this.state = { users: [], loading: false };
+        this.state = { selectedUser: null, reportState: false, users: [], loading: false };
     }
 
     columns: ColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Name', width: 250 },
         { field: 'email', headerName: 'Email', width: 250 },
-        { field: 'level', headerName: 'Permission Level', width: 250 }
+        { field: 'level', headerName: 'Permission Level', width: 250 },
+        {
+            field: "",
+            headerName: "Manage",
+            disableClickEventBubbling: true,
+            width: 150,
+            renderCell: (params: CellParams) => {
+
+                return <div>
+                    <IconButton onClick={(e) => this.onReport(params)} aria-label="add"><ReportIcon fontSize="small" /></IconButton>
+                    <IconButton onClick={(e) => this.onBan(params)} aria-label="remove"><BanIcon fontSize="small" /></IconButton>
+                </div>;
+            }
+        }
     ];
+
+    onReport(params: CellParams) {
+        var user = this.getUserFromParams(params);
+        if (user !== null) {
+            this.setState({
+                selectedUser: user,
+                reportState: true
+            });
+        }
+    }
+
+    onReportClose() {
+        this.setState({
+            reportState: false
+        });
+    }
+
+    onBan(params: CellParams) {
+        var user = this.getUserFromParams(params);
+        if (user !== null) {
+
+        }
+    }
+
+    getUserFromParams(params: CellParams): User | null {
+        var index = params.rowIndex;
+        if (index !== undefined) {
+            var user = this.state.users[index];
+            return user;
+        }
+        return null;
+    }
 
     render() {
 
@@ -61,7 +115,6 @@ class LoginPage extends React.Component<any, IState>
             return (<CircularProgress />);
         }
 
-
         return (
             <Grid item xs={12} className={this.classes.card_grid} >
                 <Grid container direction="row" justify="space-evenly" alignItems="center" spacing={0} >
@@ -70,6 +123,8 @@ class LoginPage extends React.Component<any, IState>
                             <DataGrid rows=
                                 {this.state.users.map((user: User) => ({ id: user.id, name: user.name, email: user.email, level: user.level }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
+
+                            <ReportDialog user={this.state.selectedUser} open={this.state.reportState} close={this.onReportClose} />
                         </Paper>
                     </Grid>
                 </Grid>

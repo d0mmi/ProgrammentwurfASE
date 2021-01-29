@@ -27,6 +27,10 @@ public class MariaDBConnector {
     private Connection connection;
 
     private MariaDBConnector() {
+        init();
+    }
+
+    private void init() {
         initConnection();
         if (connection != null) {
             initDatabase();
@@ -38,19 +42,23 @@ public class MariaDBConnector {
             connection = DriverManager.getConnection(buildConnectionString(System.getenv(DB_ADRESS), System.getenv(DB_USER), System.getenv(DB_PW), false));
             Query.of("CREATE DATABASE IF NOT EXISTS " + DB).execute(connection);
             connection.close();
-            connection = DriverManager.getConnection(buildConnectionString(System.getenv(DB_ADRESS), System.getenv(DB_USER), System.getenv(DB_PW), true));
+            connect();
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
     }
 
+    private void connect() throws SQLException {
+        connection = DriverManager.getConnection(buildConnectionString(System.getenv(DB_ADRESS), System.getenv(DB_USER), System.getenv(DB_PW), true));
+    }
+
     private void initDatabase() {
         try {
-            UserTableWrapper userTableWrapper = new UserTableWrapper(connection);
+            UserTableWrapper userTableWrapper = new UserTableWrapper(this);
             userTableWrapper.initTable();
-            RankTableWrapper rankTableWrapper = new RankTableWrapper(connection);
+            RankTableWrapper rankTableWrapper = new RankTableWrapper(this);
             rankTableWrapper.initTable();
-            UserRankTableWrapper userRankTableWrapper = new UserRankTableWrapper(connection);
+            UserRankTableWrapper userRankTableWrapper = new UserRankTableWrapper(this);
             userRankTableWrapper.initTable();
 
             User root = userTableWrapper.createRootUser();
@@ -59,10 +67,10 @@ public class MariaDBConnector {
                 userRankTableWrapper.create(new UserRank(root.id, rankId));
             }
 
-            new ReportTypeTableWrapper(connection).initTable();
-            new ReportTableWrapper(connection).initTable();
+            new ReportTypeTableWrapper(this).initTable();
+            new ReportTableWrapper(this).initTable();
 
-            new BanTableWrapper(connection).initTable();
+            new BanTableWrapper(this).initTable();
 
         } catch (SQLException e) {
             logger.severe(e.getMessage());
@@ -70,11 +78,13 @@ public class MariaDBConnector {
     }
 
     public Connection getConnection() {
-        try{
-            if(connection.isClosed()){
-                connection = DriverManager.getConnection(buildConnectionString(System.getenv(DB_ADRESS), System.getenv(DB_USER), System.getenv(DB_PW), true));
+        try {
+            if (connection == null) {
+                init();
+            } else if (connection.isClosed()) {
+                connect();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
         return connection;
@@ -86,7 +96,6 @@ public class MariaDBConnector {
 
     public static MariaDBConnector getInstance() {
         if (instance == null) instance = new MariaDBConnector();
-        if (instance.getConnection() == null) instance = new MariaDBConnector();
         return instance;
     }
 }

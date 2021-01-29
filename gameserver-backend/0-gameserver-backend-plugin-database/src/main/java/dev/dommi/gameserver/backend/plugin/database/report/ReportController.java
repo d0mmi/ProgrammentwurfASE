@@ -11,8 +11,8 @@ public class ReportController {
     private ReportTypeTableWrapper reportTypeTableWrapper;
 
     public ReportController() {
-        reportTableWrapper = new ReportTableWrapper(MariaDBConnector.getInstance().getConnection());
-        reportTypeTableWrapper = new ReportTypeTableWrapper(MariaDBConnector.getInstance().getConnection());
+        reportTableWrapper = new ReportTableWrapper(MariaDBConnector.getInstance());
+        reportTypeTableWrapper = new ReportTypeTableWrapper(MariaDBConnector.getInstance());
     }
 
 
@@ -42,6 +42,10 @@ public class ReportController {
 
     public ReportType getReportType(int id) throws SQLException {
         return reportTypeTableWrapper.findById(id);
+    }
+
+    public int getReportTypeIdByName(String name) throws SQLException {
+        return reportTypeTableWrapper.findIdByName(name);
     }
 
 
