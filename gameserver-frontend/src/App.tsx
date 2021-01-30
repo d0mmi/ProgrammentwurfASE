@@ -7,7 +7,6 @@ import {
   Link
 } from "react-router-dom";
 import 'fontsource-roboto';
-import ExamplePage from './pages/example/ExamplePage';
 import LoginPage from './pages/login/LoginPage';
 import { AppBar, Button, createMuiTheme, createStyles, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
@@ -21,6 +20,7 @@ import ProfilePage from './pages/profile/ProfilePage';
 import { User } from './api/UserApi';
 import UserListPage from './pages/users/UserListPage';
 import ReportListPage from './pages/reports/ReportListPage';
+import BanListPage from './pages/bans/BanListPage';
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -53,10 +53,10 @@ function App() {
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
-              <Route path="/example" component={ExamplePage} />
               <Route path="/login" component={LoginPage} />
               <Route path="/users" component={UserListPage} />
               <Route path="/reports" component={ReportListPage} />
+              <Route path="/bans" component={BanListPage} />
               <Route exact path="/" component={Home} />
             </Switch>
           </Router>
@@ -125,7 +125,7 @@ function SideBar() {
     if (user.level >= 50) {
       content.push(<Link to="/users" className={classes.drawerButton}><ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem></Link>);
       content.push(<Link to="/reports" className={classes.drawerButton}><ListItem button key={2}><ListItemIcon><ReportIcon /></ListItemIcon><ListItemText primary={"Reports"} /></ListItem></Link>);
-      content.push(<ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem>);
+      content.push(<Link to="/bans" className={classes.drawerButton}><ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem></Link>);
     }
     if (user.level >= 100) {
       content.push(<ListItem button key={4}><ListItemIcon><RankIcon /></ListItemIcon><ListItemText primary={"Ranks"} /></ListItem>);
