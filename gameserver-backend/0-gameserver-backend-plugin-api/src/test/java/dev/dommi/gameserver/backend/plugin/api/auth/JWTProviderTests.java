@@ -37,8 +37,8 @@ public class JWTProviderTests {
 
     @Test
     @ClearEnvironmentVariable(key = JWTProvider.JWT_SECRET)
-    public void JWTSecretMissingExceptionTest() {
-        assertThrows(JWTSecretMissingException.class, JWTProvider::new);
+    public void JWTSecretMissingExceptionTest() throws JWTSecretMissingException {
+        assertThrows(JWTSecretMissingException.class, JWTProvider.getInstance()::init);
 
     }
 

@@ -7,7 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
 
-public class JWTProvider {
+public final class JWTProvider {
     public static final String USER_ID = "id";
     public static final String USER_LEVEL = "level";
     public static final String JWT_SECRET = "JWT_SECRET";
@@ -15,7 +15,11 @@ public class JWTProvider {
     private Algorithm algorithm;
     private JWTVerifier verifier;
 
-    JWTProvider() throws JWTSecretMissingException {
+    private JWTProvider() throws JWTSecretMissingException {
+        init();
+    }
+
+    void init() throws JWTSecretMissingException {
         String secret = System.getenv(JWT_SECRET);
         if (secret == null) {
             throw new JWTSecretMissingException("You need to provide the JWT Secret as Environment Variable with the Key: " + JWT_SECRET);

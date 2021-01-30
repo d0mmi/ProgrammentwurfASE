@@ -15,7 +15,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-public class MariaDBConnector {
+public final class MariaDBConnector {
 
     private static final Logger logger = Logger.getLogger(MariaDBConnector.class.getName());
     private static final String DB = "db";
