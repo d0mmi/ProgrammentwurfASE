@@ -1,10 +1,12 @@
 import React from 'react';
 import '../../App.css';
 import { CircularProgress, Grid, IconButton, Paper, Theme, withStyles } from '@material-ui/core';
-import DoneIcon from '@material-ui/icons/Done';
+import ClearIcon from '@material-ui/icons/Clear';
+import BanIcon from '@material-ui/icons/Gavel';
 import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
 import { Ban, BanAPI } from '../../api/BanAPI';
+import { format } from 'date-fns'
 
 interface IState {
     bans: Ban[];
@@ -58,9 +60,15 @@ class BanListPage extends React.Component<any, IState>
             disableClickEventBubbling: true,
             width: 150,
             renderCell: (params: CellParams) => {
-
+                var icon = <ClearIcon fontSize="small" />;
+                var ban = this.getBanFromParams(params);
+                if (ban !== null) {
+                    if (!ban.active) {
+                        icon = <BanIcon fontSize="small" />;
+                    }
+                }
                 return <div>
-                    <IconButton onClick={(e) => this.onClick(params)} aria-label="add"><DoneIcon fontSize="small" /></IconButton>
+                    <IconButton onClick={(e) => this.onClick(params)} aria-label="add">{icon}</IconButton>
                 </div>;
             }
         }
@@ -69,7 +77,9 @@ class BanListPage extends React.Component<any, IState>
     onClick(params: CellParams) {
         var ban = this.getBanFromParams(params);
         if (ban !== null) {
-
+            BanAPI.updateBanStatus(ban.id, null, null, !ban.active);
+            ban.active = !ban.active;
+            this.setState({});
         }
     }
 
@@ -98,7 +108,7 @@ class BanListPage extends React.Component<any, IState>
                     <Grid key={1} item xs={"auto"}>
                         <Paper className={this.classes.paper}>
                             <DataGrid rows=
-                                {this.state.bans.map((ban: Ban) => ({ id: ban.id, userId: ban.userId, bannedById: ban.bannedById, reason: ban.reason, until: ban.until, active: ban.active }))}
+                                {this.state.bans.map((ban: Ban) => ({ id: ban.id, userId: ban.userId, bannedById: ban.bannedById, reason: ban.reason, until: format(new Date(ban.until), 'dd/MM/yyyy'), active: ban.active ? "Banned" : "Pardoned" }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
                         </Paper>
                     </Grid>

@@ -27,5 +27,8 @@ export class ReportAPI {
     public static report(reportedUserId: number, reason: String, reportType: String) {
         APIManager.post("report", { reportedUserId: reportedUserId, reason: reason, reportType: reportType });
     }
+    public static updateReportStatus(reportId: number, status: boolean) {
+        APIManager.post("admin/reports/" + reportId, { status: status });
+    }
 
 }

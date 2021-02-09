@@ -2,12 +2,17 @@ import React from 'react';
 import '../../App.css';
 import { CircularProgress, Grid, IconButton, Paper, Theme, withStyles } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
+import ClearIcon from '@material-ui/icons/Clear';
 import BanIcon from '@material-ui/icons/Gavel';
 import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
 import { Report, ReportAPI } from '../../api/ReportAPI';
+import BanDialog from '../../dialogs/BanDialog';
+import { User, UserApi } from '../../api/UserApi';
 
 interface IState {
+    selectedUser: User | null;
+    banState: boolean;
     reports: Report[];
     loading: boolean;
 }
@@ -41,10 +46,12 @@ class ReportListPage extends React.Component<any, IState>
         console.log(props);
         this.classes = this.props.classes;
         this.fetchReports = this.fetchReports.bind(this);
-        this.onClick = this.onClick.bind(this);
+        this.onResolve = this.onResolve.bind(this);
+        this.onBan = this.onBan.bind(this);
+        this.onBanClose = this.onBanClose.bind(this);
         this.getReportFromParams = this.getReportFromParams.bind(this);
 
-        this.state = { reports: [], loading: false };
+        this.state = { selectedUser: null, banState: false, reports: [], loading: false };
     }
     columns: ColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -52,27 +59,55 @@ class ReportListPage extends React.Component<any, IState>
         { field: 'reported', headerName: 'User', width: 90 },
         { field: 'reason', headerName: 'Reason', width: 250 },
         { field: 'type', headerName: 'Report Type', width: 250 },
-        { field: 'open', headerName: 'Status', width: 100 },
+        { field: 'open', headerName: 'Status', width: 125 },
         {
             field: "",
             headerName: "Manage",
             disableClickEventBubbling: true,
             width: 150,
             renderCell: (params: CellParams) => {
-
+                var icon = <DoneIcon fontSize="small" />;
+                var report = this.getReportFromParams(params);
+                if (report !== null) {
+                    if (!report.open) {
+                        icon = <ClearIcon fontSize="small" />;
+                    }
+                }
                 return <div>
-                    <IconButton onClick={(e) => this.onClick(params)} aria-label="add"><DoneIcon fontSize="small" /></IconButton>
-                    <IconButton onClick={(e) => this.onClick(params)} aria-label="remove"><BanIcon fontSize="small" /></IconButton>
+                    <IconButton onClick={(e) => this.onResolve(params)} aria-label="add">{icon}</IconButton>
+                    <IconButton onClick={(e) => this.onBan(params)} aria-label="remove"><BanIcon fontSize="small" /></IconButton>
                 </div>;
             }
         }
     ];
 
-    onClick(params: CellParams) {
+    onResolve(params: CellParams) {
         var report = this.getReportFromParams(params);
         if (report !== null) {
-
+            ReportAPI.updateReportStatus(report.id, !report.open);
+            report.open = !report.open;
+            this.setState({});
         }
+    }
+
+    async onBan(params: CellParams) {
+        var report = this.getReportFromParams(params);
+        if (report !== null) {
+            var response = await UserApi.getById(report.reported);
+            if ((response as Error).message === undefined) {
+                var user = response as User;
+                this.setState({
+                    selectedUser: user,
+                    banState: true
+                });
+            }
+        }
+    }
+
+    onBanClose() {
+        this.setState({
+            banState: false
+        });
     }
 
     getReportFromParams(params: CellParams): Report | null {
@@ -100,8 +135,10 @@ class ReportListPage extends React.Component<any, IState>
                     <Grid key={1} item xs={"auto"}>
                         <Paper className={this.classes.paper}>
                             <DataGrid rows=
-                                {this.state.reports.map((report: Report) => ({ id: report.id, creator: report.creator, reported: report.reported, reason: report.reason, type: report.type.name, open: report.open }))}
+                                {this.state.reports.map((report: Report) => ({ id: report.id, creator: report.creator, reported: report.reported, reason: report.reason, type: report.type.name, open: report.open ? "Open" : "Closed" }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
+
+                            <BanDialog user={this.state.selectedUser} open={this.state.banState} close={this.onBanClose} />
                         </Paper>
                     </Grid>
                 </Grid>

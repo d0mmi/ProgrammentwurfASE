@@ -6,11 +6,13 @@ import ReportIcon from '@material-ui/icons/Report';
 import BanIcon from '@material-ui/icons/Gavel';
 import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
-import ReportDialog from './dialogs/ReportDialog';
+import ReportDialog from '../../dialogs/ReportDialog';
+import BanDialog from '../../dialogs/BanDialog';
 
 interface IState {
     selectedUser: User | null;
     reportState: boolean;
+    banState: boolean;
     users: User[];
     loading: boolean;
 }
@@ -47,9 +49,10 @@ class UserListPage extends React.Component<any, IState>
         this.onReport = this.onReport.bind(this);
         this.onReportClose = this.onReportClose.bind(this);
         this.onBan = this.onBan.bind(this);
+        this.onBanClose = this.onBanClose.bind(this);
         this.getUserFromParams = this.getUserFromParams.bind(this);
 
-        this.state = { selectedUser: null, reportState: false, users: [], loading: false };
+        this.state = { selectedUser: null, reportState: false, banState: false, users: [], loading: false };
     }
 
     columns: ColDef[] = [
@@ -91,8 +94,17 @@ class UserListPage extends React.Component<any, IState>
     onBan(params: CellParams) {
         var user = this.getUserFromParams(params);
         if (user !== null) {
-
+            this.setState({
+                selectedUser: user,
+                banState: true
+            });
         }
+    }
+
+    onBanClose() {
+        this.setState({
+            banState: false
+        });
     }
 
     getUserFromParams(params: CellParams): User | null {
@@ -124,6 +136,7 @@ class UserListPage extends React.Component<any, IState>
                                 columns={this.columns} autoPageSize checkboxSelection />
 
                             <ReportDialog user={this.state.selectedUser} open={this.state.reportState} close={this.onReportClose} />
+                            <BanDialog user={this.state.selectedUser} open={this.state.banState} close={this.onBanClose} />
                         </Paper>
                     </Grid>
                 </Grid>

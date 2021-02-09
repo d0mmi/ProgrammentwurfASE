@@ -17,8 +17,11 @@ export class BanAPI {
         return await APIManager.get("admin/bans");
     }
 
-    public static ban(userId: number, reason: String, untilDate: String) {
+    public static ban(userId: number, reason: string, untilDate: string) {
         APIManager.post("admin/bans", { userId: userId, reason: reason, until: untilDate });
+    }
+    public static updateBanStatus(banId: number, reason: string | null, untilDate: string | null, active: boolean) {
+        APIManager.post("admin/bans/" + banId, { reason: reason, until: untilDate, active });
     }
 
 }

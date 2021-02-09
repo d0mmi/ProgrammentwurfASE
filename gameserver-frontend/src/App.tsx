@@ -21,6 +21,7 @@ import { User } from './api/UserApi';
 import UserListPage from './pages/users/UserListPage';
 import ReportListPage from './pages/reports/ReportListPage';
 import BanListPage from './pages/bans/BanListPage';
+import RankListPage from './pages/ranks/RankListPage';
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -57,6 +58,7 @@ function App() {
               <Route path="/users" component={UserListPage} />
               <Route path="/reports" component={ReportListPage} />
               <Route path="/bans" component={BanListPage} />
+              <Route path="/ranks" component={RankListPage} />
               <Route exact path="/" component={Home} />
             </Switch>
           </Router>
@@ -128,7 +130,7 @@ function SideBar() {
       content.push(<Link to="/bans" className={classes.drawerButton}><ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem></Link>);
     }
     if (user.level >= 100) {
-      content.push(<ListItem button key={4}><ListItemIcon><RankIcon /></ListItemIcon><ListItemText primary={"Ranks"} /></ListItem>);
+      content.push(<Link to="/ranks" className={classes.drawerButton}><ListItem button key={4}><ListItemIcon><RankIcon /></ListItemIcon><ListItemText primary={"Ranks"} /></ListItem></Link>);
     }
 
   }

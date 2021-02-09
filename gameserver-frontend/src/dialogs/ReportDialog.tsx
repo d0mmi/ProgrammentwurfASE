@@ -1,8 +1,8 @@
 import React from 'react';
-import '../../../App.css';
+import '../App.css';
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Theme, withStyles } from '@material-ui/core';
-import { ReportAPI, ReportType } from '../../../api/ReportAPI';
-import { Error } from '../../../api/APIManager';
+import { ReportAPI, ReportType } from '../api/ReportAPI';
+import { Error } from '../api/APIManager';
 
 interface IState {
     reason: string;
