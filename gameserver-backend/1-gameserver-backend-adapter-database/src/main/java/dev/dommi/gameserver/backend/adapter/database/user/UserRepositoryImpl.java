@@ -1,35 +1,27 @@
 package dev.dommi.gameserver.backend.adapter.database.user;
 
+import dev.dommi.gameserver.backend.adapter.database.rank.Rank;
+import dev.dommi.gameserver.backend.adapter.database.rank.RankDatabaseController;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
-import dev.dommi.gameserver.backend.plugin.database.rank.Rank;
-import dev.dommi.gameserver.backend.plugin.database.rank.RankController;
-import dev.dommi.gameserver.backend.plugin.database.user.User;
-import dev.dommi.gameserver.backend.plugin.database.user.UserController;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private UserController controller;
-    private RankController rankController;
+    private UserDatabaseController controller;
+    private RankDatabaseController rankController;
 
-    public UserRepositoryImpl(UserController controller, RankController rankController) {
+    public UserRepositoryImpl(UserDatabaseController controller, RankDatabaseController rankController) {
         this.controller = controller;
         this.rankController = rankController;
     }
 
-    public UserRepositoryImpl() {
-        controller = new UserController();
-        rankController = new RankController();
-    }
-
     @Override
     public void create(String name, String email, String pw) throws SQLException {
-        controller.createNewUser(new User(name, email, pw));
+        controller.create(new User(name, email, pw));
     }
 
     @Override
@@ -45,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(int userId, String name, String email, String pw) throws SQLException {
-        controller.modifyUser(new User(userId, name, email, pw));
+        controller.update(new User(userId, name, email, pw));
     }
 
     @Override
@@ -62,7 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void delete(int userId) throws SQLException {
-        controller.deleteById(userId);
+        controller.delete(userId);
     }
 
     UserEntity convertToUserEntityFrom(User user) throws SQLException {

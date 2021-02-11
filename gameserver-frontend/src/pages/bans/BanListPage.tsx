@@ -49,8 +49,8 @@ class BanListPage extends React.Component<any, IState>
     }
     columns: ColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'userId', headerName: 'User', width: 100 },
-        { field: 'bannedById', headerName: 'Banned By', width: 90 },
+        { field: 'user', headerName: 'User', width: 125 },
+        { field: 'bannedBy', headerName: 'Banned By', width: 125 },
         { field: 'reason', headerName: 'Reason', width: 250 },
         { field: 'until', headerName: 'Until Date', width: 250 },
         { field: 'active', headerName: 'Status', width: 100 },
@@ -108,7 +108,7 @@ class BanListPage extends React.Component<any, IState>
                     <Grid key={1} item xs={"auto"}>
                         <Paper className={this.classes.paper}>
                             <DataGrid rows=
-                                {this.state.bans.map((ban: Ban) => ({ id: ban.id, userId: ban.userId, bannedById: ban.bannedById, reason: ban.reason, until: format(new Date(ban.until), 'dd/MM/yyyy'), active: ban.active ? "Banned" : "Pardoned" }))}
+                                {this.state.bans.map((ban: Ban) => ({ id: ban.id, user: ban.user.name, bannedBy: ban.bannedBy.name, reason: ban.reason, until: format(new Date(ban.until), 'dd/MM/yyyy'), active: ban.active ? "Banned" : "Pardoned" }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
                         </Paper>
                     </Grid>

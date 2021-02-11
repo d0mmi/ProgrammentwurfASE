@@ -1,10 +1,11 @@
 import { APIManager, Error } from "./APIManager";
+import { User } from "./UserApi";
 
 export type Report = {
 
     id: number;
-    creator: number;
-    reported: number;
+    creator: User;
+    reported: User;
     reason: string;
     type: ReportType;
     open: boolean;

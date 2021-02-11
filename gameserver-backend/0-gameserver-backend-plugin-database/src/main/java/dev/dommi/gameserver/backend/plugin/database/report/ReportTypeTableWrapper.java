@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.plugin.database.report;
 
+import dev.dommi.gameserver.backend.adapter.database.report.ReportType;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;
 import io.jenetics.facilejdbc.Param;

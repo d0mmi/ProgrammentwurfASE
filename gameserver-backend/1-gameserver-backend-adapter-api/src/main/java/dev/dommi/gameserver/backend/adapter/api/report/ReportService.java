@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.adapter.api.report;
 
+import dev.dommi.gameserver.backend.adapter.api.user.UserService;
 import dev.dommi.gameserver.backend.application.report.GetReports;
 import dev.dommi.gameserver.backend.application.report.ReportUser;
 import dev.dommi.gameserver.backend.application.report.UpdateReportStatus;
@@ -47,7 +48,7 @@ public class ReportService {
         return convertToReportTypeCollectionFrom(getReports.getReportTypes());
     }
 
-    public int getReportTypeIdByName(String name){
+    public int getReportTypeIdByName(String name) {
         return getReports.getReportTypeIdByName(name);
     }
 
@@ -63,7 +64,7 @@ public class ReportService {
 
     static Report convertToReportFrom(ReportEntity report) {
         if (report == null) return null;
-        return new Report(report.getId(), report.getCreator(), report.getReported(), report.getReason(), convertToReportTypeFrom(report.getType()), report.isOpen());
+        return new Report(report.getId(), UserService.convertToUserFrom(report.getCreator()), UserService.convertToUserFrom(report.getReported()), report.getReason(), convertToReportTypeFrom(report.getType()), report.isOpen());
     }
 
     static Collection<Report> convertToReportCollectionFrom(Collection<ReportEntity> entities) {

@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.plugin.database.ban;
 
+import dev.dommi.gameserver.backend.adapter.database.ban.Ban;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 import dev.dommi.gameserver.backend.plugin.database.user.UserTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;

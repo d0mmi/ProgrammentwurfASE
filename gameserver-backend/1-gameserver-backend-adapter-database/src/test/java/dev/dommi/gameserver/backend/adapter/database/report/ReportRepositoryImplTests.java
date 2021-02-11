@@ -1,10 +1,9 @@
 package dev.dommi.gameserver.backend.adapter.database.report;
 
+import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
+import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
-import dev.dommi.gameserver.backend.plugin.database.report.Report;
-import dev.dommi.gameserver.backend.plugin.database.report.ReportController;
-import dev.dommi.gameserver.backend.plugin.database.report.ReportType;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -21,16 +20,19 @@ public class ReportRepositoryImplTests {
     @Test
     public void convertToReportEntityFromTest() throws SQLException {
 
-        ReportController controller = mock(ReportController.class);
+        ReportDatabaseController controller = mock(ReportDatabaseController.class);
+        UserRepositoryImpl userRepository = mock(UserRepositoryImpl.class);
         when(controller.getReportType(1)).thenReturn(new ReportType(1, "ExampleType"));
+        when(userRepository.findById(1)).thenReturn(new UserEntity(1, "", "", null));
+        when(userRepository.findById(2)).thenReturn(new UserEntity(2, "", "", null));
 
         Report report = new Report(1, 1, 2, "ExampleReason", 1, true);
-        ReportEntity entity = new ReportRepositoryImpl(controller).convertToReportEntityFrom(report);
+        ReportEntity entity = new ReportRepositoryImpl(controller, userRepository).convertToReportEntityFrom(report);
 
         assertNotNull(entity);
         assertEquals(report.id, entity.getId());
-        assertEquals(report.creator, entity.getCreator());
-        assertEquals(report.reported, entity.getReported());
+        assertEquals(report.creator, entity.getCreator().getId());
+        assertEquals(report.reported, entity.getReported().getId());
         assertEquals(report.reason, entity.getReason());
         assertEquals(report.open, entity.isOpen());
     }
@@ -38,11 +40,11 @@ public class ReportRepositoryImplTests {
     @Test
     public void convertToReportEntityCollectionFromTest() throws SQLException {
 
-        ReportController controller = mock(ReportController.class);
-        when(controller.getReportType(anyInt())).thenReturn(new ReportType(anyInt(), "ExampleType"));
+        ReportDatabaseController controller = mock(ReportDatabaseController.class);
+        UserRepositoryImpl userRepository = mock(UserRepositoryImpl.class);
 
         Collection<Report> reports = createReports();
-        Collection<ReportEntity> entities = new ReportRepositoryImpl(controller).convertToReportEntityCollectionFrom(reports);
+        Collection<ReportEntity> entities = new ReportRepositoryImpl(controller, userRepository).convertToReportEntityCollectionFrom(reports);
 
         for (int i = 0; i < reports.size(); i++) {
             Report report = (Report) reports.toArray()[i];
@@ -51,8 +53,6 @@ public class ReportRepositoryImplTests {
 
             assertNotNull(entity);
             assertEquals(report.id, entity.getId());
-            assertEquals(report.creator, entity.getCreator());
-            assertEquals(report.reported, entity.getReported());
             assertEquals(report.reason, entity.getReason());
             assertEquals(report.open, entity.isOpen());
         }

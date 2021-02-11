@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class UserControllerTests {
+public class UserDatabaseControllerImplTests {
 
     @Test
     public void validPathParamUserIdTest() {

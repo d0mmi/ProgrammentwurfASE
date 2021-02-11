@@ -1,22 +1,25 @@
 package dev.dommi.gameserver.backend.plugin.database.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import dev.dommi.gameserver.backend.adapter.database.user.User;
+import dev.dommi.gameserver.backend.adapter.database.user.UserDatabaseController;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-public class UserController {
+public class UserDatabaseControllerImpl implements UserDatabaseController {
 
-    private static final Logger logger = Logger.getLogger(UserController.class.getName());
+    private static final Logger logger = Logger.getLogger(UserDatabaseControllerImpl.class.getName());
     public static final String BCRYPT_COST = "BCRYPT_COST";
     private UserTableWrapper wrapper;
 
-    public UserController() {
+    public UserDatabaseControllerImpl() {
         wrapper = new UserTableWrapper(MariaDBConnector.getInstance());
     }
 
+    @Override
     public boolean verifyPasswordByEmail(String email, String pw) {
 
         String password;
@@ -31,28 +34,34 @@ public class UserController {
         return result.verified;
     }
 
+    @Override
     public User findByEmail(String email) throws SQLException {
         return wrapper.findByEmail(email);
     }
 
+    @Override
     public User findById(int id) throws SQLException {
         return wrapper.findById(id);
     }
 
-    public void deleteById(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
         wrapper.deleteById(id);
     }
 
+    @Override
     public Collection<User> findAll() throws SQLException {
         return wrapper.findAll();
     }
 
-    public void createNewUser(User user) throws SQLException {
+    @Override
+    public void create(User user) throws SQLException {
         user.pw = BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(BCRYPT_COST)), user.pw.toCharArray());
         wrapper.create(user);
     }
 
-    public void modifyUser(User user) throws SQLException {
+    @Override
+    public void update(User user) throws SQLException {
         wrapper.update(user);
     }
 

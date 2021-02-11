@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.plugin.database.rank;
+package dev.dommi.gameserver.backend.adapter.database.rank;
 
 public class UserRank {
     public int id;

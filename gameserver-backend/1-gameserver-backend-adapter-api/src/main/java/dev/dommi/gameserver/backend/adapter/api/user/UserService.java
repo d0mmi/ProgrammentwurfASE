@@ -46,7 +46,7 @@ public class UserService {
         modifyUser.deleteUserById(userId);
     }
 
-    static User convertToUserFrom(UserEntity user) {
+    public static User convertToUserFrom(UserEntity user) {
         return new User(user.getId(), user.getName(), user.getEmail(), user.getRank().getLevel());
     }
 

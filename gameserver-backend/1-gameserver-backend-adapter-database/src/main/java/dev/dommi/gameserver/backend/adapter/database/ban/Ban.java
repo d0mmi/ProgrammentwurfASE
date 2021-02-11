@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.plugin.database.ban;
+package dev.dommi.gameserver.backend.adapter.database.ban;
 
 import java.util.Date;
 

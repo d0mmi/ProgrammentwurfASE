@@ -1,10 +1,11 @@
 import { APIManager, Error } from "./APIManager";
+import { User } from "./UserApi";
 
 export type Ban = {
 
     id: number;
-    userId: number;
-    bannedById: number;
+    user: User;
+    bannedBy: User;
     reason: string;
     until: string;
     active: boolean;

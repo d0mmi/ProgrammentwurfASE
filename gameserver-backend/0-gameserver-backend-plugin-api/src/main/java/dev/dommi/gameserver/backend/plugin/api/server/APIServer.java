@@ -3,9 +3,13 @@ package dev.dommi.gameserver.backend.plugin.api.server;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import dev.dommi.gameserver.backend.adapter.database.ban.BanDatabaseController;
 import dev.dommi.gameserver.backend.adapter.database.ban.BanRepositoryImpl;
+import dev.dommi.gameserver.backend.adapter.database.rank.RankDatabaseController;
 import dev.dommi.gameserver.backend.adapter.database.rank.RankRepositoryImpl;
+import dev.dommi.gameserver.backend.adapter.database.report.ReportDatabaseController;
 import dev.dommi.gameserver.backend.adapter.database.report.ReportRepositoryImpl;
+import dev.dommi.gameserver.backend.adapter.database.user.UserDatabaseController;
 import dev.dommi.gameserver.backend.adapter.database.user.UserRepositoryImpl;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
@@ -19,6 +23,10 @@ import dev.dommi.gameserver.backend.plugin.api.services.login.LoginController;
 import dev.dommi.gameserver.backend.plugin.api.services.rank.RankController;
 import dev.dommi.gameserver.backend.plugin.api.services.report.ReportController;
 import dev.dommi.gameserver.backend.plugin.api.services.user.UserController;
+import dev.dommi.gameserver.backend.plugin.database.ban.BanDatabaseControllerImpl;
+import dev.dommi.gameserver.backend.plugin.database.rank.RankDatabaseControllerImpl;
+import dev.dommi.gameserver.backend.plugin.database.report.ReportDatabaseControllerImpl;
+import dev.dommi.gameserver.backend.plugin.database.user.UserDatabaseControllerImpl;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
@@ -72,10 +80,15 @@ public class APIServer {
     public APIServer() {
         this.port = Integer.parseInt(System.getenv(API_PORT));
 
-        UserRepository userRepository = new UserRepositoryImpl();
-        RankRepository rankRepository = new RankRepositoryImpl();
-        ReportRepository reportRepository = new ReportRepositoryImpl();
-        BanRepository banRepository = new BanRepositoryImpl();
+        BanDatabaseController banDatabaseController = new BanDatabaseControllerImpl();
+        RankDatabaseController rankDatabaseController = new RankDatabaseControllerImpl();
+        ReportDatabaseController reportDatabaseController = new ReportDatabaseControllerImpl();
+        UserDatabaseController userDatabaseController = new UserDatabaseControllerImpl();
+
+        UserRepository userRepository = new UserRepositoryImpl(userDatabaseController, rankDatabaseController);
+        RankRepository rankRepository = new RankRepositoryImpl(rankDatabaseController);
+        ReportRepository reportRepository = new ReportRepositoryImpl(reportDatabaseController, userRepository);
+        BanRepository banRepository = new BanRepositoryImpl(banDatabaseController, userRepository);
 
         LoginController loginController = new LoginController(userRepository, rankRepository, banRepository);
         BanController banController = new BanController(banRepository, userRepository);

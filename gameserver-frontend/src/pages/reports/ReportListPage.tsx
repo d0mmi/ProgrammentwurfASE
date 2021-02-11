@@ -8,7 +8,7 @@ import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
 import { Report, ReportAPI } from '../../api/ReportAPI';
 import BanDialog from '../../dialogs/BanDialog';
-import { User, UserApi } from '../../api/UserApi';
+import { User } from '../../api/UserApi';
 
 interface IState {
     selectedUser: User | null;
@@ -93,14 +93,10 @@ class ReportListPage extends React.Component<any, IState>
     async onBan(params: CellParams) {
         var report = this.getReportFromParams(params);
         if (report !== null) {
-            var response = await UserApi.getById(report.reported);
-            if ((response as Error).message === undefined) {
-                var user = response as User;
-                this.setState({
-                    selectedUser: user,
-                    banState: true
-                });
-            }
+            this.setState({
+                selectedUser: report.reported,
+                banState: true
+            });
         }
     }
 
@@ -135,7 +131,7 @@ class ReportListPage extends React.Component<any, IState>
                     <Grid key={1} item xs={"auto"}>
                         <Paper className={this.classes.paper}>
                             <DataGrid rows=
-                                {this.state.reports.map((report: Report) => ({ id: report.id, creator: report.creator, reported: report.reported, reason: report.reason, type: report.type.name, open: report.open ? "Open" : "Closed" }))}
+                                {this.state.reports.map((report: Report) => ({ id: report.id, creator: report.creator.name, reported: report.reported.name, reason: report.reason, type: report.type.name, open: report.open ? "Open" : "Closed" }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
 
                             <BanDialog user={this.state.selectedUser} open={this.state.banState} close={this.onBanClose} />

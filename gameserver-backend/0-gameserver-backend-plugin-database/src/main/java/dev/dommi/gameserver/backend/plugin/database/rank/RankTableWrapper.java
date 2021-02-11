@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.plugin.database.rank;
 
+import dev.dommi.gameserver.backend.adapter.database.rank.Rank;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;
 import io.jenetics.facilejdbc.Param;

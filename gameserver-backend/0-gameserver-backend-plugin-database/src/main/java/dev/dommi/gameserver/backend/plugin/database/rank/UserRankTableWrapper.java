@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.plugin.database.rank;
 
+import dev.dommi.gameserver.backend.adapter.database.rank.UserRank;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 import dev.dommi.gameserver.backend.plugin.database.user.UserTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;

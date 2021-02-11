@@ -2,11 +2,11 @@ package dev.dommi.gameserver.backend.plugin.database.connector;
 
 import dev.dommi.gameserver.backend.plugin.database.ban.BanTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.rank.RankTableWrapper;
-import dev.dommi.gameserver.backend.plugin.database.rank.UserRank;
+import dev.dommi.gameserver.backend.adapter.database.rank.UserRank;
 import dev.dommi.gameserver.backend.plugin.database.rank.UserRankTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportTableWrapper;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportTypeTableWrapper;
-import dev.dommi.gameserver.backend.plugin.database.user.User;
+import dev.dommi.gameserver.backend.adapter.database.user.User;
 import dev.dommi.gameserver.backend.plugin.database.user.UserTableWrapper;
 import io.jenetics.facilejdbc.Query;
 

@@ -1,11 +1,8 @@
 package dev.dommi.gameserver.backend.adapter.database.user;
 
+import dev.dommi.gameserver.backend.adapter.database.rank.Rank;
+import dev.dommi.gameserver.backend.adapter.database.rank.RankDatabaseController;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
-import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
-import dev.dommi.gameserver.backend.plugin.database.rank.Rank;
-import dev.dommi.gameserver.backend.plugin.database.rank.RankController;
-import dev.dommi.gameserver.backend.plugin.database.user.User;
-import dev.dommi.gameserver.backend.plugin.database.user.UserController;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -22,8 +19,8 @@ public class UserRepositoryImplTests {
     @Test
     public void convertToUserEntityFromTest() throws SQLException {
 
-        UserController userController = mock(UserController.class);
-        RankController rankController = mock(RankController.class);
+        UserDatabaseController userController = mock(UserDatabaseController.class);
+        RankDatabaseController rankController = mock(RankDatabaseController.class);
         when(rankController.getRankFrom(anyInt())).thenReturn(new Rank("User", 1));
 
         User user = new User(1, "TestUser", "test@example.com", "pw");
@@ -37,8 +34,8 @@ public class UserRepositoryImplTests {
 
     @Test
     public void convertToUserEntityCollectionFromTest() throws SQLException {
-        UserController userController = mock(UserController.class);
-        RankController rankController = mock(RankController.class);
+        UserDatabaseController userController = mock(UserDatabaseController.class);
+        RankDatabaseController rankController = mock(RankDatabaseController.class);
         when(rankController.getRankFrom(anyInt())).thenReturn(new Rank("User", 1));
 
         Collection<User> users = createUsers();

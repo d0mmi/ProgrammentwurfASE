@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.plugin.database.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import dev.dommi.gameserver.backend.adapter.database.user.User;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 import dev.dommi.gameserver.backend.plugin.database.wrapper.TableWrapper;
 import io.jenetics.facilejdbc.Param;
@@ -52,7 +53,7 @@ public class UserTableWrapper extends TableWrapper<User> {
             String name = System.getenv(API_ROOT_USER);
             String pw = System.getenv(API_ROOT_PW);
             if (name != null && pw != null) {
-                pw = BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(UserController.BCRYPT_COST)), pw.toCharArray());
+                pw = BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(UserDatabaseControllerImpl.BCRYPT_COST)), pw.toCharArray());
                 create(new User(name, email, pw));
                 rootUser = findByEmail(email);
             }

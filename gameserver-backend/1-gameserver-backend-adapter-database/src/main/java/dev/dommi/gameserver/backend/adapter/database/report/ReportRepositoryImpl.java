@@ -1,11 +1,10 @@
 package dev.dommi.gameserver.backend.adapter.database.report;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
+import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.plugin.database.report.Report;
-import dev.dommi.gameserver.backend.plugin.database.report.ReportController;
-import dev.dommi.gameserver.backend.plugin.database.report.ReportType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,19 +12,17 @@ import java.util.Collection;
 
 public class ReportRepositoryImpl implements ReportRepository {
 
-    private ReportController controller;
+    private ReportDatabaseController controller;
+    private UserRepository userRepository;
 
-    public ReportRepositoryImpl(ReportController controller) {
+    public ReportRepositoryImpl(ReportDatabaseController controller, UserRepository userRepository) {
         this.controller = controller;
-    }
-
-    public ReportRepositoryImpl() {
-        controller = new ReportController();
+        this.userRepository = userRepository;
     }
 
     @Override
     public Collection<ReportEntity> getAllReports() throws SQLException {
-        return convertToReportEntityCollectionFrom(controller.getAllReports());
+        return convertToReportEntityCollectionFrom(controller.findAll());
     }
 
     @Override
@@ -40,7 +37,7 @@ public class ReportRepositoryImpl implements ReportRepository {
 
     @Override
     public ReportEntity getReport(int reportId) throws SQLException {
-        return convertToReportEntityFrom(controller.getReport(reportId));
+        return convertToReportEntityFrom(controller.findById(reportId));
     }
 
     @Override
@@ -55,19 +52,21 @@ public class ReportRepositoryImpl implements ReportRepository {
 
     @Override
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) throws SQLException {
-        controller.reportUser(creatorId, reportedUserId, reason, reportTypeId);
+        controller.create(new Report(creatorId, reportedUserId, reason, reportTypeId));
     }
 
     @Override
     public void updateReportStatus(int reportId, boolean status) throws SQLException {
-        controller.updateReportStatus(reportId, status);
+        controller.update(new Report(reportId,status));
     }
 
 
     ReportEntity convertToReportEntityFrom(Report report) throws SQLException {
         if (report == null) return null;
         ReportType type = controller.getReportType(report.typeId);
-        return new ReportEntity(report.id, report.creator, report.reported, report.reason, convertToReportTypeEntityFrom(type), report.open);
+        UserEntity creator = userRepository.findById(report.creator);
+        UserEntity reported = userRepository.findById(report.reported);
+        return new ReportEntity(report.id, creator, reported, report.reason, convertToReportTypeEntityFrom(type), report.open);
     }
 
     Collection<ReportEntity> convertToReportEntityCollectionFrom(Collection<Report> reports) throws SQLException {

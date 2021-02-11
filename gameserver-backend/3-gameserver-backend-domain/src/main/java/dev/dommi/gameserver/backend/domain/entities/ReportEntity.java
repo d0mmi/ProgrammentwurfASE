@@ -7,13 +7,13 @@ import java.sql.SQLException;
 
 public class ReportEntity {
     private int id;
-    private int creator;
-    private int reported;
+    private UserEntity creator;
+    private UserEntity reported;
     private String reason;
     private ReportTypeVO type;
     private boolean open;
 
-    public ReportEntity(int id, int creator, int reported, String reason, ReportTypeVO type, boolean open) {
+    public ReportEntity(int id, UserEntity creator, UserEntity reported, String reason, ReportTypeVO type, boolean open) {
         this.id = id;
         this.creator = creator;
         this.reported = reported;
@@ -26,11 +26,11 @@ public class ReportEntity {
         return id;
     }
 
-    public int getCreator() {
+    public UserEntity getCreator() {
         return creator;
     }
 
-    public int getReported() {
+    public UserEntity getReported() {
         return reported;
     }
 

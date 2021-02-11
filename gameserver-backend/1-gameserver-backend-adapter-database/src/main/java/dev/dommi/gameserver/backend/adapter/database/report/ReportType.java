@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.plugin.database.report;
+package dev.dommi.gameserver.backend.adapter.database.report;
 
 public class ReportType {
     public int id;

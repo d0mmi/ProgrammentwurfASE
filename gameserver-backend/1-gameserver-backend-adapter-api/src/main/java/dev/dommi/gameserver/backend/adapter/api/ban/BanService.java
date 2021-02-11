@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.adapter.api.ban;
 
+import dev.dommi.gameserver.backend.adapter.api.user.UserService;
 import dev.dommi.gameserver.backend.application.ban.BanUser;
 import dev.dommi.gameserver.backend.application.ban.CheckUserBan;
 import dev.dommi.gameserver.backend.application.ban.GetAllBans;
@@ -68,7 +69,8 @@ public class BanService {
 
     static Ban convertToBanFrom(BanEntity ban) {
         if (ban == null) return null;
-        return new Ban(ban.getId(), ban.getUserId(), ban.getBannedById(), ban.getReason(), ban.getUntil(), ban.isActive());
+
+        return new Ban(ban.getId(), UserService.convertToUserFrom(ban.getUser()), UserService.convertToUserFrom(ban.getBannedBy()), ban.getReason(), ban.getUntil(), ban.isActive());
     }
 
     static Collection<Ban> convertToBanCollectionFrom(Collection<BanEntity> entities) {

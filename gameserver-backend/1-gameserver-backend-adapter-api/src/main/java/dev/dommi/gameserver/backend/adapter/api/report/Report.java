@@ -1,14 +1,16 @@
 package dev.dommi.gameserver.backend.adapter.api.report;
 
+import dev.dommi.gameserver.backend.adapter.api.user.User;
+
 public class Report {
     public int id;
-    public int creator;
-    public int reported;
+    public User creator;
+    public User reported;
     public String reason;
     public ReportType type;
     public boolean open;
 
-    public Report(int id, int creator, int reported, String reason, ReportType type, boolean open) {
+    public Report(int id, User creator, User reported, String reason, ReportType type, boolean open) {
         this.id = id;
         this.creator = creator;
         this.reported = reported;

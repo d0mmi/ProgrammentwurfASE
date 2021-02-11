@@ -2,8 +2,6 @@ package dev.dommi.gameserver.backend.adapter.database.rank;
 
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
-import dev.dommi.gameserver.backend.plugin.database.rank.Rank;
-import dev.dommi.gameserver.backend.plugin.database.rank.RankController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,15 +9,15 @@ import java.util.Collection;
 
 public class RankRepositoryImpl implements RankRepository {
 
-    private RankController controller;
+    private RankDatabaseController controller;
 
-    public RankRepositoryImpl() {
-        this.controller = new RankController();
+    public RankRepositoryImpl(RankDatabaseController controller) {
+        this.controller = controller;
     }
 
     @Override
     public Collection<RankVO> getAllRanks() throws SQLException {
-        return convertToRankVOCollectionFrom(controller.getAllRanks());
+        return convertToRankVOCollectionFrom(controller.findAll());
     }
 
     @Override

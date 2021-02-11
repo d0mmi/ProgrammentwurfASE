@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.plugin.database.user;
+package dev.dommi.gameserver.backend.adapter.database.user;
 
 
 public final class User {

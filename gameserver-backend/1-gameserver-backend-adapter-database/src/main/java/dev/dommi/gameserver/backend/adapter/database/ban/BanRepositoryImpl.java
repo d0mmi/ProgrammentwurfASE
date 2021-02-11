@@ -1,9 +1,9 @@
 package dev.dommi.gameserver.backend.adapter.database.ban;
 
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
+import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
-import dev.dommi.gameserver.backend.plugin.database.ban.Ban;
-import dev.dommi.gameserver.backend.plugin.database.ban.BanController;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,10 +12,12 @@ import java.util.Date;
 
 public class BanRepositoryImpl implements BanRepository {
 
-    private BanController controller;
+    private BanDatabaseController controller;
+    private UserRepository userRepository;
 
-    public BanRepositoryImpl() {
-        controller = new BanController();
+    public BanRepositoryImpl(BanDatabaseController controller, UserRepository userRepository) {
+        this.controller = controller;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -59,12 +61,15 @@ public class BanRepositoryImpl implements BanRepository {
     }
 
 
-    static BanEntity convertToBanEntityFrom(Ban ban) {
+    BanEntity convertToBanEntityFrom(Ban ban) throws SQLException {
         if (ban == null) return null;
-        return new BanEntity(ban.id, ban.userId, ban.bannedById, ban.reason, ban.until, ban.active);
+        UserEntity user = userRepository.findById(ban.userId);
+        UserEntity bannedBy = userRepository.findById(ban.bannedById);
+
+        return new BanEntity(ban.id, user, bannedBy, ban.reason, ban.until, ban.active);
     }
 
-    static Collection<BanEntity> convertToBanEntityCollectionFrom(Collection<Ban> bans) {
+    Collection<BanEntity> convertToBanEntityCollectionFrom(Collection<Ban> bans) throws SQLException {
         Collection<BanEntity> entities = new ArrayList<>();
         for (Ban ban : bans) {
             if (ban != null) {

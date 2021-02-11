@@ -23,6 +23,12 @@
 
         <dependency>
             <groupId>dev.dommi.gameserver-backend</groupId>
+            <artifactId>0-gameserver-backend-plugin-database</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.dommi.gameserver-backend</groupId>
             <artifactId>1-gameserver-backend-adapter-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
