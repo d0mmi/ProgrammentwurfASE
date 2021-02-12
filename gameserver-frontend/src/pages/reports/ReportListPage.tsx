@@ -68,7 +68,7 @@ class ReportListPage extends React.Component<any, IState>
             renderCell: (params: CellParams) => {
                 var icon = <DoneIcon fontSize="small" />;
                 var report = this.getReportFromParams(params);
-                if (report !== null) {
+                if (report !== undefined) {
                     if (!report.open) {
                         icon = <ClearIcon fontSize="small" />;
                     }
