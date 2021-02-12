@@ -77,7 +77,7 @@ class UserListPage extends React.Component<any, IState>
 
     onReport(params: CellParams) {
         var user = this.getUserFromParams(params);
-        if (user !== null) {
+        if (user !== undefined) {
             this.setState({
                 selectedUser: user,
                 reportState: true
@@ -93,7 +93,7 @@ class UserListPage extends React.Component<any, IState>
 
     onBan(params: CellParams) {
         var user = this.getUserFromParams(params);
-        if (user !== null) {
+        if (user !== undefined) {
             this.setState({
                 selectedUser: user,
                 banState: true
@@ -107,13 +107,14 @@ class UserListPage extends React.Component<any, IState>
         });
     }
 
-    getUserFromParams(params: CellParams): User | null {
-        var index = params.rowIndex;
-        if (index !== undefined) {
-            var user = this.state.users[index];
+    getUserFromParams(params: CellParams): User | undefined {
+        var id = params.getValue('id')?.toString();
+        if (id !== undefined) {
+            var idNumber = +id;
+            var user = this.state.users.find((user) => user.id == idNumber);
             return user;
         }
-        return null;
+        return undefined;
     }
 
     render() {

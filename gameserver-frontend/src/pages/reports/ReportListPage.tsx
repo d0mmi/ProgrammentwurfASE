@@ -83,7 +83,7 @@ class ReportListPage extends React.Component<any, IState>
 
     onResolve(params: CellParams) {
         var report = this.getReportFromParams(params);
-        if (report !== null) {
+        if (report !== undefined) {
             ReportAPI.updateReportStatus(report.id, !report.open);
             report.open = !report.open;
             this.setState({});
@@ -92,7 +92,7 @@ class ReportListPage extends React.Component<any, IState>
 
     async onBan(params: CellParams) {
         var report = this.getReportFromParams(params);
-        if (report !== null) {
+        if (report !== undefined) {
             this.setState({
                 selectedUser: report.reported,
                 banState: true
@@ -106,13 +106,14 @@ class ReportListPage extends React.Component<any, IState>
         });
     }
 
-    getReportFromParams(params: CellParams): Report | null {
-        var index = params.rowIndex;
-        if (index !== undefined) {
-            var report = this.state.reports[index];
+    getReportFromParams(params: CellParams): Report | undefined {
+        var id = params.getValue('id')?.toString();
+        if (id !== undefined) {
+            var idNumber = +id;
+            var report = this.state.reports.find((report) => report.id == idNumber);
             return report;
         }
-        return null;
+        return undefined;
     }
 
     render() {

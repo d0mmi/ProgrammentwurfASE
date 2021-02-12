@@ -62,7 +62,7 @@ class BanListPage extends React.Component<any, IState>
             renderCell: (params: CellParams) => {
                 var icon = <ClearIcon fontSize="small" />;
                 var ban = this.getBanFromParams(params);
-                if (ban !== null) {
+                if (ban !== undefined) {
                     if (!ban.active) {
                         icon = <BanIcon fontSize="small" />;
                     }
@@ -76,20 +76,21 @@ class BanListPage extends React.Component<any, IState>
 
     onClick(params: CellParams) {
         var ban = this.getBanFromParams(params);
-        if (ban !== null) {
+        if (ban !== undefined) {
             BanAPI.updateBanStatus(ban.id, null, null, !ban.active);
             ban.active = !ban.active;
             this.setState({});
         }
     }
 
-    getBanFromParams(params: CellParams): Ban | null {
-        var index = params.rowIndex;
-        if (index !== undefined) {
-            var ban = this.state.bans[index];
+    getBanFromParams(params: CellParams): Ban | undefined {
+        var id = params.getValue('id')?.toString();
+        if (id !== undefined) {
+            var idNumber = +id;
+            var ban = this.state.bans.find((ban) => ban.id == idNumber);
             return ban;
         }
-        return null;
+        return undefined;
     }
 
     render() {
