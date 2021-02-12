@@ -1,4 +1,23 @@
 \chapter{Refactoring}
 
 \section{Code Smells identifizieren}
+
+\subsection{1. Long Method APIServer}
+
+\subsubsection{Identifizierung}
+
+Der erste Code Smell den ich im Refactoring fand war der Lange Konstruktor der APIServer Klasse.
+Da sollten vor dem Starten des Servers verschiedene Dinge initialisiert und konfiguriert werden.
+Da häufte sich aber über die Zeit immer mehr an, was zu diesem Code Smell führte.
+
+\subsubsection{Begründung des Refactorings}
+
+In diesem Refactoring wurde zuerst das Konfigurieren der Kontroller in eine extra Klasse mit dem Namen APIServerConfig ausgelagert.
+Diese Klasse wird dann als Parameter des Konstruktors übergeben was es in Zukunft ermöglicht den Server einfacher mit verschiedenen Konfigurationen zu starten.
+Danach wurde der AccessManager in die Klasse APIServerAccessManager und die Konfiguration der Endpunkte in die Klasse APIServerEndpointGroup ausgelagert,
+wodurch der Code viel verständlicher und überschaubarer wird.
+Zuletzt wurde das erstellen der Serverinstanz, für eine bessere Übersichtlichkeit, noch in eine extra Funktion verschoben.
+Dadurch wurde der Code insgesammt auf viele kleinere und logische Bausteine verteilt wodurch er einfacher zu verstehen ist.
+Zudem konnten durch das aufteilen einfacher sinnvolle Namen für die Methoden der einzelnen Schritte gefunden werden.
+
 \section{Refactorings begründen}

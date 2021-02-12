@@ -8,9 +8,9 @@ import java.util.Date;
 
 public interface BanDatabaseController extends DatabaseController<Ban> {
 
-    public Collection<Ban> findAllByActive(boolean active) throws SQLException;
-    public Collection<Ban> findAllByUser(int userId) throws SQLException;
-    public Collection<Ban> findAllByDate(Date date) throws SQLException;
-    public Collection<Ban> findAllByUserAndDate(int userId, Date date) throws SQLException;
+    Collection<Ban> findAllByActive(boolean active) throws SQLException;
+    Collection<Ban> findAllByUser(int userId) throws SQLException;
+    Collection<Ban> findAllByDate(Date date) throws SQLException;
+    Collection<Ban> findAllByUserAndDate(int userId, Date date) throws SQLException;
 
 }

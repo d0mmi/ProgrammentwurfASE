@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public interface DatabaseController<T> {
 
-    public void create(T value) throws SQLException;
-    public void update(T value) throws SQLException;
-    public void delete(int value) throws SQLException;
-    public T findById(int value) throws SQLException;
-    public Collection<T> findAll() throws SQLException;
+    void create(T value) throws SQLException;
+    void update(T value) throws SQLException;
+    void delete(int value) throws SQLException;
+    T findById(int value) throws SQLException;
+    Collection<T> findAll() throws SQLException;
 
 }

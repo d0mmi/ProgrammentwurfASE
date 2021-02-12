@@ -5,7 +5,6 @@ import io.jenetics.facilejdbc.Param;
 import io.jenetics.facilejdbc.Query;
 import io.jenetics.facilejdbc.RowParser;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 

@@ -7,16 +7,16 @@ import java.util.Collection;
 
 public interface RankRepository {
 
-    public Collection<RankVO> getAllRanks() throws SQLException;
+    Collection<RankVO> getAllRanks() throws SQLException;
 
-    public RankVO getRankFrom(int userId) throws SQLException;
+    RankVO getRankFrom(int userId) throws SQLException;
 
-    public int getRankIdFrom(String name) throws SQLException;
+    int getRankIdFrom(String name) throws SQLException;
 
-    public void grantRank(int userId, int rankId) throws SQLException;
+    void grantRank(int userId, int rankId) throws SQLException;
 
-    public void revokeRank(int userId, int rankId) throws SQLException;
+    void revokeRank(int userId, int rankId) throws SQLException;
 
-    public void revokeAllRanks(int userId) throws SQLException;
+    void revokeAllRanks(int userId) throws SQLException;
 
 }

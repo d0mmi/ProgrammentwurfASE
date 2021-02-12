@@ -6,6 +6,6 @@ import java.sql.SQLException;
 
 public interface UserDatabaseController extends DatabaseController<User> {
 
-    public boolean verifyPasswordByEmail(String email, String pw);
-    public User findByEmail(String email) throws SQLException;
+    boolean verifyPasswordByEmail(String email, String pw);
+    User findByEmail(String email) throws SQLException;
 }

@@ -7,9 +7,9 @@ import java.util.Collection;
 
 public interface ReportDatabaseController extends DatabaseController<Report> {
 
-    public Collection<Report> getReportsCreatedBy(int userId) throws SQLException;
-    public Collection<Report> getReportsFor(int userId) throws SQLException;
-    public ReportType getReportType(int typeId) throws SQLException;
-    public Collection<ReportType> getReportTypes() throws SQLException;
-    public int getReportTypeIdByName(String name) throws SQLException;
+    Collection<Report> getReportsCreatedBy(int userId) throws SQLException;
+    Collection<Report> getReportsFor(int userId) throws SQLException;
+    ReportType getReportType(int typeId) throws SQLException;
+    Collection<ReportType> getReportTypes() throws SQLException;
+    int getReportTypeIdByName(String name) throws SQLException;
 }

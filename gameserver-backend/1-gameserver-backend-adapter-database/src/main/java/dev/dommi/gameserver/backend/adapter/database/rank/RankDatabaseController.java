@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 public interface RankDatabaseController extends DatabaseController<Rank> {
 
-    public Rank getRankFrom(int userId) throws SQLException;
-    public int getRankIdFrom(String name) throws SQLException;
-    public void grantRank(int userId, int rankId) throws SQLException;
-    public void revokeRank(int userId, int rankId) throws SQLException;
-    public void revokeAllRanks(int userId) throws SQLException;
+    Rank getRankFrom(int userId) throws SQLException;
+    int getRankIdFrom(String name) throws SQLException;
+    void grantRank(int userId, int rankId) throws SQLException;
+    void revokeRank(int userId, int rankId) throws SQLException;
+    void revokeAllRanks(int userId) throws SQLException;
 
 }

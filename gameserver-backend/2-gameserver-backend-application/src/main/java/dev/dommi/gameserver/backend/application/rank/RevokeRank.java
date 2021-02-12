@@ -1,6 +1,5 @@
 package dev.dommi.gameserver.backend.application.rank;
 
-import dev.dommi.gameserver.backend.domain.entities.RankType;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
