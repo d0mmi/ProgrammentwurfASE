@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Theme, withStyles } from '@material-ui/core';
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, Theme, withStyles } from '@material-ui/core';
 import { Rank, RankAPI } from '../api/RankAPI';
 import { Error } from '../api/APIManager';
 
@@ -26,7 +26,6 @@ class RankDialog extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.fetchRanks = this.fetchRanks.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -53,13 +52,13 @@ class RankDialog extends React.Component<any, IState>
                 <DialogContent>
                     <DialogContentText>To set the Rank of this User, please select the Rank below.</DialogContentText>
                     <FormControl variant="outlined" className={this.classes.formControl}>
-                        <InputLabel id="demo-simple-select-outlined-label">Type</InputLabel>
+                        <InputLabel id="demo-simple-select-outlined-label">Rank</InputLabel>
                         <Select
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
                             value={this.state.rank}
                             onChange={this.handleRankChange}
-                            label="Age">
+                            label="Rank">
                             {this.state.ranks.map((rank: Rank) => (<MenuItem value={rank.name}>{rank.name}</MenuItem>))}
                         </Select>
                     </FormControl>
@@ -101,7 +100,7 @@ class RankDialog extends React.Component<any, IState>
         if (this.state.rank.length > 0) {
             var rank = this.state.ranks.find((rank) => rank.name === this.state.rank);
             if (rank !== undefined) {
-                RankAPI.grantRankTo(this.props.user.id, rank.name);
+                await RankAPI.grantRankTo(this.props.user.id, rank.name);
             }
         }
         this.handleClose();

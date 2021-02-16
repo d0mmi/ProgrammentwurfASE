@@ -13,8 +13,8 @@ export class RankAPI {
         return await APIManager.get("admin/ranks");
     }
 
-    public static grantRankTo(userId: number, rank: String) {
-        APIManager.post("admin/ranks/grant", { userId: userId, rank: rank });
+    public static async grantRankTo(userId: number, rank: String) {
+        await APIManager.post("admin/ranks/grant", { userId: userId, rank: rank });
     }
 
     public static revokeRankFrom(userId: number) {

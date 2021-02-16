@@ -27,7 +27,8 @@ const styles = (theme: Theme) => ({
         width: "100%"
     },
     input: {
-        marginTop: "15px"
+        marginTop: "15px",
+        marginRight: "5px"
     },
 });
 
@@ -39,11 +40,11 @@ class LoginPage extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.cookies = this.props.cookies
         this.fetchUser = this.fetchUser.bind(this);
         this.onSave = this.onSave.bind(this);
+        this.onLogout = this.onLogout.bind(this);
 
         this.state = { user: this.cookies.get('user'), name: "", email: "", loading: false };
     }
@@ -68,6 +69,7 @@ class LoginPage extends React.Component<any, IState>
                             <TextField required className={this.classes.input} id="outlined-basic" label="Email" variant="outlined" onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ email: e.target.value })} />
                             <br />
                             <Button className={this.classes.input} variant="contained" color="primary" onClick={this.onSave}>Save</Button>
+                            <Button className={this.classes.input} variant="contained" color="primary" onClick={this.onLogout}>Logout</Button>
                         </Paper>
                     </Grid>
                 </Grid>
@@ -93,6 +95,11 @@ class LoginPage extends React.Component<any, IState>
         var email = (this.state.email.length === 0) ? null : this.state.email;
         await UserApi.updateById(this.state.user.id, name, email);
         await this.fetchUser();
+    }
+    async onLogout() {
+        this.cookies.remove('user');
+        this.cookies.remove('session');
+        window.location.reload();
     }
 
 

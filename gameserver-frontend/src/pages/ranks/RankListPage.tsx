@@ -36,7 +36,6 @@ class BanListPage extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.fetchRanks = this.fetchRanks.bind(this);
 

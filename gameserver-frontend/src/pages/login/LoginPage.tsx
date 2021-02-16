@@ -4,6 +4,7 @@ import { UserApi, LoginResponse } from '../../api/UserApi';
 import { Button, Grid, Paper, Snackbar, TextField, Theme, withStyles } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { withCookies, Cookies } from 'react-cookie';
+import { Error } from '../../api/APIManager';
 
 interface IState {
     name: string;
@@ -12,6 +13,7 @@ interface IState {
     login: boolean;
     sucessOpen: boolean;
     errorOpen: boolean;
+    error: string;
 }
 
 const styles = (theme: Theme) => ({
@@ -29,7 +31,8 @@ const styles = (theme: Theme) => ({
         width: "300px"
     },
     input: {
-        marginBottom: "15px"
+        marginBottom: "15px",
+        marginLeft: "15px"
     },
 });
 
@@ -41,10 +44,9 @@ class LoginPage extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.cookies = this.props.cookies
-        this.state = { name: "", email: "", password: "", login: true, sucessOpen: false, errorOpen: false };
+        this.state = { name: "", email: "", password: "", login: true, sucessOpen: false, errorOpen: false, error: "" };
         this.onLogin = this.onLogin.bind(this);
         this.onRegister = this.onRegister.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -74,10 +76,10 @@ class LoginPage extends React.Component<any, IState>
                     </Grid>
                 </Grid>
                 <Snackbar open={this.state.sucessOpen} autoHideDuration={6000} onClose={this.handleClose}>
-                    <Alert onClose={this.handleClose} variant="filled" severity="success"> This is a success message!</Alert>
+                    <Alert onClose={this.handleClose} variant="filled" severity="success"> Success!</Alert>
                 </Snackbar>
                 <Snackbar open={this.state.errorOpen} autoHideDuration={6000} onClose={this.handleClose}>
-                    <Alert onClose={this.handleClose} variant="filled" severity="error">This is an error message!</Alert>
+                    <Alert onClose={this.handleClose} variant="filled" severity="error">{this.state.error}</Alert>
                 </Snackbar>
             </Grid>
         );
@@ -95,12 +97,19 @@ class LoginPage extends React.Component<any, IState>
             this.cookies.set("session", (response as LoginResponse).token);
             window.location.href = window.location.protocol + "//" + window.location.host + "/";
         } else {
-            this.setState({ errorOpen: true });
+            var error = response as Error;
+            this.setState({ errorOpen: true, error: error.message });
         }
     }
 
     async onRegister() {
-        UserApi.register(this.state.name, this.state.email, this.state.password);
+        var response = await UserApi.register(this.state.name, this.state.email, this.state.password);
+        if ((response as Error).message !== undefined) {
+            var error = response as Error;
+            this.setState({ errorOpen: true, error: error.message });
+        } else {
+            this.setState({ sucessOpen: true, login: true });
+        }
     }
 }
 

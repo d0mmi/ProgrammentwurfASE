@@ -43,7 +43,6 @@ class ReportListPage extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.fetchReports = this.fetchReports.bind(this);
         this.onResolve = this.onResolve.bind(this);
@@ -110,7 +109,7 @@ class ReportListPage extends React.Component<any, IState>
         var id = params.getValue('id')?.toString();
         if (id !== undefined) {
             var idNumber = +id;
-            var report = this.state.reports.find((report) => report.id == idNumber);
+            var report = this.state.reports.find((report) => report.id === idNumber);
             return report;
         }
         return undefined;

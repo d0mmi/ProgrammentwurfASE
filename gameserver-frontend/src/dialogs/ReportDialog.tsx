@@ -27,7 +27,6 @@ class ReportDialog extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.fetchReportTypes = this.fetchReportTypes.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -61,7 +60,7 @@ class ReportDialog extends React.Component<any, IState>
                             id="demo-simple-select-outlined"
                             value={this.state.type}
                             onChange={this.handleTypeChange}
-                            label="Age">
+                            label="Report">
                             {this.state.types.map((type: ReportType) => (<MenuItem value={type.name}>{type.name}</MenuItem>))}
                         </Select>
                     </FormControl>

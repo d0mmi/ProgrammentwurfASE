@@ -26,7 +26,6 @@ class ReportDialog extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.handleClose = this.handleClose.bind(this);
         this.banUser = this.banUser.bind(this);

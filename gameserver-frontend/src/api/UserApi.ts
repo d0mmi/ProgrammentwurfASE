@@ -17,8 +17,8 @@ export type User = {
 
 export class UserApi {
 
-    public static async register(name: string, email: string, pw: string) {
-        await APIManager.post("register", {
+    public static async register(name: string, email: string, pw: string): Promise<any | Error> {
+        return await APIManager.post("register", {
             "name": name,
             "email": email,
             "pw": pw

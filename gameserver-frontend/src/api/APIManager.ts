@@ -27,7 +27,6 @@ export class APIManager {
     }
 
     private static async sendRequest(query: string, method: string = "get", body: any = undefined, requiresToken: boolean = true): Promise<any | Error> {
-        console.log(window.location.host + "/api/" + query);
         var headers: any = (body === null) ? {} : { 'Content-Type': 'application/json' }
         if (this.token !== undefined && this.token !== null && this.token.length > 0) {
             headers['Authorization'] = 'Bearer ' + this.token;
@@ -35,7 +34,8 @@ export class APIManager {
             throw new Error("No token provided!");
         }
         var response = await fetch(window.location.protocol + "//" + window.location.host + "/api/" + query, { method: method, body: (body === undefined) ? undefined : JSON.stringify(body), headers: headers });
-        if (response.status === 200 || response.status === 201) return await response.json();
+        if (response.status === 200) return await response.json();
+        if (response.status === 201) return { "status": "ok" };
 
         return {
             code: response.status,

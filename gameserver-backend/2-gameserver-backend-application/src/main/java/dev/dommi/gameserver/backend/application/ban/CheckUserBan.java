@@ -34,6 +34,7 @@ public class CheckUserBan {
             if (user != null) {
                 return isBanned(user);
             }
+            return false;
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
@@ -46,6 +47,7 @@ public class CheckUserBan {
             if (user != null) {
                 return isBanned(user);
             }
+            return false;
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }

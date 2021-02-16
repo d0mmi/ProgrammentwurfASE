@@ -39,7 +39,6 @@ class BanListPage extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.fetchBans = this.fetchBans.bind(this);
         this.onClick = this.onClick.bind(this);
@@ -87,7 +86,7 @@ class BanListPage extends React.Component<any, IState>
         var id = params.getValue('id')?.toString();
         if (id !== undefined) {
             var idNumber = +id;
-            var ban = this.state.bans.find((ban) => ban.id == idNumber);
+            var ban = this.state.bans.find((ban) => ban.id === idNumber);
             return ban;
         }
         return undefined;

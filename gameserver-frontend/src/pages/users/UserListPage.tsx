@@ -10,8 +10,10 @@ import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
 import RankDialog from '../../dialogs/RankDialog';
 import ReportDialog from '../../dialogs/ReportDialog';
 import BanDialog from '../../dialogs/BanDialog';
+import { withCookies } from 'react-cookie';
 
 interface IState {
+    user: User
     selectedUser: User | null;
     rankState: boolean;
     reportState: boolean;
@@ -46,7 +48,6 @@ class UserListPage extends React.Component<any, IState>
 
     constructor(props: any) {
         super(props);
-        console.log(props);
         this.classes = this.props.classes;
         this.fetchUsers = this.fetchUsers.bind(this);
         this.onRank = this.onRank.bind(this);
@@ -56,8 +57,7 @@ class UserListPage extends React.Component<any, IState>
         this.onBan = this.onBan.bind(this);
         this.onBanClose = this.onBanClose.bind(this);
         this.getUserFromParams = this.getUserFromParams.bind(this);
-
-        this.state = { selectedUser: null, rankState: false, reportState: false, banState: false, users: [], loading: false };
+        this.state = { user: this.props.cookies.get('user'), selectedUser: null, rankState: false, reportState: false, banState: false, users: [], loading: false };
     }
 
     columns: ColDef[] = [
@@ -73,9 +73,9 @@ class UserListPage extends React.Component<any, IState>
             renderCell: (params: CellParams) => {
 
                 return <div>
-                    <IconButton onClick={(e) => this.onRank(params)} aria-label="rank"><RankIcon fontSize="small" /></IconButton>
-                    <IconButton onClick={(e) => this.onReport(params)} aria-label="report"><ReportIcon fontSize="small" /></IconButton>
-                    <IconButton onClick={(e) => this.onBan(params)} aria-label="ban"><BanIcon fontSize="small" /></IconButton>
+                    {(this.state.user.level >= 100) ? (<IconButton onClick={(e) => this.onRank(params)} aria-label="rank"><RankIcon fontSize="small" /></IconButton>) : (<div />)}
+                    {(this.state.user.level >= 50) ? (<IconButton onClick={(e) => this.onReport(params)} aria-label="report"><ReportIcon fontSize="small" /></IconButton>) : (<div />)}
+                    {(this.state.user.level >= 50) ? (<IconButton onClick={(e) => this.onBan(params)} aria-label="ban"><BanIcon fontSize="small" /></IconButton>) : (<div />)}
                 </div>;
             }
         }
@@ -95,6 +95,7 @@ class UserListPage extends React.Component<any, IState>
         this.setState({
             rankState: false
         });
+        this.fetchUsers();
     }
 
 
@@ -134,7 +135,7 @@ class UserListPage extends React.Component<any, IState>
         var id = params.getValue('id')?.toString();
         if (id !== undefined) {
             var idNumber = +id;
-            var user = this.state.users.find((user) => user.id == idNumber);
+            var user = this.state.users.find((user) => user.id === idNumber);
             return user;
         }
         return undefined;
@@ -159,7 +160,7 @@ class UserListPage extends React.Component<any, IState>
                                 {this.state.users.map((user: User) => ({ id: user.id, name: user.name, email: user.email, level: user.level }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
 
-                            <RankDialog user={this.state.selectedUser} open={this.state.rankState} close={this.onRankClose} />
+                            {(this.state.user.level >= 100) ? (<RankDialog user={this.state.selectedUser} open={this.state.rankState} close={this.onRankClose} />) : (<div />)}
                             <ReportDialog user={this.state.selectedUser} open={this.state.reportState} close={this.onReportClose} />
                             <BanDialog user={this.state.selectedUser} open={this.state.banState} close={this.onBanClose} />
                         </Paper>
@@ -184,4 +185,4 @@ class UserListPage extends React.Component<any, IState>
 
 }
 
-export default withStyles(styles, { withTheme: true })(UserListPage);
+export default withStyles(styles, { withTheme: true })(withCookies(UserListPage));

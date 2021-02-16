@@ -125,12 +125,12 @@ function SideBar() {
   var content: any[] = [];
   if (user !== null && user !== undefined) {
     if (user.level >= 50) {
-      content.push(<Link to="/users" className={classes.drawerButton}><ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem></Link>);
-      content.push(<Link to="/reports" className={classes.drawerButton}><ListItem button key={2}><ListItemIcon><ReportIcon /></ListItemIcon><ListItemText primary={"Reports"} /></ListItem></Link>);
-      content.push(<Link to="/bans" className={classes.drawerButton}><ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem></Link>);
+      content.push(<Link key={1} to="/users" className={classes.drawerButton}><ListItem button key={1}><ListItemIcon><PersonIcon /></ListItemIcon><ListItemText primary={"Users"} /></ListItem></Link>);
+      content.push(<Link key={2} to="/reports" className={classes.drawerButton}><ListItem button key={2}><ListItemIcon><ReportIcon /></ListItemIcon><ListItemText primary={"Reports"} /></ListItem></Link>);
+      content.push(<Link key={3} to="/bans" className={classes.drawerButton}><ListItem button key={3}><ListItemIcon><BanIcon /></ListItemIcon><ListItemText primary={"Bans"} /></ListItem></Link>);
     }
     if (user.level >= 100) {
-      content.push(<Link to="/ranks" className={classes.drawerButton}><ListItem button key={4}><ListItemIcon><RankIcon /></ListItemIcon><ListItemText primary={"Ranks"} /></ListItem></Link>);
+      content.push(<Link key={4} to="/ranks" className={classes.drawerButton}><ListItem button key={4}><ListItemIcon><RankIcon /></ListItemIcon><ListItemText primary={"Ranks"} /></ListItem></Link>);
     }
 
   }

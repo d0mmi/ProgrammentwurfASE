@@ -53,7 +53,7 @@ public class APIServer {
 
     }
 
-    public void stop() throws InterruptedException {
+    public void stop() {
         if (server != null) {
             server.stop();
         }
