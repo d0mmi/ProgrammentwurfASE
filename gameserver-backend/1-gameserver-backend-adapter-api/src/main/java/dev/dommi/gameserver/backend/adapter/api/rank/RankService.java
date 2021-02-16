@@ -41,7 +41,7 @@ public class RankService {
 
     static Rank convertToRankFrom(RankVO rankVO) {
         if (rankVO == null) return null;
-        return new Rank(rankVO.getName(), rankVO.getLevel());
+        return new Rank(rankVO.getId(), rankVO.getName(), rankVO.getLevel());
     }
 
     static Collection<Rank> convertToRankCollectionFrom(Collection<RankVO> rankVOs) {

@@ -46,12 +46,12 @@ public class UserRepositoryMock implements UserRepository {
             returnNullFirstTime = false;
             return null;
         }
-        return new UserEntity(1, "ExampleUser", email, new RankVO("User", 1));
+        return new UserEntity(1, "ExampleUser", email, new RankVO(1,"User", 1));
     }
 
     @Override
     public UserEntity findById(int userId) throws SQLException {
-        return new UserEntity(userId, "ExampleUser", "test@example.com", new RankVO("User", 1));
+        return new UserEntity(userId, "ExampleUser", "test@example.com", new RankVO(1,"User", 1));
     }
 
     @Override

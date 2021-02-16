@@ -10,12 +10,12 @@ import java.util.Collection;
 public class RankRepositoryMock implements RankRepository {
     @Override
     public Collection<RankVO> getAllRanks() throws SQLException {
-        return Arrays.asList(new RankVO("User", 1));
+        return Arrays.asList(new RankVO(1,"User", 1));
     }
 
     @Override
     public RankVO getRankFrom(int userId) throws SQLException {
-        return new RankVO("User", 1);
+        return new RankVO(1,"User", 1);
     }
 
     @Override

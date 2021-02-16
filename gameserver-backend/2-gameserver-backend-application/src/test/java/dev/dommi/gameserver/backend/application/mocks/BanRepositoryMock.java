@@ -27,7 +27,7 @@ public class BanRepositoryMock implements BanRepository {
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 1);
-        return new BanEntity(id, new UserEntity(0,"test1","test@test.com",new RankVO("test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO("test",0)), "exampleReason", cal.getTime(), true);
+        return new BanEntity(id, new UserEntity(0,"test1","test@test.com",new RankVO(1,"test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO(1,"test",0)), "exampleReason", cal.getTime(), true);
     }
 
     @Override
@@ -37,21 +37,21 @@ public class BanRepositoryMock implements BanRepository {
 
     @Override
     public Collection<BanEntity> findAllByActive(boolean active) throws SQLException {
-        return Arrays.asList(new BanEntity(1, new UserEntity(0,"test1","test@test.com",new RankVO("test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO("test",0)), "exampleReason", new Date(), active));
+        return Arrays.asList(new BanEntity(1, new UserEntity(0,"test1","test@test.com",new RankVO(1,"test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO(1,"test",0)), "exampleReason", new Date(), active));
     }
 
     @Override
     public Collection<BanEntity> findAllByUser(int userId) throws SQLException {
-        return Arrays.asList(new BanEntity(1, new UserEntity(userId,"test1","test@test.com",new RankVO("test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO("test",0)), "exampleReason", new Date(), true));
+        return Arrays.asList(new BanEntity(1, new UserEntity(userId,"test1","test@test.com",new RankVO(1,"test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO(1,"test",0)), "exampleReason", new Date(), true));
     }
 
     @Override
     public Collection<BanEntity> findAllByDate(Date date) throws SQLException {
-        return Arrays.asList(new BanEntity(1, new UserEntity(0,"test1","test@test.com",new RankVO("test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO("test",0)), "exampleReason", date, true));
+        return Arrays.asList(new BanEntity(1, new UserEntity(0,"test1","test@test.com",new RankVO(1,"test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO(1,"test",0)), "exampleReason", date, true));
     }
 
     @Override
     public Collection<BanEntity> findAllByUserAndDate(int userId, Date date) throws SQLException {
-        return Arrays.asList(new BanEntity(1, new UserEntity(userId,"test1","test@test.com",new RankVO("test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO("test",0)), "exampleReason", date, true));
+        return Arrays.asList(new BanEntity(1, new UserEntity(userId,"test1","test@test.com",new RankVO(1,"test",0)), new UserEntity(1,"test2","test2@test.com",new RankVO(1,"test",0)), "exampleReason", date, true));
     }
 }

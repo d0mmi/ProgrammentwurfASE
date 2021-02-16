@@ -18,7 +18,7 @@ public class RankServiceTests {
 
     @Test
     public void convertToRankFromTest() {
-        RankVO rankVO = new RankVO("User", 1);
+        RankVO rankVO = new RankVO(1,"User", 1);
         Rank rank = RankService.convertToRankFrom(rankVO);
         assertNotNull(rank);
         assertEquals(rankVO.getName(), rank.name);
@@ -45,7 +45,7 @@ public class RankServiceTests {
         List<RankVO> vos = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            vos.add(new RankVO("User" + i, i));
+            vos.add(new RankVO(1,"User" + i, i));
         }
         return vos;
     }

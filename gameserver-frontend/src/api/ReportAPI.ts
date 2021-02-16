@@ -12,7 +12,7 @@ export type Report = {
 
 };
 export type ReportType = {
-
+    id: number;
     name: string;
 
 };
@@ -25,8 +25,8 @@ export class ReportAPI {
     public static async getReports(): Promise<Report[] | Error> {
         return await APIManager.get("admin/reports");
     }
-    public static report(reportedUserId: number, reason: String, reportType: String) {
-        APIManager.post("report", { reportedUserId: reportedUserId, reason: reason, reportType: reportType });
+    public static report(reportedUserId: number, reason: String, reportTypeId: number) {
+        APIManager.post("report", { reportedUserId: reportedUserId, reason: reason, reportTypeId: reportTypeId });
     }
     public static updateReportStatus(reportId: number, status: boolean) {
         APIManager.post("admin/reports/" + reportId, { status: status });

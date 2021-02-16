@@ -13,7 +13,7 @@ public class RankRepositoryMock implements RankRepository {
 
     @Override
     public RankVO getRankFrom(int userId) {
-        return new RankVO("test", 1);
+        return new RankVO(1,"test", 1);
     }
 
     @Override

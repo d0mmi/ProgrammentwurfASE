@@ -3,14 +3,14 @@ package dev.dommi.gameserver.backend.plugin.api.services.report;
 public class ReportUserRequest {
     public int reportedUserId;
     public String reason;
-    public String reportType;
+    public int reportTypeId;
 
     public ReportUserRequest() {
     }
 
-    public ReportUserRequest(int reportedUserId, String reason, String reportType) {
+    public ReportUserRequest(int reportedUserId, String reason, int reportTypeId) {
         this.reportedUserId = reportedUserId;
         this.reason = reason;
-        this.reportType = reportType;
+        this.reportTypeId = reportTypeId;
     }
 }

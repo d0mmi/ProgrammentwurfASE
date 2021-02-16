@@ -21,7 +21,7 @@ public class UserEntityTests {
 
     @Test
     public void grantRankTest() throws SQLException {
-        RankVO oldRank = new RankVO("old", 1);
+        RankVO oldRank = new RankVO(1,"old", 1);
         UserEntity userEntity = new UserEntity(0, "", "", oldRank);
 
         userEntity.grantRank(1, new RankRepositoryMock());
@@ -31,7 +31,7 @@ public class UserEntityTests {
 
     @Test
     public void revokeRankTest() throws SQLException {
-        RankVO oldRank = new RankVO(RankType.USER.value, 1);
+        RankVO oldRank = new RankVO(1,RankType.USER.value, 1);
         UserEntity userEntity = new UserEntity(0, "", "", oldRank);
 
         userEntity.revokeRank(new RankRepositoryMock());

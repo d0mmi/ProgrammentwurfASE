@@ -14,7 +14,7 @@ public class UserServiceTests {
 
     @Test
     public void convertToUserFromTest() {
-        UserEntity entity = new UserEntity(1, "TestUser", "test@example.com", new RankVO("User", 1));
+        UserEntity entity = new UserEntity(1, "TestUser", "test@example.com", new RankVO(1,"User", 1));
         User user = UserService.convertToUserFrom(entity);
         assertNotNull(user);
         assertEquals(entity.getId(), user.id);
@@ -44,7 +44,7 @@ public class UserServiceTests {
         List<UserEntity> entities = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            entities.add(new UserEntity(i, "TestUser" + i, "test" + i + "@example.com", new RankVO("User", 1)));
+            entities.add(new UserEntity(i, "TestUser" + i, "test" + i + "@example.com", new RankVO(1,"User", 1)));
         }
         return entities;
     }

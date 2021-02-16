@@ -47,7 +47,7 @@ public class RankRepositoryImpl implements RankRepository {
 
     static RankVO convertToRankVOFrom(Rank rank) {
         if (rank == null) return null;
-        return new RankVO(rank.name, rank.level);
+        return new RankVO(rank.id, rank.name, rank.level);
     }
 
     static Collection<RankVO> convertToRankVOCollectionFrom(Collection<Rank> ranks) {

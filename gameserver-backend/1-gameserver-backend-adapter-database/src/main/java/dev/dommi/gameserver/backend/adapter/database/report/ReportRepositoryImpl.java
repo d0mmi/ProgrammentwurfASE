@@ -82,7 +82,7 @@ public class ReportRepositoryImpl implements ReportRepository {
 
     static ReportTypeVO convertToReportTypeEntityFrom(ReportType type) {
         if (type == null) return null;
-        return new ReportTypeVO(type.name);
+        return new ReportTypeVO(type.id, type.name);
     }
 
     static Collection<ReportTypeVO> convertToReportTypeEntityCollectionFrom(Collection<ReportType> types) {

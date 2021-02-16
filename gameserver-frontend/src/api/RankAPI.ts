@@ -1,7 +1,7 @@
 import { APIManager, Error } from "./APIManager";
 
 export type Rank = {
-
+    id: number;
     name: string;
     level: number;
 

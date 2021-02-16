@@ -16,7 +16,7 @@ public class BanServiceTests {
 
     @Test
     public void convertToBanFromTest() {
-        BanEntity entity = new BanEntity(1,  new UserEntity(1,"test","test@test.com",new RankVO("test",0)),  new UserEntity(2,"test2","test2@test.com",new RankVO("test",0)), "exampleReason", new Date(), true);
+        BanEntity entity = new BanEntity(1,  new UserEntity(1,"test","test@test.com",new RankVO(1,"test",0)),  new UserEntity(2,"test2","test2@test.com",new RankVO(1,"test",0)), "exampleReason", new Date(), true);
         Ban ban = BanService.convertToBanFrom(entity);
 
         assertNotNull(ban);
@@ -51,7 +51,7 @@ public class BanServiceTests {
         List<BanEntity> entities = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            entities.add(new BanEntity(1 + i, new UserEntity(2 + i,"test"+i,"test@test.com",new RankVO("test",0)), new UserEntity(3 + i,"test"+i,"test@test.com",new RankVO("test",0)), "exampleReason" + i, new Date(), true));
+            entities.add(new BanEntity(1 + i, new UserEntity(2 + i,"test"+i,"test@test.com",new RankVO(1,"test",0)), new UserEntity(3 + i,"test"+i,"test@test.com",new RankVO(1,"test",0)), "exampleReason" + i, new Date(), true));
         }
         return entities;
     }

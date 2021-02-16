@@ -80,7 +80,7 @@ public class ReportService {
 
     static ReportType convertToReportTypeFrom(ReportTypeVO type) {
         if (type == null) return null;
-        return new ReportType(type.getName());
+        return new ReportType(type.getId(), type.getName());
     }
 
     static Collection<ReportType> convertToReportTypeCollectionFrom(Collection<ReportTypeVO> entities) {

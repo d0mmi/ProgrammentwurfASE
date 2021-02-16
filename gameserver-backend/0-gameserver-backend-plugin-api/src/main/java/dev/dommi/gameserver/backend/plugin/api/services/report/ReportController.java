@@ -35,9 +35,8 @@ public class ReportController {
     public void report(Context ctx) {
         ReportUserRequest request = ctx.bodyAsClass(ReportUserRequest.class);
         int userId = APIServer.getUserIDFromRequestToken(ctx);
-        int reportTypeId = reportService.getReportTypeIdByName(request.reportType);
-        if (reportTypeId > -1) {
-            reportService.reportUser(userId, request.reportedUserId, request.reason, reportTypeId);
+        if (userId > -1) {
+            reportService.reportUser(userId, request.reportedUserId, request.reason, request.reportTypeId);
             ctx.status(201);
         } else {
             ctx.status(400);

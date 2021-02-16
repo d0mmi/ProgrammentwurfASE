@@ -4,13 +4,16 @@ import { UserApi, User } from '../../api/UserApi';
 import { CircularProgress, Grid, IconButton, Paper, Theme, withStyles } from '@material-ui/core';
 import ReportIcon from '@material-ui/icons/Report';
 import BanIcon from '@material-ui/icons/Gavel';
+import RankIcon from '@material-ui/icons/Security';
 import { Error } from '../../api/APIManager';
 import { CellParams, ColDef, DataGrid } from '@material-ui/data-grid';
+import RankDialog from '../../dialogs/RankDialog';
 import ReportDialog from '../../dialogs/ReportDialog';
 import BanDialog from '../../dialogs/BanDialog';
 
 interface IState {
     selectedUser: User | null;
+    rankState: boolean;
     reportState: boolean;
     banState: boolean;
     users: User[];
@@ -46,13 +49,15 @@ class UserListPage extends React.Component<any, IState>
         console.log(props);
         this.classes = this.props.classes;
         this.fetchUsers = this.fetchUsers.bind(this);
+        this.onRank = this.onRank.bind(this);
+        this.onRankClose = this.onRankClose.bind(this);
         this.onReport = this.onReport.bind(this);
         this.onReportClose = this.onReportClose.bind(this);
         this.onBan = this.onBan.bind(this);
         this.onBanClose = this.onBanClose.bind(this);
         this.getUserFromParams = this.getUserFromParams.bind(this);
 
-        this.state = { selectedUser: null, reportState: false, banState: false, users: [], loading: false };
+        this.state = { selectedUser: null, rankState: false, reportState: false, banState: false, users: [], loading: false };
     }
 
     columns: ColDef[] = [
@@ -68,12 +73,30 @@ class UserListPage extends React.Component<any, IState>
             renderCell: (params: CellParams) => {
 
                 return <div>
-                    <IconButton onClick={(e) => this.onReport(params)} aria-label="add"><ReportIcon fontSize="small" /></IconButton>
-                    <IconButton onClick={(e) => this.onBan(params)} aria-label="remove"><BanIcon fontSize="small" /></IconButton>
+                    <IconButton onClick={(e) => this.onRank(params)} aria-label="rank"><RankIcon fontSize="small" /></IconButton>
+                    <IconButton onClick={(e) => this.onReport(params)} aria-label="report"><ReportIcon fontSize="small" /></IconButton>
+                    <IconButton onClick={(e) => this.onBan(params)} aria-label="ban"><BanIcon fontSize="small" /></IconButton>
                 </div>;
             }
         }
     ];
+
+    onRank(params: CellParams) {
+        var user = this.getUserFromParams(params);
+        if (user !== undefined) {
+            this.setState({
+                selectedUser: user,
+                rankState: true
+            });
+        }
+    }
+
+    onRankClose() {
+        this.setState({
+            rankState: false
+        });
+    }
+
 
     onReport(params: CellParams) {
         var user = this.getUserFromParams(params);
@@ -136,6 +159,7 @@ class UserListPage extends React.Component<any, IState>
                                 {this.state.users.map((user: User) => ({ id: user.id, name: user.name, email: user.email, level: user.level }))}
                                 columns={this.columns} autoPageSize checkboxSelection />
 
+                            <RankDialog user={this.state.selectedUser} open={this.state.rankState} close={this.onRankClose} />
                             <ReportDialog user={this.state.selectedUser} open={this.state.reportState} close={this.onReportClose} />
                             <BanDialog user={this.state.selectedUser} open={this.state.banState} close={this.onBanClose} />
                         </Paper>
