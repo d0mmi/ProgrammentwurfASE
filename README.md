@@ -17,5 +17,14 @@ Programmentwurf für die Vorlesung Advanced Software Engineering
 - Guilds
 
 ## Running the Project:
-- First time run "docker-compose up"
+
+### Dev Mode
+- First time build + run "docker-compose up --build"
 - After first time run "docker-compose start"
+- To remove it run "docker-compose down --volumes"
+
+### Production Mode
+
+- First time build + run "docker-compose -f docker-compose.prod.yml up --build"
+- After first time run "docker-compose -f docker-compose.prod.yml start"
+- To remove it run "docker-compose -f docker-compose.prod.yml down --volumes"

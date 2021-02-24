@@ -64,7 +64,7 @@
 %% Unveränderliche Rückgabewerte (immutable) oder
 %% Defensive Kopien
 
-Value Objects wurden für die Ranks und ReportTypes verwendet, da diese zwar in der Datenbank eine ID besitzten aber im restlichen Code diese nicht benötigen.
+Value Objects wurden für die Ranks und ReportTypes verwendet, da diese rein auf ihre Werte reduziert werden und über keine zusätzlichen Funktionen verfügen.
 Dadurch profitieren die Klassen von der Unveränderlichkeit, dies bedeutet das ein Objekt welches gültig konstruiert wurde danach nicht mehr ungültig werden kann.
 Dadurch kann der Code weniger ungewollte Seiteneffekte erzeugen und ist leicht testbar.
 

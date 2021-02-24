@@ -56,7 +56,7 @@ public class LoginController {
             tags = {"Login"},
             requestBody = @OpenApiRequestBody(content = {@OpenApiContent(from = LoginRequest.class)}),
             responses = {
-                    @OpenApiResponse(status = "201", content = {@OpenApiContent(from = LoginResponse.class)}),
+                    @OpenApiResponse(status = "200", content = {@OpenApiContent(from = LoginResponse.class)}),
                     @OpenApiResponse(status = "401", content = {@OpenApiContent(from = UnauthorizedResponse.class)}),
                     @OpenApiResponse(status = "500", content = {@OpenApiContent(from = InternalServerErrorResponse.class)})
             }
@@ -66,7 +66,7 @@ public class LoginController {
         if (!banService.isUserBanned(request.email)) {
             try {
                 User user = loginService.login(request.email, request.pw);
-                ctx.status(201).json(new LoginResponse(JWTProvider.getInstance().generateToken(user)));
+                ctx.status(200).json(new LoginResponse(JWTProvider.getInstance().generateToken(user)));
 
             } catch (InvalidLoginException e) {
 
