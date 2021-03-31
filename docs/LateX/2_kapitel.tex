@@ -65,3 +65,4 @@ Die Adapter rufen dann Funktionen aus der Application Schicht auf.
 In der Application-Schicht liegt dann die eigentliche Logik der Anwendung und hier werden API und Datenbank zusammen geführt.
 In der Domain Schicht befinden sich die Entities und Value Objects der Application Schicht,
 dies dient dem Ziel diese in Zukunft in weiteren Application-Schichten einheitlich verwenden zu können.
+Zusätzlich enthält die Domain Schicht die Repository-Interfaces welche von darunter liegenden Schichten implementiert werden um eine Inversion of Control zu erzeugen.
