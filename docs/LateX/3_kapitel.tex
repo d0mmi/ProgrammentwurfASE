@@ -1,3 +1,6 @@
+%% TODO Für jedes Prinzip: Wie hab ich das angewendet und warum hab ich das so gemacht? mit Beispielen
+
+
 \chapter{Programming Principles}
 \section{Analyse und Begründung für SOLID}
 %% 
@@ -15,6 +18,9 @@
 Das Single Responsibility Principle sagt aus, dass eine Klasse nur eine Zuständigkeit haben sollte.
 Somit hat jede Klasse eine klar definierte Aufgabe und es entsteht eine niedrige Komplexität des Codes.
 Und um so niedriger die Komplexität des Codes desto besser lässt er sich warten und erweitern.
+Angewendet wurde das vor allem in den Klassen der Application-Schicht, denn hier wurde für jede Anfrage eine eigene Klasse erstellt.
+Die Klasse LoginUser bzw. RegisterUser kümmern sich zum Beispiel nur um den Login bzw. die Registrierung der User.
+Ein weiteres Beispiel wäre die Klasse ReportUser, da diese nur für die Report Anfrage zuständig ist.
 
 %% Open Closed Principle
 %%  - Elemente der Software wie Klassen, Module, Funktionen sollten:
@@ -35,6 +41,10 @@ Durch das Open Closed Principle wird die Software offen für Erweiterungen aber 
 Das bedeutet der Code wird nur durch Vererbung bzw. Implementierung von Interfaces erweitert.
 Dies führt dazu das bestehender Code nicht geändert wird, wodurch die Anwendung für eine gute kompatibilität über die Versionen sorgt.
 Hierbei ist es wichtig viele Abstraktionen zu nutzen um die Erweiterbarkeit zu fördern.
+Dieses Prinzip wurde nicht sehr viel angewendet, aber passend zu diesem Prinzip sind die Repository Interfaces welche auf verschiedene Arten implementiert werden können.
+Ein Beispiel hierfür wäre es eine neue Datenbank hinzuzufügen welche dann den Code durch das Implementieren der Repository Interfaces erweitert.
+Ein weiterer Bereich ist die Database-Adapter-Schicht in der die Controller der einzelnen Tabellen von einem Allgemeinen Database Controller erben.
+Um den Code mit einer neuen Datenbanktabelle zu erweitern wird hier eine neue Klasse erstellt welche Vererbung einsetzt um die Funktionalität zu erweitern.
 
 %% Liskov Substitution Principle
 %%  - Objekte eines abgeleiteten Typs müssen als Ersatz für Instanzen ihres Basistyps funktionieren ohne die Korrektheit des Programms zu ändern
@@ -51,6 +61,7 @@ Im Liskov Substitution Principle werden Ableitungsregeln stark eingeschränkt wa
 Hierbei müssen abgeleitete Typen schwächere Vorbedingungen und stärkere Nachbedingungen haben.
 Durch dieses Prinzip ergeben sich somit im OOP \glqq verhält sich wie\grqq{} Beziehungen statt den üblichen \glqq ist ein\grqq{} Beziehungen.
 Somit kann man sich auf ein bestimmtes Verhalten der abgeleiteten Typen verlassen, wenn man das Verhalten des Basistyps kennt.
+Dieses Prinzip wurde nicht angewendet da neben den Repository Interfaces kaum Interfaces oder Vererbungen zum Einsatz kamen.
 
 %% Interface Segregation Principle
 %%  - Anwender sollten nicht von Funktionen abhängig sein, die sie nicht nutzen
@@ -65,6 +76,8 @@ Somit kann man sich auf ein bestimmtes Verhalten der abgeleiteten Typen verlasse
 Das Interface Segregation Principle sorgt dafür, dass Anwender nicht von Funktionen abhängig sind die sie gar nicht nutzen.
 Dies wird ermöglicht indem man statt einzelnen großen schweren Interfaces mit vielen Funktionen, viele kleine leichte Interfaces mit wenigen Funktionen implementiert.
 Somit kann man seine Klasse passend für den Anwendungszweck anpassen ohne unnötige extrafunktionen mit zu schleppen.
+Der Code beeinhaltet aber bisher keine komplexen Abhängigkeiten von Interfaces in denen Funktionen des Interfaces nicht genutzt würden.
+Daher wurde dieses Prinzip noch nicht angewendet.
 
 %% Dependency Inversion Principle
 %%  - Klassischerweise sind High-Level Module von Low-Level Modulen abhängig:
@@ -87,6 +100,8 @@ Im Dependency Inversion Principle wird die klassische Struktur in der High-Level
 Denn Abstraktionen sollten nicht von Details abhängig sein, daher werden hierbei die Regeln durch High-Level Module vorgegeben und in Low-Level Modulen Implementiert.
 Dadurch bilden die High-Level Module ein Framework und es werden nur noch abtrakte Abhängigkeiten genutzt.
 Ein großer Vorteil der dieses Prinzip ist die hohe Fexibilität der Software, denn Low-Level Module können somit einfach ausgetauscht werden ohne die High-Level Module zu beinflussen.
+Dieses Prinzip wurde durch die Schichtenarchitektur der Clean Architecture verwirklicht,
+in welcher die Repositories und Entities des High-Level Moduls Domain in den darunterliegenden Implementiert und aufgerufen werden.
 
 
 \section{Analyse und Begründung für GRASP} %%  (insb. Kopplung/Kohäsion)
@@ -133,11 +148,13 @@ durch das halten eines Attributs vom Typ einer anderen Klasse oder durch das Bes
 Durch eine lose Kopplung werden Komponenten austauschbar.
 Man kann an konkrete oder abstrakte Datentypen gekoppelt sein, aber auch durch verschiedene Threads mit gemeinsamen Sperren oder durch Resourcen wie gemeinsame Dateien.
 Dabei ist eine Kopplung zu stabilen Komponenten weniger problematisch.
+Durch die Inversion of Control sind die meisten Klassen von Klassen innerer Schichten abhängig, somit also von stabileren Komponenten.
+Denn je tiefer eine Klasse liegt desto selterner wird diese Klasse geändert wodurch die Abhängigkeiten relativ stabiel sind.
 
 %% 
 %% High Cohesion:
 %%  - Hohe bzw. starke Kohäsion
-%%  - Kohäsion ist ein Maß für den Zusammenhalteiner Klasse
+%%  - Kohäsion ist ein Maß für den Zusammenhalt einer Klasse
 %%      - Beschreibt die semantische Nähe der Elemente einer Klasse
 %%  - Hohe Kohäsion und Lose Kopplung als Fundament für idealen Code
 %%  + Einfacheres und verständlicheres Design 
@@ -154,6 +171,8 @@ Kohäsion ist ein Maß für den Zusammenhalt einer Klasse, es beschreibt die sem
 Hohe Kohäsion und Lose Kopplung sind das Fundament für idealen Code, da sie zu einem einfacheren und verständlicheren Design führen.
 Die Semantische Nähe der Attribute und Methoden ist nur schwer automatisiert testbar und es ist Menschliche Einschätzung notwendig.
 Zu den Automatisch bestimmbaren technischen Metriken gehören Anzahl Attribute und Methoden einer Klasse und Häufigkeit der Verwendung der Attribute in allen Methoden aber diese sind nicht immer ideal.
+Der Zusammenhalt der Klassen in diesem Projekt ist ziemlich gut da die Attribute, wie zum Beispiel in den Entities der Domain-Schicht zu sehen ist, semantisch gut zu den Klassen passen.
+Die ReportEntity enthält zum Beispiel nur Attribute welche semantisch zu einem Report des Users gehören und verwendet jedes Attribut auch in mindestens einer Methode.
 %% Information Expert: 
 %%  - Allgemeine Zuweisung einer Zuständigkeit zu einem Objekt
 %%  - Einfachste Möglichkeit
@@ -174,6 +193,8 @@ Die einfachste Möglichkeit ist es dem Objekt, das die Informationen besitzt, di
 Wenn im Designmodell eine passende Klasse existiert wird diese verwendet, ansonsten wird im Domänenmodell eine passende Repräsentation gesucht und dafür eine Klasse im Designmodell erstellt.
 Objekte sind dann zuständig für Aufgaben über die sie Informationen besitzen, wodurch eine kapselung von Informationen und leichtere Klassen enstehen.
 Aber es kann zu Problemen mit anderen Prinzipien führen.
+Auch hier passen die Entities wieder rein, da diese die Verantwortung zu ihren Informationen übernehmen.
+Die UserEntity übernimmt zum Beispiel die Zuständigkeit über die Informationen eines Users.
 %% Creator:
 %%  - Das Erzeuger-Prinzip legt fest, wer für die Erzeugung von Objekten zuständig ist
 %%  - Ein Objekt der Klasse B ist zuständig für die Erzeugung von Objekten der Klasse A, wenn
@@ -185,10 +206,11 @@ Aber es kann zu Problemen mit anderen Prinzipien führen.
 %%  - Allgemein gehalten kommt ein Objekt als Creator eines anderen in Frage, wenn es zujedem erstellten Objekt eine Beziehung hat
 %%      - Eine Komposition in UML deutet auf einen Creatorhin
 %%  + Ein geeigneter Creator verringert dieKopplung von Komponenten 
-\subsection{Creator}
-Im Creator-Prinzip wird festgelegt wer für die Erzeugung von Objekten zuständig ist.
-Allgemein gesehen kommt ein Objekt als Creator eines anderen in Frage, wenn es zu jedem erstellten Objekt eine Beziehung hat.
-Ein geeigneter Creator verringert die Kopplung von Komponenten, was zu den bereits genannten Vorteilen führt.
+%% \subsection{Creator}
+%% Im Creator-Prinzip wird festgelegt wer für die Erzeugung von Objekten zuständig ist.
+%% Allgemein gesehen kommt ein Objekt als Creator eines anderen in Frage, wenn es zu jedem erstellten Objekt eine Beziehung hat.
+%% Ein geeigneter Creator verringert die Kopplung von Komponenten, was zu den bereits genannten Vorteilen führt.
+%% TODO Creator trotzdem erwähnen? Creator Implementieren?
 %% Indirection:
 %%  - Indirektion bzw. Delegation (<T>)
 %%  - Kann Systeme oder Teile von Systemenvoneinander entkoppeln
@@ -199,7 +221,9 @@ Ein geeigneter Creator verringert die Kopplung von Komponenten, was zu den berei
 \subsection{Indirection}
 Durch Indirection werden Systeme oder Teile von Systemen voneinander entkoppelt.
 Es bietet mehr Freiheitsgrade als Vererbung oder Polymorphismus, aber benötigt auch mehr Aufwand.
-Dadurch ensteht das gewollte Low Coupling wodurch die Software viel flexibler wird.
+Dadurch ensteht die gewollte High Cohesion und die Software wird viel flexibler.
+%% TODO Indirection trotzdem erwähnen? Indirection Implementieren? fragen ob die Wrappen wirklich passen?
+Die Table Wrapper sorgen hierbei beispielsweise dafür den übergeordneten Code von den SQL Strings zu entkoppeln.
 %% Polymorphism:
 %%  - Polymorphismus
 %%  - Behandlung von Alternativen abhängig von einem konkreten Typ
@@ -221,6 +245,8 @@ Dabei erhalten Methoden je nach Typ eine andere Implementierung, wodurch auf Fal
 Die Konditionalstruktur wird sozusagen im Typsystem codiert und es werden Abstrakte Klassen oder Interfaces als Basistyp genutzt.
 Zudem werden Polymorphe Methodenaufrufe erst zur Laufzeit gebunden.
 Mithilfe von Polymorphismus wird die Software einfacher erweiterbar und bestehende die Implementierung muss nicht verändert werden.
+Angewendet wurde das zum Beispiel in den Database Controllern in der Database-Adapter-Schicht aber auch für die Table Wrapper in der Database-Plugin-Schicht.
+Hier werden die Funktionen die Allgemein für alle Tabellen benötigt werden durch die Tabellen spezifischen Funktionen erweitert.
 %% Controller:
 %%  - Verarbeitung von einkommenden Benutzereingaben
 %%  - Koordination zwischen Benutzeroberfläche und Businesslogik
@@ -240,6 +266,19 @@ Der Controller verarbeitet einkommende Benutzereingaben und koordiniert zwischen
 Seine Hauptaufgabe ist die Delegation zu anderen Objekten und er enthält keine Businesslogik.
 Zu den verschiedene Arten von Controllern gehören der System Controller, wobei nur ein Controller für alle Aktionen genutzt wird, der nur für kleine Anwendungen praktikabel ist
 und der Use Case Controller, welcher einen Controller pro Use Case nutzt.
+Implementiert wurden die Use Case Controller in der API-Plugin-Schicht.
+Hierbei wurde je ein Controller für die folgenden Usecases definiert:
+
+\begin{itemize}
+    \item Authentifizierung (Register / Login)
+    \item User
+    \item Rank
+    \item Report
+    \item Ban
+\end{itemize}
+
+Diese Controller leiten die Anfragen dann an die API-Adapter-Schicht weiter in denen dann die Daten für die inneren Schichten umgemappt und weitergereicht werden.
+
 %% Pure Fabrication:
 %%  - Reine bzw. völlige Erfindung
 %%  - Reine Verhaltens- oder Arbeits- Klasse
@@ -249,9 +288,10 @@ und der Use Case Controller, welcher einen Controller pro Use Case nutzt.
 %%  + Einfach wiederverwendbar auch außerhalbder Domäne 
 %%  + Begünstigt high cohesion durch Kapselung spezieller Funktionalität 
 %%  ⇒ Sollte möglichst wenig vorkommen
-\subsection{Pure Fabrication}
-Bei der Pure Fabrication besitzt eine Klasse keinen Bezug zur Problemdomäne, wodurch eine Trennung zwischen Technologie und Problemdomäne und eine Kapselung von Algorithmen entsteht.
-Damit werden diese Softwareteile auch außerhalb der Domäne einfach wiederverwendbar und durch die Kapselung spezieller Funktionalität wird High Cohesion begünstigt.
+%% \subsection{Pure Fabrication}
+%% Bei der Pure Fabrication besitzt eine Klasse keinen Bezug zur Problemdomäne, wodurch eine Trennung zwischen Technologie und Problemdomäne und eine Kapselung von Algorithmen entsteht.
+%% Damit werden diese Softwareteile auch außerhalb der Domäne einfach wiederverwendbar und durch die Kapselung spezieller Funktionalität wird High Cohesion begünstigt.
+%% TODO Pure Fabrication trotzdem erwähnen? Pure Fabrication Implementieren?
 %% Protected Variations:
 %%  - Sicherung vor Variation
 %%  - Kapselung verschiedener Implementierungen hinter einer einheitlichen Schnittstelle (API)
@@ -272,6 +312,7 @@ Mit der Kapselung verschiedener Implementierungen hinter einer einheitlichen Sch
 Der Einfluss von Variabilität einzelner Komponenten soll dadurch nicht das Gesamtsystem betreffen.
 Mit Polymorphie und Delegation lässt sich ein System gut schützen.
 Weitere Schutzöglichkeiten gibt es durch Stylesheets im Webumfeld, Spezifikation von Schnittstellen oder Betriebssystemen und Virtuellen Maschinen.
+Um diese einheitlichen Schnittstellen zu ermöglichen beinhaltet zum Beispiel die Domain-Schicht die Repository Interfaces, welche dann für verschiedene Datenbanken abgekapselt implementiert werden können.
 \section{Analyse und Begründung für DRY}
 %%  - Don’t Repeat Yourself!
 %%  - Anwendbar auf alles mögliche
@@ -311,3 +352,5 @@ dies kann aber teilweise durch diverse Tools vermieden werden indem sie erkannte
 %%      - Ungeduldige Duplikation
 %%      - Entwickler ist zu faul die Duplikation zu beseitigen
 Diese ungeduldige Duplikation ensteht durch Entwickler die zu faul sind die Duplikation zu beseitigen.
+
+In der Erstellung dieses Projektes wurde darauf geachtet keinen duplizierten Code zu erzeugen und stattdessen bestehenden Code wiederzuverwenden.

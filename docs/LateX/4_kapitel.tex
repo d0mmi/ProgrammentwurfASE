@@ -5,6 +5,8 @@
 \section{Singleton}
 
 Das Singleton wurde für die beiden Klassen MariaDBConnector und JWTProvider eingesetzt.
+Hierbei wurde eine Lazy Instantiation eingesetzt da dadurch die Systemstartzeit nicht verlängert wird.
+Es wurde keine Synchronized Lazy Instantiation eingesetzt, da sowieso alles auf dem Selben Thread läuft.
 
 \subsection{Einsatz begründen}
 
