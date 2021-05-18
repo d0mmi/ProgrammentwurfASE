@@ -67,22 +67,4 @@ public class BanTableWrapper extends TableWrapper<Ban> {
                 .on(Param.value("userId", userId), Param.value("active", 1))
                 .as(parse().list(), conn.getConnection());
     }
-
-    @Override
-    public void update(Ban ban) throws SQLException {
-        StringBuilder values = new StringBuilder();
-        List<Param> params = new ArrayList<>();
-        params.add(Param.value("id", ban.id));
-        if (ban.reason != null && !ban.reason.isEmpty()) {
-            values.append("reason = :reason,");
-            params.add(Param.value("reason", ban.reason));
-        }
-        if (ban.until != null) {
-            values.append("until = '" + new SimpleDateFormat("yyyy-MM-dd").format(ban.until) + "',");
-        }
-        values.append("active = :active");
-        params.add(Param.value("active", ban.active ? 1 : 0));
-
-        Query.of(" UPDATE " + tableName + "  SET " + values.toString() + " WHERE id = :id").on(params).execute(conn.getConnection());
-    }
 }

@@ -34,7 +34,6 @@ public class BanService {
         updateBan.updateBan(id, reason, until, active);
     }
 
-    //TODO Implement check in other Requests
     public boolean isUserBanned(int userId) {
         return checkUserBan.isBanned(userId);
     }

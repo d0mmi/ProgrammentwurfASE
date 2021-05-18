@@ -9,6 +9,7 @@ import io.jenetics.facilejdbc.Query;
 import io.jenetics.facilejdbc.RowParser;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,34 +62,8 @@ public class UserTableWrapper extends TableWrapper<User> {
         return rootUser;
     }
 
-    @Override
-    public void update(User value) throws SQLException {
-        StringBuilder values = new StringBuilder();
-        List<Param> params = new ArrayList<>();
-        params.add(Param.value("id", value.id));
-        System.out.println(value.name);
-        System.out.println(value.email);
-        System.out.println(value.pw);
-        if (value.name != null && !value.name.isEmpty()) {
-            values.append("name = :name,");
-            params.add(Param.value("name", value.name));
-        }
-        if (value.email != null && !value.email.isEmpty()) {
-            values.append("email = :email,");
-            params.add(Param.value("email", value.email));
-        }
-        if (value.pw != null && !value.pw.isEmpty()) {
-            values.append("pw = :pw,");
-            params.add(Param.value("pw", value.pw));
-        }
-
-        String valueString = values.toString();
-        valueString = valueString.substring(0, valueString.length() - 1);
-
-        Query.of(" UPDATE " + tableName + " SET " + valueString + " WHERE id = :id").on(params).execute(conn.getConnection());
-    }
-
     public User findByEmail(String email) throws SQLException {
+        if(email == null) return null;
         return Query.of("SELECT * FROM " + tableName + " WHERE email = :email").on(Param.value("email", email)).as(parse().singleNull(), conn.getConnection());
     }
 }

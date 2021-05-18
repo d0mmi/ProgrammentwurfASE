@@ -53,23 +53,4 @@ public class UserRankTableWrapper extends TableWrapper<UserRank> {
     public void deleteRankByUserId(int userId, int rankId) throws SQLException {
         Query.of("DELETE FROM " + tableName + " WHERE userId = :userId AND rankId = :rankId").on(Param.value("userId", userId), Param.value("rankId", rankId)).execute(conn.getConnection());
     }
-
-    @Override
-    public void update(UserRank value) throws SQLException {
-        StringBuilder values = new StringBuilder();
-        List<Param> params = new ArrayList<>();
-        params.add(Param.value("id", value.id));
-        if (value.userId >= 0) {
-            values.append("userId = :userId,");
-            params.add(Param.value("userId", value.userId));
-        }
-        if (value.rankId >= 0) {
-            values.append("rankId = :rankId,");
-            params.add(Param.value("rankId", value.rankId));
-        }
-
-        String valueString = values.toString();
-        valueString = valueString.substring(0, valueString.length() - 1);
-        Query.of(" UPDATE " + tableName + "  SET " + valueString + " WHERE id = :id").on(params).execute(conn.getConnection());
-    }
 }

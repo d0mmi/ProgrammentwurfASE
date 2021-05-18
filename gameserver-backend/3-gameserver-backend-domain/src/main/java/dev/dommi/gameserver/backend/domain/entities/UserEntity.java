@@ -55,7 +55,7 @@ public class UserEntity {
     }
 
     public boolean modify(String name, String email, String pw, UserRepository userRepository) throws SQLException {
-        if (userRepository.findByEmail(email) == null && valuesValid(name, email, pw)) {
+        if (email == null || userRepository.findByEmail(email) == null && valuesValid(name, email, pw)) {
             userRepository.update(id, name, email, pw);
             this.name = name;
             this.email = email;

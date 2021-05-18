@@ -48,11 +48,4 @@ public class ReportTypeTableWrapper extends TableWrapper<ReportType> {
     public void create(ReportType value) throws SQLException {
         Query.of("INSERT INTO " + tableName + " (name) VALUES (:name)").on(Param.value("name", value.name)).execute(conn.getConnection());
     }
-
-    @Override
-    public void update(ReportType value) throws SQLException {
-        if (value.id >= 0 && value.name != null && !value.name.isEmpty()) {
-            Query.of(" UPDATE " + tableName + "  SET name = :name WHERE id = :id").on(Param.value("id", value.id), Param.value("name", value.name)).execute(conn.getConnection());
-        }
-    }
 }
