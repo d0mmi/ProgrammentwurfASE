@@ -1,1 +1,54 @@
 %% TODO Einleitung / Erklärung auch dass UI nur Optional ist um Funktion anzuschauen
+\chapter{Einleitung}
+
+In diesem Programmentwurf wurde ein User Verwaltungs System Backend für einen beliebigen Game Server entworfen.
+Das bedeutet dieses System soll auf die Datenbank eines Game Servers mit Usern zugreifen und diese über eine API Schnittstelle verwalten.
+Es wurde auch ein simples UI entworfen um die Funktionalität der API Schnittstelle einfacher überprüfen zu können.
+Dieses UI gehört aber nicht zum eigentlichen Programmentwurf und sollte daher als von der Bewertung ausgeschlossen betrachtet werden.
+
+\section{Installation}
+
+\subsection{Requirements}
+
+Benötigte Software zum ausführen des Programmentwurfs:
+
+\begin{itemize}
+    \item Java 11
+    \item Docker Desktop
+    \item docker-compose
+\end{itemize}
+
+\subsection{Starten der Anwendung}
+Befehle im root Order der Repo ausführen.
+Das erste bauen könnte etwas länger dauern.
+
+Bauen und ausführen: docker-compose up --build
+\newline
+Starten ohne neu bauen: docker-compose start
+\newline
+Stoppen: docker-compose stop
+\newline
+Stoppen + alles löschen: docker-compose down --volumes
+\newline
+
+Default Admin User: email: root@example.com pw: example
+
+
+
+
+Frontent: http://localhost:3000/
+(wenn noch keine Reports / Bans in der DB sind zeigt das UI dauerhaft einen Ladebalken auf diesen Seiten an)
+\newline
+API-Server: http://localhost:7001/
+\newline
+Datenbank: localhost:3306
+
+
+
+\subsection{Ausführen der Tests}
+
+Befehl im root Order des Backends ausführen: ./gameserver-backend
+
+Wichtig die Mockito version benötigt Java 11 !
+
+Befehl zum ausführen der Unit tests: mvn test
