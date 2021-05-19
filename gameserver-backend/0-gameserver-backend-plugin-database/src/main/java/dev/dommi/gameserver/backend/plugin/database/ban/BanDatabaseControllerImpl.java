@@ -5,59 +5,110 @@ import dev.dommi.gameserver.backend.adapter.database.ban.BanDatabaseController;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class BanDatabaseControllerImpl implements BanDatabaseController {
 
-    private BanTableWrapper wrapper;
+    private static final Logger logger = Logger.getLogger(BanDatabaseControllerImpl.class.getName());
+    private final BanTableWrapper wrapper;
 
     public BanDatabaseControllerImpl() {
         wrapper = new BanTableWrapper(MariaDBConnector.getInstance());
     }
 
     @Override
-    public void create(Ban value) throws SQLException {
-        wrapper.create(value);
+    public boolean create(Ban value) {
+        try {
+            wrapper.create(value);
+            return true;
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
     }
 
     @Override
-    public void update(Ban value) throws SQLException {
-        wrapper.update(value);
+    public boolean update(Ban value) {
+        try {
+            wrapper.update(value);
+            return true;
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
     }
 
     @Override
-    public Ban findById(int id) throws SQLException {
-        return wrapper.findById(id);
+    public Ban findById(int id) {
+        try {
+            return wrapper.findById(id);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return null;
     }
 
     @Override
-    public Collection<Ban> findAll() throws SQLException {
-        return wrapper.findAll();
+    public Collection<Ban> findAll() {
+        try {
+            return wrapper.findAll();
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public Collection<Ban> findAllByActive(boolean active) throws SQLException {
-        return wrapper.findAllByActive(active);
+    public Collection<Ban> findAllByActive(boolean active) {
+        try {
+            return wrapper.findAllByActive(active);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public Collection<Ban> findAllByUser(int userId) throws SQLException {
-        return wrapper.findAllByUser(userId);
+    public Collection<Ban> findAllByUser(int userId) {
+        try {
+            return wrapper.findAllByUser(userId);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public Collection<Ban> findAllByDate(Date date) throws SQLException {
-        return wrapper.findAllByDate(date);
+    public Collection<Ban> findAllByDate(Date date) {
+        try {
+            return wrapper.findAllByDate(date);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public Collection<Ban> findAllByUserAndDate(int userId, Date date) throws SQLException {
-        return wrapper.findAllByUserAndDate(userId, date);
+    public Collection<Ban> findAllByUserAndDate(int userId, Date date) {
+        try {
+            return wrapper.findAllByUserAndDate(userId, date);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public void delete(int value) throws SQLException {
-        wrapper.deleteById(value);
+    public boolean delete(int value) {
+        try {
+            wrapper.deleteById(value);
+            return true;
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
     }
 }

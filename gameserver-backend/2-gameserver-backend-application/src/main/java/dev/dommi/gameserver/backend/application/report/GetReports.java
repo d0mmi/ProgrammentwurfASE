@@ -1,74 +1,41 @@
 package dev.dommi.gameserver.backend.application.report;
 
+import dev.dommi.gameserver.backend.domain.aggregates.ReportAggregate;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 public class GetReports {
-    private static final Logger logger = Logger.getLogger(GetReports.class.getName());
-    private ReportRepository repository;
+    private final ReportRepository repository;
 
     public GetReports(ReportRepository repository) {
         this.repository = repository;
     }
 
-    public Collection<ReportEntity> getAll() {
-        try {
-            return repository.getAllReports();
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return new ArrayList<>();
+    public Collection<ReportAggregate> getAll() {
+        return repository.getAllReports();
     }
 
-    public Collection<ReportEntity> getReportsCreatedBy(int userId) {
-        try {
-            return repository.getReportsCreatedBy(userId);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return new ArrayList<>();
+    public Collection<ReportAggregate> getReportsCreatedBy(int userId) {
+        return repository.getReportsCreatedBy(userId);
     }
 
-    public Collection<ReportEntity> getReportsFor(int userId) {
-        try {
-            return repository.getReportsFor(userId);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return new ArrayList<>();
+    public Collection<ReportAggregate> getReportsFor(int userId) {
+        return repository.getReportsFor(userId);
     }
 
-    public ReportEntity getReport(int reportId) {
-        try {
-            return repository.getReport(reportId);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return null;
+    public ReportAggregate getReport(int reportId) {
+        return repository.getReport(reportId);
     }
 
 
     public Collection<ReportTypeVO> getReportTypes() {
-        try {
-            return repository.getReportTypes();
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return new ArrayList<>();
+        return repository.getReportTypes();
     }
 
-    public int getReportTypeIdByName(String name){
-        try {
-            return repository.getReportTypeIdByName(name);
-        } catch (SQLException | NullPointerException e) {
-            logger.severe(e.getMessage());
-        }
-        return -1;
+    public int getReportTypeIdByName(String name) {
+        return repository.getReportTypeIdByName(name);
     }
 }

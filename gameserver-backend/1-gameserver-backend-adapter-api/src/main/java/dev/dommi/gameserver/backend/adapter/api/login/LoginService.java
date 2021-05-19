@@ -1,6 +1,7 @@
 package dev.dommi.gameserver.backend.adapter.api.login;
 
 import dev.dommi.gameserver.backend.adapter.api.user.User;
+import dev.dommi.gameserver.backend.application.login.InvalidCredentialsException;
 import dev.dommi.gameserver.backend.application.login.LoginUser;
 import dev.dommi.gameserver.backend.application.login.RegisterUser;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
@@ -30,7 +31,7 @@ public class LoginService {
         try {
             UserEntity userEntity = loginUser.loginUser(email, pw);
             return new User(userEntity.getId(), userEntity.getName(), userEntity.getEmail(), userEntity.getRank().getLevel());
-        } catch (InvalidParameterException e) {
+        } catch (InvalidCredentialsException e) {
             throw new InvalidLoginException(WRONG_CREDENTIALS_ERROR);
         }
     }

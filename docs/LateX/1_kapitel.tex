@@ -27,14 +27,15 @@
         Moderator                    & Verwaltet User, User Reports und User Bans                                                           \\ \hline
         Admin                        & Verwaltet die Ränge der User                                                                         \\ \hline
         Ban                          & Wenn ein User gegen Regeln verstößt kann er gebannt werden und ist dadurch eine Zeit lang gesperrt   \\ \hline
-        todo                         & todo                                                                                                 \\ \hline
     \end{tabular}
 \end{center}
 
 
 \section{Analyse und Begründung der verwendeten Muster}
 
-\subsection{Value Objects}
+%% TODO Nochmal komplett STruktur überarbeiten und alles nutzen und besser erklären + mehr Logik einbauen?
+
+\subsection{Value Objects} %% TODO Mehr Begründen warum ist es z.B eine Entity etc.
 
 %% Value Objects (VO) sind einfache Objekte ohne eigene Identität
 %% VO sind unveränderlich (immutable)
@@ -64,9 +65,10 @@
 %% Unveränderliche Rückgabewerte (immutable) oder
 %% Defensive Kopien
 
-Value Objects wurden für die Ranks und ReportTypes verwendet, da diese rein auf ihre Werte reduziert werden und über keine zusätzlichen Funktionen verfügen.
+Value Objects wurden für die Ranks und ReportTypes verwendet, da diese rein auf ihre Werte reduziert werden können und über keine zusätzlichen Funktionen verfügen.
 Dadurch profitieren die Klassen von der Unveränderlichkeit, dies bedeutet das ein Objekt welches gültig konstruiert wurde danach nicht mehr ungültig werden kann.
 Dadurch kann der Code weniger ungewollte Seiteneffekte erzeugen und ist leicht testbar.
+%% TODO Beispiel für Invariante
 
 
 \subsection{Entities}
@@ -144,7 +146,7 @@ Zuletzt besitzen sie noch Methoden die verschiedenes Verhalten der Entities besc
 %% Aggregate sind mächtig, aber auch schwierig
 
 Aggregate wurden keine verwendet, da die Komplexität der Entities und Value Objects nicht sehr hoch war.
-%% TODO mehr
+%% TODO mehr / implementieren
 
 \subsection{Repositories}
 
@@ -231,10 +233,10 @@ ohne das der Domain Code davon beeinflusst wird.
 
 Domain Services wurden auch keine verwendet, da es kein Domänenweites komplexes Verhalten gab, welches nicht in Entities oder Value Objects abgebildet werden konnte.
 
+%% Einbauen, z.B für Rechte prüfung? / für sonstige Logik?
 
 
-
-
+%% Mehr Interfaces in domain welche in Applikation implementiert werden?
 
 
 

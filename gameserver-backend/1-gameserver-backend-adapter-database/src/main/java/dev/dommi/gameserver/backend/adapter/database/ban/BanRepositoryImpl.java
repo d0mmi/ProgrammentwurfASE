@@ -1,5 +1,8 @@
 package dev.dommi.gameserver.backend.adapter.database.ban;
 
+import dev.dommi.gameserver.backend.adapter.database.user.User;
+import dev.dommi.gameserver.backend.adapter.database.user.UserDatabaseController;
+import dev.dommi.gameserver.backend.domain.aggregates.BanAggregate;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
@@ -12,68 +15,65 @@ import java.util.Date;
 
 public class BanRepositoryImpl implements BanRepository {
 
-    private BanDatabaseController controller;
-    private UserRepository userRepository;
+    private final BanDatabaseController controller;
+    private final UserDatabaseController userDatabaseController;
 
-    public BanRepositoryImpl(BanDatabaseController controller, UserRepository userRepository) {
+    public BanRepositoryImpl(BanDatabaseController controller, UserDatabaseController userDatabaseController) {
         this.controller = controller;
-        this.userRepository = userRepository;
+        this.userDatabaseController = userDatabaseController;
     }
 
     @Override
-    public void create(int userId, int bannedById, String reason, Date until) throws SQLException {
-        controller.create(new Ban(userId, bannedById, reason, until));
+    public boolean create(int userId, int bannedById, String reason, Date until) {
+        return controller.create(new Ban(userId, bannedById, reason, until));
     }
 
     @Override
-    public void update(int id, String reason, Date until, boolean active) throws SQLException {
-        controller.update(new Ban(id, reason, until, active));
+    public boolean update(int id, String reason, Date until, boolean active) {
+        return controller.update(new Ban(id, reason, until, active));
     }
 
     @Override
-    public BanEntity findById(int id) throws SQLException {
-        return convertToBanEntityFrom(controller.findById(id));
+    public BanAggregate findById(int id) {
+        Ban ban = controller.findById(id);
+        User user = userDatabaseController.findById(ban.userId);
+        User bannedBy = userDatabaseController.findById(ban.bannedById);
+        return BanMapper.getBanAggregateFrom(ban, user, bannedBy);
     }
 
     @Override
-    public Collection<BanEntity> findAll() throws SQLException {
-        return convertToBanEntityCollectionFrom(controller.findAll());
+    public Collection<BanAggregate> findAll() {
+        return convertCollection(controller.findAll());
     }
 
     @Override
-    public Collection<BanEntity> findAllByActive(boolean active) throws SQLException {
-        return convertToBanEntityCollectionFrom(controller.findAllByActive(active));
+    public Collection<BanAggregate> findAllByActive(boolean active) {
+        return convertCollection(controller.findAllByActive(active));
     }
 
     @Override
-    public Collection<BanEntity> findAllByUser(int userId) throws SQLException {
-        return convertToBanEntityCollectionFrom(controller.findAllByUser(userId));
+    public Collection<BanAggregate> findAllByUser(int userId) {
+        return convertCollection(controller.findAllByUser(userId));
     }
 
     @Override
-    public Collection<BanEntity> findAllByDate(Date date) throws SQLException {
-        return convertToBanEntityCollectionFrom(controller.findAllByDate(date));
+    public Collection<BanAggregate> findAllByDate(Date date) {
+        return convertCollection(controller.findAllByDate(date));
     }
 
     @Override
-    public Collection<BanEntity> findAllByUserAndDate(int userId, Date date) throws SQLException {
-        return convertToBanEntityCollectionFrom(controller.findAllByUserAndDate(userId, date));
+    public Collection<BanAggregate> findAllByUserAndDate(int userId, Date date) {
+        return convertCollection(controller.findAllByUserAndDate(userId, date));
     }
 
 
-    BanEntity convertToBanEntityFrom(Ban ban) throws SQLException {
-        if (ban == null) return null;
-        UserEntity user = userRepository.findById(ban.userId);
-        UserEntity bannedBy = userRepository.findById(ban.bannedById);
-
-        return new BanEntity(ban.id, user, bannedBy, ban.reason, ban.until, ban.active);
-    }
-
-    Collection<BanEntity> convertToBanEntityCollectionFrom(Collection<Ban> bans) throws SQLException {
-        Collection<BanEntity> entities = new ArrayList<>();
+    Collection<BanAggregate> convertCollection(Collection<Ban> bans) {
+        Collection<BanAggregate> entities = new ArrayList<>();
         for (Ban ban : bans) {
             if (ban != null) {
-                entities.add(convertToBanEntityFrom(ban));
+                User user = userDatabaseController.findById(ban.userId);
+                User bannedBy = userDatabaseController.findById(ban.bannedById);
+                entities.add(BanMapper.getBanAggregateFrom(ban, user, bannedBy));
             }
         }
         return entities;

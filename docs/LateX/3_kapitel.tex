@@ -1,4 +1,8 @@
 %% TODO Für jedes Prinzip: Wie hab ich das angewendet und warum hab ich das so gemacht? mit Beispielen
+%% Was mach das Prinzip / Was ist der Kern / warum ist das in der Klasse gut zu sehen?
+
+%% Prinzipien die nich vorkommen trotzdem erwähnen und erklären warum nicht!!!
+%% Warum setzt das aus meiner Sicht das Prinzip um!!!!!
 
 
 \chapter{Programming Principles}
@@ -78,6 +82,7 @@ Dies wird ermöglicht indem man statt einzelnen großen schweren Interfaces mit 
 Somit kann man seine Klasse passend für den Anwendungszweck anpassen ohne unnötige extrafunktionen mit zu schleppen.
 Der Code beeinhaltet aber bisher keine komplexen Abhängigkeiten von Interfaces in denen Funktionen des Interfaces nicht genutzt würden.
 Daher wurde dieses Prinzip noch nicht angewendet.
+%% TODO bei Repository interfaces
 
 %% Dependency Inversion Principle
 %%  - Klassischerweise sind High-Level Module von Low-Level Modulen abhängig:
@@ -206,11 +211,13 @@ Die UserEntity übernimmt zum Beispiel die Zuständigkeit über die Informatione
 %%  - Allgemein gehalten kommt ein Objekt als Creator eines anderen in Frage, wenn es zujedem erstellten Objekt eine Beziehung hat
 %%      - Eine Komposition in UML deutet auf einen Creatorhin
 %%  + Ein geeigneter Creator verringert dieKopplung von Komponenten 
-%% \subsection{Creator}
-%% Im Creator-Prinzip wird festgelegt wer für die Erzeugung von Objekten zuständig ist.
-%% Allgemein gesehen kommt ein Objekt als Creator eines anderen in Frage, wenn es zu jedem erstellten Objekt eine Beziehung hat.
-%% Ein geeigneter Creator verringert die Kopplung von Komponenten, was zu den bereits genannten Vorteilen führt.
-%% TODO Creator trotzdem erwähnen? Creator Implementieren?
+\subsection{Creator}
+Im Creator-Prinzip wird festgelegt wer für die Erzeugung von Objekten zuständig ist.
+Allgemein gesehen kommt ein Objekt als Creator eines anderen in Frage, wenn es zu jedem erstellten Objekt eine Beziehung hat.
+Ein geeigneter Creator verringert die Kopplung von Komponenten, was zu den bereits genannten Vorteilen führt.
+Dieses Prinzip wurde nicht angewandt da die Objekte direkt in den Adapter-Schichten erzeugt und umgewandelt werden und dafür keine extra Klasse verwendet wird.
+%% TODO Creator trotzdem erwähnen? Creator Implementieren!!!!!
+
 %% Indirection:
 %%  - Indirektion bzw. Delegation (<T>)
 %%  - Kann Systeme oder Teile von Systemenvoneinander entkoppeln
@@ -288,9 +295,10 @@ Diese Controller leiten die Anfragen dann an die API-Adapter-Schicht weiter in d
 %%  + Einfach wiederverwendbar auch außerhalbder Domäne 
 %%  + Begünstigt high cohesion durch Kapselung spezieller Funktionalität 
 %%  ⇒ Sollte möglichst wenig vorkommen
-%% \subsection{Pure Fabrication}
-%% Bei der Pure Fabrication besitzt eine Klasse keinen Bezug zur Problemdomäne, wodurch eine Trennung zwischen Technologie und Problemdomäne und eine Kapselung von Algorithmen entsteht.
-%% Damit werden diese Softwareteile auch außerhalb der Domäne einfach wiederverwendbar und durch die Kapselung spezieller Funktionalität wird High Cohesion begünstigt.
+\subsection{Pure Fabrication}
+Bei der Pure Fabrication besitzt eine Klasse keinen Bezug zur Problemdomäne, wodurch eine Trennung zwischen Technologie und Problemdomäne und eine Kapselung von Algorithmen entsteht.
+Damit werden diese Softwareteile auch außerhalb der Domäne einfach wiederverwendbar und durch die Kapselung spezieller Funktionalität wird High Cohesion begünstigt.
+Dies wurde nicht angewandt da alle Klassen einen Bezug zur Domäne hatten.
 %% TODO Pure Fabrication trotzdem erwähnen? Pure Fabrication Implementieren?
 %% Protected Variations:
 %%  - Sicherung vor Variation
@@ -354,3 +362,5 @@ dies kann aber teilweise durch diverse Tools vermieden werden indem sie erkannte
 Diese ungeduldige Duplikation ensteht durch Entwickler die zu faul sind die Duplikation zu beseitigen.
 
 In der Erstellung dieses Projektes wurde darauf geachtet keinen duplizierten Code zu erzeugen und stattdessen bestehenden Code wiederzuverwenden.
+
+%% TODO Funktionen Zeigen welche von vielen Stellen aufgerufen werden!!!!!

@@ -1,28 +1,27 @@
 package dev.dommi.gameserver.backend.domain.repositories;
 
-import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
+import dev.dommi.gameserver.backend.domain.aggregates.ReportAggregate;
 import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 
-import java.sql.SQLException;
 import java.util.Collection;
 
 public interface ReportRepository {
 
-    Collection<ReportEntity> getAllReports() throws SQLException;
+    Collection<ReportAggregate> getAllReports();
 
-    Collection<ReportEntity> getReportsCreatedBy(int userId) throws SQLException;
+    Collection<ReportAggregate> getReportsCreatedBy(int userId);
 
-    Collection<ReportEntity> getReportsFor(int userId) throws SQLException;
+    Collection<ReportAggregate> getReportsFor(int userId);
 
-    ReportEntity getReport(int reportId) throws SQLException;
+    ReportAggregate getReport(int reportId);
 
-    Collection<ReportTypeVO> getReportTypes() throws SQLException;
+    Collection<ReportTypeVO> getReportTypes();
 
-    int getReportTypeIdByName(String name) throws SQLException;
+    int getReportTypeIdByName(String name);
 
-    void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) throws SQLException;
+    boolean reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId);
 
-    void updateReportStatus(int reportId, boolean status) throws SQLException;
+    boolean updateReportStatus(int reportId, boolean status);
 
 
 }

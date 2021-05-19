@@ -1,23 +1,23 @@
 package dev.dommi.gameserver.backend.application.report;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 
-import java.sql.SQLException;
-import java.util.logging.Logger;
 
 public class ReportUser {
-    private static final Logger logger = Logger.getLogger(ReportUser.class.getName());
-    private ReportRepository repository;
+    private final UserRepository userRepository;
+    private final ReportRepository reportRepository;
 
-    public ReportUser(ReportRepository repository) {
-        this.repository = repository;
+    public ReportUser(UserRepository userRepository, ReportRepository reportRepository) {
+        this.userRepository = userRepository;
+        this.reportRepository = reportRepository;
     }
 
     public void reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) {
-        try {
-            repository.reportUser(creatorId, reportedUserId, reason, reportTypeId);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
+        UserRankAggregate user = userRepository.findById(creatorId);
+        if (user != null) {
+            user.reportUser(reportedUserId, reason, reportTypeId, reportRepository);
         }
     }
 

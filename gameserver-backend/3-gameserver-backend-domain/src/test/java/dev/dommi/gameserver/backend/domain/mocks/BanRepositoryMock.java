@@ -1,6 +1,6 @@
 package dev.dommi.gameserver.backend.domain.mocks;
 
-import dev.dommi.gameserver.backend.domain.entities.BanEntity;
+import dev.dommi.gameserver.backend.domain.aggregates.BanAggregate;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 
 import java.sql.SQLException;
@@ -8,42 +8,42 @@ import java.util.*;
 
 public class BanRepositoryMock implements BanRepository {
     @Override
-    public void create(int userId, int bannedById, String reason, Date until) throws SQLException {
-
+    public boolean create(int userId, int bannedById, String reason, Date until) {
+    return true;
     }
 
     @Override
-    public void update(int id, String reason, Date until, boolean active) throws SQLException {
-
+    public boolean update(int id, String reason, Date until, boolean active) {
+        return true;
     }
 
     @Override
-    public BanEntity findById(int id) throws SQLException {
+    public BanAggregate findById(int id) {
         return null;
     }
 
     @Override
-    public Collection<BanEntity> findAll() throws SQLException {
+    public Collection<BanAggregate> findAll() {
         return new ArrayList<>();
     }
 
     @Override
-    public Collection<BanEntity> findAllByActive(boolean active) throws SQLException {
+    public Collection<BanAggregate> findAllByActive(boolean active) {
         return new ArrayList<>();
     }
 
     @Override
-    public Collection<BanEntity> findAllByUser(int userId) throws SQLException {
+    public Collection<BanAggregate> findAllByUser(int userId) {
         return new ArrayList<>();
     }
 
     @Override
-    public Collection<BanEntity> findAllByDate(Date date) throws SQLException {
+    public Collection<BanAggregate> findAllByDate(Date date) {
         return new ArrayList<>();
     }
 
     @Override
-    public Collection<BanEntity> findAllByUserAndDate(int userId, Date date) throws SQLException {
+    public Collection<BanAggregate> findAllByUserAndDate(int userId, Date date) {
         return new ArrayList<>();
     }
 }

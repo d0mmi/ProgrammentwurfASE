@@ -6,12 +6,15 @@ import dev.dommi.gameserver.backend.adapter.database.report.ReportType;
 import dev.dommi.gameserver.backend.plugin.database.connector.MariaDBConnector;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 public class ReportDatabaseControllerImpl implements ReportDatabaseController {
 
-    private ReportTableWrapper reportTableWrapper;
-    private ReportTypeTableWrapper reportTypeTableWrapper;
+    private static final Logger logger = Logger.getLogger(ReportDatabaseControllerImpl.class.getName());
+    private final ReportTableWrapper reportTableWrapper;
+    private final ReportTypeTableWrapper reportTypeTableWrapper;
 
     public ReportDatabaseControllerImpl() {
         reportTableWrapper = new ReportTableWrapper(MariaDBConnector.getInstance());
@@ -19,59 +22,123 @@ public class ReportDatabaseControllerImpl implements ReportDatabaseController {
     }
 
     @Override
-    public Collection<Report> findAll() throws SQLException {
-        return reportTableWrapper.findAll();
+    public Collection<Report> findAll() {
+
+        try {
+
+            return reportTableWrapper.findAll();
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
 
     @Override
-    public Collection<Report> getReportsCreatedBy(int userId) throws SQLException {
-        return reportTableWrapper.findReportsCreatedBy(userId);
+    public Collection<Report> getReportsCreatedBy(int userId) {
+        try {
+
+            return reportTableWrapper.findReportsCreatedBy(userId);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
 
     @Override
-    public Collection<Report> getReportsFor(int userId) throws SQLException {
-        return reportTableWrapper.findReportsFor(userId);
+    public Collection<Report> getReportsFor(int userId) {
+        try {
+
+            return reportTableWrapper.findReportsFor(userId);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
 
     @Override
-    public Report findById(int reportId) throws SQLException {
-        return reportTableWrapper.findById(reportId);
+    public Report findById(int reportId) {
+        try {
+
+            return reportTableWrapper.findById(reportId);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return null;
     }
 
 
     @Override
-    public Collection<ReportType> getReportTypes() throws SQLException {
-        return reportTypeTableWrapper.findAll();
+    public Collection<ReportType> getReportTypes() {
+        try {
+
+            return reportTypeTableWrapper.findAll();
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public ReportType getReportType(int id) throws SQLException {
-        return reportTypeTableWrapper.findById(id);
+    public ReportType getReportType(int id) {
+        try {
+
+            return reportTypeTableWrapper.findById(id);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return null;
     }
 
     @Override
-    public int getReportTypeIdByName(String name) throws SQLException {
-        return reportTypeTableWrapper.findIdByName(name);
+    public int getReportTypeIdByName(String name) {
+        try {
+
+            return reportTypeTableWrapper.findIdByName(name);
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return -1;
     }
 
 
     @Override
-    public void update(Report value) throws SQLException {
-        reportTableWrapper.update(value);
+    public boolean update(Report value) {
+        try {
+
+            reportTableWrapper.update(value);
+            return true;
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
     }
 
     @Override
-    public void create(Report value) throws SQLException {
-        reportTableWrapper.create(value);
+    public boolean create(Report value) {
+        try {
+
+            reportTableWrapper.create(value);
+            return true;
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
     }
 
 
     @Override
-    public void delete(int value) throws SQLException {
-        reportTableWrapper.deleteById(value);
+    public boolean delete(int value) {
+        try {
+
+            reportTableWrapper.deleteById(value);
+            return true;
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
     }
 
 

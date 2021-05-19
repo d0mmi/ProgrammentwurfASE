@@ -2,17 +2,19 @@ package dev.dommi.gameserver.backend.adapter.database.user;
 
 import dev.dommi.gameserver.backend.adapter.database.rank.Rank;
 import dev.dommi.gameserver.backend.adapter.database.rank.RankDatabaseController;
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private UserDatabaseController controller;
-    private RankDatabaseController rankController;
+    private final UserDatabaseController controller;
+    private final RankDatabaseController rankController;
 
     public UserRepositoryImpl(UserDatabaseController controller, RankDatabaseController rankController) {
         this.controller = controller;
@@ -20,8 +22,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void create(String name, String email, String pw) throws SQLException {
-        controller.create(new User(name, email, pw));
+    public boolean create(String name, String email, String pw) {
+        return controller.create(new User(name, email, pw));
     }
 
     @Override
@@ -30,45 +32,42 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Collection<UserEntity> getAll() throws SQLException {
+    public Collection<UserRankAggregate> getAll() {
         Collection<User> users = controller.findAll();
-        return convertToUserEntityCollectionFrom(users);
+        return convertCollection(users);
     }
 
     @Override
-    public void update(int userId, String name, String email, String pw) throws SQLException {
-        controller.update(new User(userId, name, email, pw));
+    public boolean update(int userId, String name, String email, String pw) {
+        return controller.update(new User(userId, name, email, pw));
     }
 
     @Override
-    public UserEntity findByEmail(String email) throws SQLException {
+    public UserRankAggregate findByEmail(String email) {
         User user = controller.findByEmail(email);
-        return convertToUserEntityFrom(user);
-    }
-
-    @Override
-    public UserEntity findById(int userId) throws SQLException {
-        User user = controller.findById(userId);
-        return convertToUserEntityFrom(user);
-    }
-
-    @Override
-    public void delete(int userId) throws SQLException {
-        controller.delete(userId);
-    }
-
-    UserEntity convertToUserEntityFrom(User user) throws SQLException {
-        if (user == null) return null;
         Rank rank = rankController.getRankFrom(user.id);
-        if (rank == null) return new UserEntity(user.id, user.name, user.email, null);
-        return new UserEntity(user.id, user.name, user.email, new RankVO(rank.id, rank.name, rank.level));
+        return UserMapper.getUserRankAggregateFrom(user, rank);
     }
 
-    Collection<UserEntity> convertToUserEntityCollectionFrom(Collection<User> users) throws SQLException {
-        Collection<UserEntity> entities = new ArrayList<>();
+    @Override
+    public UserRankAggregate findById(int userId) {
+        User user = controller.findById(userId);
+        Rank rank = rankController.getRankFrom(user.id);
+        return UserMapper.getUserRankAggregateFrom(user, rank);
+    }
+
+    @Override
+    public boolean delete(int userId) {
+        return controller.delete(userId);
+    }
+
+
+    Collection<UserRankAggregate> convertCollection(Collection<User> users) {
+        Collection<UserRankAggregate> entities = new ArrayList<>();
         for (User user : users) {
             if (user != null) {
-                entities.add(convertToUserEntityFrom(user));
+                Rank rank = rankController.getRankFrom(user.id);
+                entities.add(UserMapper.getUserRankAggregateFrom(user, rank));
             }
         }
         return entities;

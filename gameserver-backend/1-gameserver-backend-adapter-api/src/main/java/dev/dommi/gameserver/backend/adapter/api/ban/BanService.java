@@ -1,8 +1,6 @@
 package dev.dommi.gameserver.backend.adapter.api.ban;
 
 import dev.dommi.gameserver.backend.adapter.api.user.UserService;
-import dev.dommi.gameserver.backend.application.ban.BanUser;
-import dev.dommi.gameserver.backend.application.ban.CheckUserBan;
 import dev.dommi.gameserver.backend.application.ban.GetAllBans;
 import dev.dommi.gameserver.backend.application.ban.UpdateBan;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;

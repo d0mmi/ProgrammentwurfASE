@@ -1,23 +1,23 @@
 package dev.dommi.gameserver.backend.domain.repositories;
 
-import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 
-import java.sql.SQLException;
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
+
 import java.util.Collection;
 
 public interface UserRepository {
 
-    void create(String name, String email, String pw) throws SQLException;
+    boolean create(String name, String email, String pw);
 
     boolean verifyPasswordByEmail(String email, String pw);
 
-    Collection<UserEntity> getAll() throws SQLException;
+    Collection<UserRankAggregate> getAll();
 
-    void update(int userId, String name, String email, String pw) throws SQLException;
+    boolean update(int userId, String name, String email, String pw);
 
-    UserEntity findByEmail(String email) throws SQLException;
+    UserRankAggregate findByEmail(String email);
 
-    UserEntity findById(int userId) throws SQLException;
+    UserRankAggregate findById(int userId);
 
-    void delete(int userId) throws SQLException;
+    boolean delete(int userId);
 }

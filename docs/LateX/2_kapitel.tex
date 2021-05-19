@@ -55,7 +55,7 @@
     \fbox{\includegraphics[width=6cm]{schichtarchitektur}}
     \caption{\label{flutter-1} Schichtarchitektur}
 \end{figure}
-
+%% genauer erklären warum es aufgespalten wurde!!!!
 Die Schichtarchitektur ist in vier Schichten unterteilt: Plugin, Adapter, Application, Domain.
 Die Plugin-Schicht wurde nochmals in API und Datenbank aufgeteilt um die übersichtlichkeit etwas zu erhöhen.
 Dementsprechend wurde die Adapter-Schicht auch in API und Datenbank aufgeteilt und konvertiert die jeweiligen Objekt-Formate in die Formate der inneren Schichten.
@@ -64,5 +64,9 @@ In der Application-Schicht liegt dann die eigentliche Logik der Anwendung und hi
 In der Domain Schicht befinden sich die Entities und Value Objects der Application Schicht,
 dies dient dem Ziel diese in Zukunft in weiteren Application-Schichten einheitlich verwenden zu können.
 Zusätzlich enthält die Domain Schicht die Repository-Interfaces welche von darunter liegenden Schichten implementiert werden um eine Inversion of Control zu erzeugen.
-
-%% TODO vlt bisschen mehr schreiben
+%% fundamental: von aussen nach innen!!!!!!!
+%% TODO vlt bisschen mehr schreiben, Begründung fehlt
+%% Anwendung macht xy
+%% ich ordne folgende funktionen der folgenden Schicht zu ...
+%% die sind da weil ...
+%% Folgende schichten wurden nicht verwendet weil....
