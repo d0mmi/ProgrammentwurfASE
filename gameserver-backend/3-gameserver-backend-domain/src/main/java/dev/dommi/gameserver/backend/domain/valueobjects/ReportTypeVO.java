@@ -33,4 +33,8 @@ public class ReportTypeVO {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+
+    public ReportTypeVO copy() {
+        return new ReportTypeVO(id, name);
+    }
 }

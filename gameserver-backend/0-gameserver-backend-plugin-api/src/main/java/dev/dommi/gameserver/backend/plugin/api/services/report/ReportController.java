@@ -1,9 +1,10 @@
 package dev.dommi.gameserver.backend.plugin.api.services.report;
 
 import dev.dommi.gameserver.backend.adapter.api.report.Report;
-import dev.dommi.gameserver.backend.adapter.api.report.ReportService;
+import dev.dommi.gameserver.backend.adapter.api.report.ReportBridge;
 import dev.dommi.gameserver.backend.adapter.api.report.ReportType;
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
@@ -13,10 +14,10 @@ public class ReportController {
 
 
     private static final String REPORT_ID = "reportId";
-    private final ReportService reportService;
+    private final ReportBridge reportBridge;
 
-    public ReportController(ReportRepository reportRepository) {
-        reportService = new ReportService(reportRepository);
+    public ReportController(UserRepository userRepository, ReportRepository reportRepository) {
+        reportBridge = new ReportBridge(userRepository, reportRepository);
     }
 
     @OpenApi(
@@ -36,7 +37,7 @@ public class ReportController {
         ReportUserRequest request = ctx.bodyAsClass(ReportUserRequest.class);
         int userId = APIServer.getUserIDFromRequestToken(ctx);
         if (userId > -1) {
-            reportService.reportUser(userId, request.reportedUserId, request.reason, request.reportTypeId);
+            reportBridge.reportUser(userId, request.reportedUserId, request.reason, request.reportTypeId);
             ctx.status(201);
         } else {
             ctx.status(400);
@@ -58,7 +59,7 @@ public class ReportController {
     )
     public void updateReportStatus(Context ctx) {
         UpdateReportStatusRequest request = ctx.bodyAsClass(UpdateReportStatusRequest.class);
-        reportService.updateReportStatus(validPathParamReportId(ctx), request.status);
+        reportBridge.updateReportStatus(validPathParamReportId(ctx), request.status);
         ctx.status(201);
     }
 
@@ -74,7 +75,7 @@ public class ReportController {
             }
     )
     public void getOne(Context ctx) {
-        ctx.json(reportService.getReport(validPathParamReportId(ctx)));
+        ctx.json(reportBridge.getReport(validPathParamReportId(ctx)));
     }
 
     @OpenApi(
@@ -96,11 +97,11 @@ public class ReportController {
         Integer createdBy = ctx.queryParam("createdBy", Integer.class).getOrNull();
         Integer reportsFor = ctx.queryParam("reportsFor", Integer.class).getOrNull();
         if (createdBy != null && createdBy >= 0) {
-            ctx.json(reportService.getReportsCreatedBy(createdBy));
+            ctx.json(reportBridge.getReportsCreatedBy(createdBy));
         } else if (reportsFor != null && reportsFor >= 0) {
-            ctx.json(reportService.getReportsFor(reportsFor));
+            ctx.json(reportBridge.getReportsFor(reportsFor));
         } else {
-            ctx.json(reportService.getAllReports());
+            ctx.json(reportBridge.getAllReports());
         }
 
     }
@@ -117,7 +118,7 @@ public class ReportController {
             }
     )
     public void getTypes(Context ctx) {
-        ctx.json(reportService.getReportTypes());
+        ctx.json(reportBridge.getReportTypes());
     }
 
     private int validPathParamReportId(Context ctx) {

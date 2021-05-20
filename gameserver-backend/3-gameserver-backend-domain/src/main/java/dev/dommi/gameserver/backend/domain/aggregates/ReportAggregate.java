@@ -2,7 +2,6 @@ package dev.dommi.gameserver.backend.domain.aggregates;
 
 import dev.dommi.gameserver.backend.domain.entities.ReportEntity;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
-import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.ReportTypeVO;
 
 public class ReportAggregate {
@@ -20,37 +19,18 @@ public class ReportAggregate {
         this.reportTypeVO = reportTypeVO;
     }
 
-    public int getCreatorId() {
-        return creator.getId();
+    public UserEntity getCreator() {
+        return creator.copy();
     }
 
-    public int getReportedId() {
-        return reported.getId();
+    public UserEntity getReported() {
+        return reported.copy();
     }
 
-    public String getCreatorEmail() {
-        return creator.getEmail();
+    public ReportTypeVO getReportType() {
+        return reportTypeVO.copy();
     }
 
-    public String getReportedEmail() {
-        return reported.getEmail();
-    }
-
-    public String getCreatorName() {
-        return creator.getName();
-    }
-
-    public String getReportedName() {
-        return reported.getName();
-    }
-
-    public int getReportTypeId() {
-        return reportTypeVO.getId();
-    }
-
-    public String getReportTypeName() {
-        return reportTypeVO.getName();
-    }
 
     public int getReportId() {
         return reportEntity.getId();
@@ -64,8 +44,8 @@ public class ReportAggregate {
         return reportEntity.isOpen();
     }
 
-    public boolean updateStatus(boolean status, ReportRepository repository) {
-        return reportEntity.updateStatus(status, repository);
+    public boolean updateStatus(boolean status) {
+        return reportEntity.updateStatus(status);
     }
 
 

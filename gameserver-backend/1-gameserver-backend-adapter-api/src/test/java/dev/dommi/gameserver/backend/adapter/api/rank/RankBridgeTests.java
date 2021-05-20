@@ -9,17 +9,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RankServiceTests {
+public class RankBridgeTests {
 
     @Test
     public void invalidRankStringTest() {
-        assertThrows(IllegalArgumentException.class, () -> new RankService(new RankRepositoryMock(), new UserRepositoryMock()).grantRankTo(1, "invalidRank"));
+        assertThrows(IllegalArgumentException.class, () -> new RankBridge(new RankRepositoryMock(), new UserRepositoryMock()).grantRankTo(1, "invalidRank"));
     }
 
     @Test
     public void convertToRankFromTest() {
         RankVO rankVO = new RankVO(1,"User", 1);
-        Rank rank = RankService.convertToRankFrom(rankVO);
+        Rank rank = RankBridge.convertToRankFrom(rankVO);
         assertNotNull(rank);
         assertEquals(rankVO.getName(), rank.name);
         assertEquals(rankVO.getLevel(), rank.level);
@@ -28,7 +28,7 @@ public class RankServiceTests {
     @Test
     public void convertToRankCollectionFromTest() {
         Collection<RankVO> vos = createVOs();
-        Collection<Rank> ranks = RankService.convertToRankCollectionFrom(vos);
+        Collection<Rank> ranks = RankBridge.convertToRankCollectionFrom(vos);
 
         for (int i = 0; i < vos.size(); i++) {
             Rank rank = (Rank) ranks.toArray()[i];

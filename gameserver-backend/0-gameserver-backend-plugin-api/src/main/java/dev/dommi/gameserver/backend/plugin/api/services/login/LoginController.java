@@ -1,10 +1,10 @@
 package dev.dommi.gameserver.backend.plugin.api.services.login;
 
 
-import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
-import dev.dommi.gameserver.backend.adapter.api.login.InvalidLoginException;
-import dev.dommi.gameserver.backend.adapter.api.login.LoginService;
+import dev.dommi.gameserver.backend.adapter.api.ban.BanBridge;
+import dev.dommi.gameserver.backend.adapter.api.login.LoginBridge;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
+import dev.dommi.gameserver.backend.application.login.InvalidCredentialsException;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
@@ -20,12 +20,12 @@ import java.util.logging.Logger;
 
 public class LoginController {
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
-    private final LoginService loginService;
-    private final BanService banService;
+    private final LoginBridge loginBridge;
+    private final BanBridge banBridge;
 
     public LoginController(UserRepository userRepository, RankRepository rankRepository, BanRepository banRepository) {
-        loginService = new LoginService(userRepository, rankRepository);
-        banService = new BanService(banRepository, userRepository);
+        loginBridge = new LoginBridge(userRepository, rankRepository);
+        banBridge = new BanBridge(banRepository, userRepository);
     }
 
     @OpenApi(
@@ -43,7 +43,7 @@ public class LoginController {
     public void register(Context ctx) {
         RegisterRequest request = ctx.bodyAsClass(RegisterRequest.class);
 
-        if (loginService.register(request.name, request.email, request.pw)) ctx.status(201);
+        if (loginBridge.register(request.name, request.email, request.pw)) ctx.status(201);
         else ctx.status(400).json(new BadRequestResponse("Could not register User!"));
 
     }
@@ -63,12 +63,12 @@ public class LoginController {
     )
     public void login(Context ctx) {
         LoginRequest request = ctx.bodyAsClass(LoginRequest.class);
-        if (!banService.isUserBanned(request.email)) {
+        if (!banBridge.isUserBanned(request.email)) {
             try {
-                User user = loginService.login(request.email, request.pw);
+                User user = loginBridge.login(request.email, request.pw);
                 ctx.status(200).json(new LoginResponse(JWTProvider.getInstance().generateToken(user)));
 
-            } catch (InvalidLoginException e) {
+            } catch (InvalidCredentialsException e) {
 
                 ctx.status(401).json(new UnauthorizedResponse(e.getMessage()));
 

@@ -1,13 +1,12 @@
 package dev.dommi.gameserver.backend.domain.entities;
 
 import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.services.CredentialService;
 
 
 public class UserEntity {
 
-    private int id;
+    private final int id;
     private String name;
     private String email;
 
@@ -29,10 +28,9 @@ public class UserEntity {
         return email;
     }
 
-    public boolean modify(String name, String email, String pw, UserRepository userRepository) {
+    public boolean modify(String name, String email) {
         CredentialService credentialService = new CredentialService();
-        if (email == null || !credentialService.isEmailInUse(userRepository, email) && credentialService.credentialsValidOrNull(name, email, pw)) {
-            userRepository.update(id, name, email, pw);
+        if (credentialService.credentialsValidOrNull(name, email, null)) {
             this.name = name;
             this.email = email;
             return true;
@@ -40,8 +38,13 @@ public class UserEntity {
         return false;
     }
 
-    public boolean reportUser(int reportedUserId, String reason, int reportTypeId, ReportRepository reportRepository){
-        return reportRepository.reportUser(id,reportedUserId,reason,reportTypeId);
+    public boolean reportUser(int reportedUserId, String reason, int reportTypeId, ReportRepository reportRepository) {
+        if (id == reportedUserId || (reason == null || reason.length() < 1)) return false;
+        return reportRepository.reportUser(id, reportedUserId, reason, reportTypeId);
+    }
+
+    public UserEntity copy() {
+        return new UserEntity(id, name, email);
     }
 
 }

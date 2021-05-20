@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-public class RankService {
+public class RankBridge {
 
-    private static final Logger logger = Logger.getLogger(RankService.class.getName());
+    private static final Logger logger = Logger.getLogger(RankBridge.class.getName());
     private final GrantRank grantRank;
     private final RevokeRank revokeRank;
     private final GetAllRanks getAllRanks;
 
-    public RankService(RankRepository rankRepository, UserRepository userRepository) {
+    public RankBridge(RankRepository rankRepository, UserRepository userRepository) {
         grantRank = new GrantRank(rankRepository, userRepository);
         revokeRank = new RevokeRank(rankRepository, userRepository);
         getAllRanks = new GetAllRanks(rankRepository);

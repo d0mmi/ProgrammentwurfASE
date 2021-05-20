@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.application.mocks;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
@@ -21,8 +22,8 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public void create(String name, String email, String pw) throws SQLException {
-
+    public boolean create(String name, String email, String pw) {
+        return true;
     }
 
     @Override
@@ -31,31 +32,40 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public Collection<UserEntity> getAll() throws SQLException {
+    public Collection<UserRankAggregate> getAll() {
         return Arrays.asList(findById(1));
     }
 
     @Override
-    public void update(int userId, String name, String email, String pw) throws SQLException {
-
+    public boolean update(UserRankAggregate user) {
+        return true;
     }
 
     @Override
-    public UserEntity findByEmail(String email) throws SQLException {
+    public boolean changePassword(int id, String oldPassword, String newPassword) {
+        return true;
+    }
+
+    @Override
+    public UserRankAggregate findByEmail(String email) {
         if (returnNullFirstTime) {
             returnNullFirstTime = false;
             return null;
         }
-        return new UserEntity(1, "ExampleUser", email, new RankVO(1,"User", 1));
+        UserEntity entity = new UserEntity(1, "TestUser", email);
+        RankVO rank = new RankVO(2, "Rank", 50);
+        return new UserRankAggregate(entity, rank);
     }
 
     @Override
-    public UserEntity findById(int userId) throws SQLException {
-        return new UserEntity(userId, "ExampleUser", "test@example.com", new RankVO(1,"User", 1));
+    public UserRankAggregate findById(int userId) {
+        UserEntity entity = new UserEntity(userId, "TestUser", "test@example.com");
+        RankVO rank = new RankVO(2, "Rank", 50);
+        return new UserRankAggregate(entity, rank);
     }
 
     @Override
-    public void delete(int userId) throws SQLException {
-
+    public boolean delete(int userId) {
+        return true;
     }
 }

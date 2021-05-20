@@ -59,8 +59,8 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
-    public boolean updateReportStatus(int reportId, boolean status) {
-        return controller.update(new Report(reportId, status));
+    public boolean update(ReportAggregate report) {
+        return controller.update(new Report(report.getReportId(), report.isOpen()));
     }
 
 

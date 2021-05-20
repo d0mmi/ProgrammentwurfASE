@@ -38,13 +38,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean update(int userId, String name, String email, String pw) {
-        return controller.update(new User(userId, name, email, pw));
+    public boolean update(UserRankAggregate user) {
+        return controller.update(new User(user.getUserId(), user.getUserName(), user.getEmail()));
+    }
+
+    @Override
+    public boolean changePassword(int id, String oldPassword, String newPassword) {
+        return controller.changePassword(id, oldPassword, newPassword);
     }
 
     @Override
     public UserRankAggregate findByEmail(String email) {
         User user = controller.findByEmail(email);
+        if(user == null) return null;
         Rank rank = rankController.getRankFrom(user.id);
         return UserMapper.getUserRankAggregateFrom(user, rank);
     }

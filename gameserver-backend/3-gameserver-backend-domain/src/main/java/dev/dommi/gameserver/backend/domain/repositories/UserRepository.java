@@ -13,7 +13,9 @@ public interface UserRepository {
 
     Collection<UserRankAggregate> getAll();
 
-    boolean update(int userId, String name, String email, String pw);
+    boolean update(UserRankAggregate user);
+
+    boolean changePassword(int id, String oldPassword, String newPassword);
 
     UserRankAggregate findByEmail(String email);
 

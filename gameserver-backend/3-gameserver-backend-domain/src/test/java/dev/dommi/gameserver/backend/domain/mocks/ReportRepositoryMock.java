@@ -43,7 +43,7 @@ public class ReportRepositoryMock implements ReportRepository {
     }
 
     @Override
-    public boolean updateReportStatus(int reportId, boolean status) {
+    public boolean update(ReportAggregate report) {
         return true;
     }
 }

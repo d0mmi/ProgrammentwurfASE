@@ -26,12 +26,12 @@ public class APIServerConfig {
     private static final String API_PORT = "API_PORT";
     private static APIServerConfig defaultConfig;
 
-    private int port;
-    private LoginController loginController;
-    private BanController banController;
-    private RankController rankController;
-    private ReportController reportController;
-    private UserController userController;
+    private final int port;
+    private final LoginController loginController;
+    private final BanController banController;
+    private final RankController rankController;
+    private final ReportController reportController;
+    private final UserController userController;
 
     public APIServerConfig(int port, LoginController loginController, BanController banController, RankController rankController, ReportController reportController, UserController userController) {
         this.port = port;
@@ -57,13 +57,13 @@ public class APIServerConfig {
 
         UserRepository userRepository = new UserRepositoryImpl(userDatabaseController, rankDatabaseController);
         RankRepository rankRepository = new RankRepositoryImpl(rankDatabaseController);
-        ReportRepository reportRepository = new ReportRepositoryImpl(reportDatabaseController, userRepository);
-        BanRepository banRepository = new BanRepositoryImpl(banDatabaseController, userRepository);
+        ReportRepository reportRepository = new ReportRepositoryImpl(reportDatabaseController, userDatabaseController);
+        BanRepository banRepository = new BanRepositoryImpl(banDatabaseController, userDatabaseController);
 
         LoginController loginController = new LoginController(userRepository, rankRepository, banRepository);
         BanController banController = new BanController(banRepository, userRepository);
         RankController rankController = new RankController(rankRepository, userRepository);
-        ReportController reportController = new ReportController(reportRepository);
+        ReportController reportController = new ReportController(userRepository, reportRepository);
         UserController userController = new UserController(userRepository);
 
         return new APIServerConfig(Integer.parseInt(System.getenv(API_PORT)), loginController, banController, rankController, reportController, userController);

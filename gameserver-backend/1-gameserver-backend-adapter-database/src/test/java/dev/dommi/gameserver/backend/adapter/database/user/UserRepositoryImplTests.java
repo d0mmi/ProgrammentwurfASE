@@ -1,54 +1,45 @@
 package dev.dommi.gameserver.backend.adapter.database.user;
 
 import dev.dommi.gameserver.backend.adapter.database.rank.Rank;
-import dev.dommi.gameserver.backend.adapter.database.rank.RankDatabaseController;
-import dev.dommi.gameserver.backend.domain.entities.UserEntity;
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserRepositoryImplTests {
 
     @Test
-    public void convertToUserEntityFromTest() throws SQLException {
+    public void convertToUserEntityFromTest() {
 
-        UserDatabaseController userController = mock(UserDatabaseController.class);
-        RankDatabaseController rankController = mock(RankDatabaseController.class);
-        when(rankController.getRankFrom(anyInt())).thenReturn(new Rank("User", 1));
 
         User user = new User(1, "TestUser", "test@example.com", "pw");
-        UserEntity entity = new UserRepositoryImpl(userController, rankController).convertToUserEntityFrom(user);
+        UserRankAggregate aggregate = UserMapper.getUserRankAggregateFrom(user, new Rank(1, "", 50));
 
-        assertNotNull(entity);
-        assertEquals(user.id, entity.getId());
-        assertEquals(user.name, entity.getName());
-        assertEquals(user.email, entity.getEmail());
+        assertNotNull(aggregate);
+        assertEquals(user.id, aggregate.getUserId());
+        assertEquals(user.name, aggregate.getUserName());
+        assertEquals(user.email, aggregate.getEmail());
     }
 
     @Test
-    public void convertToUserEntityCollectionFromTest() throws SQLException {
-        UserDatabaseController userController = mock(UserDatabaseController.class);
-        RankDatabaseController rankController = mock(RankDatabaseController.class);
-        when(rankController.getRankFrom(anyInt())).thenReturn(new Rank("User", 1));
+    public void convertToUserEntityCollectionFromTest() {
 
         Collection<User> users = createUsers();
-        Collection<UserEntity> entities = new UserRepositoryImpl(userController, rankController).convertToUserEntityCollectionFrom(users);
 
         for (int i = 0; i < users.size(); i++) {
             User user = (User) users.toArray()[i];
-            UserEntity entity = (UserEntity) entities.toArray()[i];
 
-            assertNotNull(entity);
-            assertEquals(user.id, entity.getId());
-            assertEquals(user.name, entity.getName());
-            assertEquals(user.email, entity.getEmail());
+            UserRankAggregate aggregate = UserMapper.getUserRankAggregateFrom(user, new Rank(1, "", 50));
+
+            assertNotNull(aggregate);
+            assertEquals(user.id, aggregate.getUserId());
+            assertEquals(user.name, aggregate.getUserName());
+            assertEquals(user.email, aggregate.getEmail());
         }
 
     }

@@ -1,65 +1,61 @@
 package dev.dommi.gameserver.backend.domain.entities;
 
 
-import dev.dommi.gameserver.backend.domain.mocks.BanRepositoryMock;
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.mocks.RankRepositoryMock;
-import dev.dommi.gameserver.backend.domain.mocks.UserRepositoryMock;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 import org.junit.jupiter.api.Test;
-
-import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserEntityTests {
 
     @Test
-    public void isBannedTest() throws SQLException {
-        UserEntity userEntity = new UserEntity(0, "", "", null);
-        assertFalse(userEntity.isBanned(new BanRepositoryMock()));
+    public void grantRankTest() {
+        UserEntity entity = new UserEntity(1, "TestUser", "test@example.com");
+        RankVO old = new RankVO(2, "oldRank", 50);
+        UserRankAggregate aggregate = new UserRankAggregate(entity, old);
+
+        aggregate.grantRank(1, new RankRepositoryMock());
+
+        assertNotEquals(old.getName(), aggregate.getRankName());
     }
 
     @Test
-    public void grantRankTest() throws SQLException {
-        RankVO oldRank = new RankVO(1,"old", 1);
-        UserEntity userEntity = new UserEntity(0, "", "", oldRank);
+    public void revokeRankTest() {
+        UserEntity entity = new UserEntity(1, "TestUser", "test@example.com");
+        RankVO old = new RankVO(2, "oldRank", 50);
+        UserRankAggregate aggregate = new UserRankAggregate(entity, old);
 
-        userEntity.grantRank(1, new RankRepositoryMock());
+        aggregate.revokeRank(new RankRepositoryMock());
 
-        assertNotEquals(oldRank, userEntity.getRank());
+        assertNotEquals(aggregate.getRankName(), old.getName());
     }
 
     @Test
-    public void revokeRankTest() throws SQLException {
-        RankVO oldRank = new RankVO(1,RankType.USER.value, 1);
-        UserEntity userEntity = new UserEntity(0, "", "", oldRank);
-
-        userEntity.revokeRank(new RankRepositoryMock());
-
-        assertTrue(userEntity.getRank().getName().equalsIgnoreCase(RankType.USER.value));
-    }
-
-    @Test
-    public void modifyTest() throws SQLException {
-        UserEntity userEntity = new UserEntity(0, "", "", null);
+    public void modifyTest() {
+        UserEntity entity = new UserEntity(1, "User", "test1@example.com");
+        RankVO rank = new RankVO(2, "Rank", 50);
+        UserRankAggregate aggregate = new UserRankAggregate(entity, rank);
         String name = "TestUser";
         String email = "test@test.com";
         String pw = "Passw0rd#";
 
-        assertTrue(userEntity.modify(name, email, pw, new UserRepositoryMock()));
-        assertEquals(userEntity.getName(), name);
-        assertEquals(userEntity.getEmail(), email);
+        assertTrue(aggregate.modifyUser(name, email));
+        assertEquals(aggregate.getUserName(), name);
+        assertEquals(aggregate.getEmail(), email);
     }
 
     @Test
-    public void invalidModifyTest() throws SQLException {
-        UserEntity userEntity = new UserEntity(0, "", "", null);
+    public void invalidModifyTest() {
+        UserEntity entity = new UserEntity(1, "User", "test@example.com");
+        RankVO rank = new RankVO(2, "Rank", 50);
+        UserRankAggregate aggregate = new UserRankAggregate(entity, rank);
         String name = "TestUser";
-        String email = "test@test.com";
-        String pw = "Invalid";
+        String email = "invalid";
 
-        assertFalse(userEntity.modify(name, email, pw, new UserRepositoryMock()));
-        assertNotEquals(userEntity.getName(), name);
-        assertNotEquals(userEntity.getEmail(), email);
+        assertFalse(aggregate.modifyUser(name, email));
+        assertNotEquals(aggregate.getUserName(), name);
+        assertNotEquals(aggregate.getEmail(), email);
     }
 }

@@ -18,21 +18,21 @@ public class RankRepositoryMock implements RankRepository {
 
     @Override
     public int getRankIdFrom(String name) {
-        return 0;
+        return 1;
     }
 
     @Override
-    public void grantRank(int userId, int rankId) {
-
+    public boolean grantRank(int userId, int rankId) {
+        return  true;
     }
 
     @Override
-    public void revokeRank(int userId, int rankId) {
-
+    public boolean revokeRank(int userId, int rankId) {
+        return  true;
     }
 
     @Override
-    public void revokeAllRanks(int userId) {
-
+    public boolean revokeAllRanks(int userId) {
+        return  true;
     }
 }

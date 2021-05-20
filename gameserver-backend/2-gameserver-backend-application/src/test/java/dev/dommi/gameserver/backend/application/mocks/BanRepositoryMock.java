@@ -17,7 +17,7 @@ public class BanRepositoryMock implements BanRepository {
     }
 
     @Override
-    public boolean update(int id, String reason, Date until, boolean active) {
+    public boolean update(BanAggregate ban) {
         return true;
     }
 

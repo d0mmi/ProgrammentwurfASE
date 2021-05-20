@@ -1,10 +1,9 @@
 package dev.dommi.gameserver.backend.domain.entities;
 
-import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 
 public class ReportEntity {
-    private int id;
-    private String reason;
+    private final int id;
+    private final String reason;
     private boolean open;
 
     public ReportEntity(int id, String reason, boolean open) {
@@ -25,8 +24,8 @@ public class ReportEntity {
         return open;
     }
 
-    public boolean updateStatus(boolean status, ReportRepository reportRepository) {
-        if(reportRepository.updateReportStatus(id, status)){
+    public boolean updateStatus(boolean status) {
+        if (this.open != status) {
             this.open = status;
             return true;
         }

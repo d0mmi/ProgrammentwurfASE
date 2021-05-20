@@ -18,6 +18,13 @@ public final class User extends DatabaseObject {
         this.pw = pw;
     }
 
+    public User(int id, String name, String email) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.pw = null;
+    }
+
     public User(String name, String email, String pw) {
         super(-1);
         this.name = name;

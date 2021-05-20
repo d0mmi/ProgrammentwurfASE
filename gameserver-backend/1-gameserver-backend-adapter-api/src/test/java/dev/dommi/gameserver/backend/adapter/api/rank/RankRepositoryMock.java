@@ -8,32 +8,32 @@ import java.util.Collection;
 
 public class RankRepositoryMock implements RankRepository {
     @Override
-    public Collection<RankVO> getAllRanks() throws SQLException {
+    public Collection<RankVO> getAllRanks() {
         return null;
     }
 
     @Override
-    public RankVO getRankFrom(int userId) throws SQLException {
+    public RankVO getRankFrom(int userId) {
         return null;
     }
 
     @Override
-    public int getRankIdFrom(String name) throws SQLException {
+    public int getRankIdFrom(String name) {
         return 0;
     }
 
     @Override
-    public void grantRank(int userId, int rankId) throws SQLException {
-
+    public boolean grantRank(int userId, int rankId) {
+        return true;
     }
 
     @Override
-    public void revokeRank(int userId, int rankId) throws SQLException {
-
+    public boolean revokeRank(int userId, int rankId) {
+        return true;
     }
 
     @Override
-    public void revokeAllRanks(int userId) throws SQLException {
-
+    public boolean revokeAllRanks(int userId) {
+        return true;
     }
 }

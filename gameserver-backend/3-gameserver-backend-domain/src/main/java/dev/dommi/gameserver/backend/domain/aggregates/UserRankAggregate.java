@@ -41,8 +41,8 @@ public class UserRankAggregate {
         return rankVO.getLevel();
     }
 
-    public boolean modifyUser(String name, String email, String pw, UserRepository userRepository) {
-        return userEntity.modify(name, email, pw, userRepository);
+    public boolean modifyUser(String name, String email) {
+        return userEntity.modify(name, email);
     }
 
     public boolean reportUser(int reportedUserId, String reason, int reportTypeId, ReportRepository reportRepository) {

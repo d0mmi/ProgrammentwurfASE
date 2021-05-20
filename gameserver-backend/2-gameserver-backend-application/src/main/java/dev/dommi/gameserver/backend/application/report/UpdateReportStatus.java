@@ -14,8 +14,8 @@ public class UpdateReportStatus {
 
     public void updateReportStatus(int reportId, boolean status) {
         ReportAggregate report = repository.getReport(reportId);
-        if (report != null) {
-            report.updateStatus(status, repository);
+        if (report != null && report.updateStatus(status)) {
+            repository.update(report);
         }
     }
 

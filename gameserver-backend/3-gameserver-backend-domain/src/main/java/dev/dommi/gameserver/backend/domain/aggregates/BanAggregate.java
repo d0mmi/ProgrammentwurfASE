@@ -2,7 +2,6 @@ package dev.dommi.gameserver.backend.domain.aggregates;
 
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
-import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 
 import java.util.Date;
 
@@ -18,32 +17,33 @@ public class BanAggregate {
         this.bannedBy = bannedBy;
     }
 
-    public int getUserId() {
-        return user.getId();
+    public int getId() {
+        return banEntity.getId();
     }
 
-    public int getBannedById() {
-        return bannedBy.getId();
+    public String getReason() {
+        return banEntity.getReason();
     }
 
-    public String getUserEmail() {
-        return user.getEmail();
+    public Date getUntil() {
+        return banEntity.getUntil();
     }
 
-    public String getBannedByEmail() {
-        return bannedBy.getEmail();
+    public boolean isActive() {
+        return banEntity.isActive();
     }
 
-    public String getUserName() {
-        return user.getName();
+    public UserEntity getUser() {
+        return user.copy();
     }
 
-    public String getBannedByName() {
-        return bannedBy.getName();
+    public UserEntity getBannedBy() {
+        return bannedBy.copy();
     }
 
-    public boolean update(String reason, Date until, boolean active, BanRepository repository) {
-        return banEntity.update(reason, until, active, repository);
+
+    public boolean update(String reason, Date until, boolean active) {
+        return banEntity.update(reason, until, active);
     }
 
 

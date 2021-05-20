@@ -29,8 +29,8 @@ public class BanRepositoryImpl implements BanRepository {
     }
 
     @Override
-    public boolean update(int id, String reason, Date until, boolean active) {
-        return controller.update(new Ban(id, reason, until, active));
+    public boolean update(BanAggregate ban) {
+        return controller.update(new Ban(ban.getId(), ban.getReason(), ban.getUntil(), ban.isActive()));
     }
 
     @Override

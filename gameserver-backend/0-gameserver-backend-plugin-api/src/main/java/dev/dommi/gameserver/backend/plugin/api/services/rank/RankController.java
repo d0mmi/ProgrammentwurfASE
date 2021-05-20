@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.plugin.api.services.rank;
 
 import dev.dommi.gameserver.backend.adapter.api.rank.Rank;
-import dev.dommi.gameserver.backend.adapter.api.rank.RankService;
+import dev.dommi.gameserver.backend.adapter.api.rank.RankBridge;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import io.javalin.http.BadRequestResponse;
@@ -11,10 +11,10 @@ import io.javalin.plugin.openapi.annotations.*;
 
 public class RankController {
 
-    private final RankService rankService;
+    private final RankBridge rankBridge;
 
     public RankController(RankRepository rankRepository, UserRepository userRepository) {
-        rankService = new RankService(rankRepository, userRepository);
+        rankBridge = new RankBridge(rankRepository, userRepository);
     }
 
     @OpenApi(
@@ -33,7 +33,7 @@ public class RankController {
     public void grant(Context ctx) {
         GrantRankRequest request = ctx.bodyAsClass(GrantRankRequest.class);
         try {
-            rankService.grantRankTo(request.userId, request.rank);
+            rankBridge.grantRankTo(request.userId, request.rank);
             ctx.status(201);
         } catch (IllegalArgumentException e) {
             ctx.status(400);
@@ -56,7 +56,7 @@ public class RankController {
     )
     public void revoke(Context ctx) {
         RevokeRankRequest request = ctx.bodyAsClass(RevokeRankRequest.class);
-        rankService.revokeRankFrom(request.userId);
+        rankBridge.revokeRankFrom(request.userId);
         ctx.status(201);
     }
 
@@ -72,7 +72,7 @@ public class RankController {
             }
     )
     public void getAll(Context ctx) {
-        ctx.json(rankService.getAll());
+        ctx.json(rankBridge.getAll());
     }
 
 }

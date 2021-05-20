@@ -21,7 +21,7 @@ public interface ReportRepository {
 
     boolean reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId);
 
-    boolean updateReportStatus(int reportId, boolean status);
+    boolean update(ReportAggregate report);
 
 
 }

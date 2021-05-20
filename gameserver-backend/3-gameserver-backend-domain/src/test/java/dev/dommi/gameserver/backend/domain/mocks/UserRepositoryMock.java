@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.domain.mocks;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 
@@ -8,7 +9,8 @@ import java.util.Collection;
 public class UserRepositoryMock implements UserRepository {
 
     @Override
-    public void create(String name, String email, String pw) {
+    public boolean create(String name, String email, String pw) {
+        return true;
 
     }
 
@@ -18,27 +20,33 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public Collection<UserEntity> getAll() {
+    public Collection<UserRankAggregate> getAll() {
         return null;
     }
 
     @Override
-    public void update(int userId, String name, String email, String pw) {
-
+    public boolean update(UserRankAggregate user) {
+        return true;
     }
 
     @Override
-    public UserEntity findByEmail(String email) {
+    public boolean changePassword(int id, String oldPassword, String newPassword) {
+        return true;
+    }
+
+    @Override
+    public UserRankAggregate findByEmail(String email) {
         return null;
     }
 
     @Override
-    public UserEntity findById(int userId) {
+    public UserRankAggregate findById(int userId) {
         return null;
     }
 
     @Override
-    public void delete(int userId) {
+    public boolean delete(int userId) {
+        return true;
 
     }
 }

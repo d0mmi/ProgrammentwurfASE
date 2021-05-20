@@ -14,7 +14,7 @@ public class RankRepositoryImplTests {
     @Test
     public void convertToRankVOFromTest() {
         Rank rank = new Rank("exampleRank", 1);
-        RankVO rankVO = RankRepositoryImpl.convertToRankVOFrom(rank);
+        RankVO rankVO = RankMapper.getRankVOFrom(rank);
 
         assertNotNull(rank);
         assertEquals(rankVO.getName(), rank.name);
@@ -24,7 +24,7 @@ public class RankRepositoryImplTests {
     @Test
     public void convertToRankVOCollectionFromTest() {
         Collection<Rank> ranks = createRanks();
-        Collection<RankVO> vos = RankRepositoryImpl.convertToRankVOCollectionFrom(ranks);
+        Collection<RankVO> vos =  RankMapper.getUserEntityCollectionFrom(ranks);
 
         for (int i = 0; i < ranks.size(); i++) {
             Rank rank = (Rank) ranks.toArray()[i];

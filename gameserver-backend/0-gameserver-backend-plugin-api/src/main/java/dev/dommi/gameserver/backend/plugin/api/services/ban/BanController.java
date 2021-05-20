@@ -1,7 +1,7 @@
 package dev.dommi.gameserver.backend.plugin.api.services.ban;
 
 import dev.dommi.gameserver.backend.adapter.api.ban.Ban;
-import dev.dommi.gameserver.backend.adapter.api.ban.BanService;
+import dev.dommi.gameserver.backend.adapter.api.ban.BanBridge;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.plugin.api.server.APIServer;
@@ -19,10 +19,10 @@ public class BanController {
     private static final Logger logger = Logger.getLogger(BanController.class.getName());
     private static final String BAN_ID = "banId";
 
-    private final BanService banService;
+    private final BanBridge banBridge;
 
     public BanController(BanRepository banRepository, UserRepository userRepository) {
-        banService = new BanService(banRepository, userRepository);
+        banBridge = new BanBridge(banRepository, userRepository);
     }
 
     @OpenApi(
@@ -42,7 +42,7 @@ public class BanController {
         BanUserRequest request = ctx.bodyAsClass(BanUserRequest.class);
         int userId = APIServer.getUserIDFromRequestToken(ctx);
         if (userId >= 0) {
-            banService.banUser(request.userId, userId, request.reason, request.until);
+            banBridge.banUser(request.userId, userId, request.reason, request.until);
             ctx.status(201);
         } else ctx.status(400).json(new BadRequestResponse("No valid UserId in token found!"));
     }
@@ -62,7 +62,7 @@ public class BanController {
     )
     public void updateBan(Context ctx) {
         UpdateBanRequest request = ctx.bodyAsClass(UpdateBanRequest.class);
-        banService.update(validPathParamBanId(ctx), request.reason, request.until, request.active);
+        banBridge.update(validPathParamBanId(ctx), request.reason, request.until, request.active);
         ctx.status(201);
     }
 
@@ -78,7 +78,7 @@ public class BanController {
             }
     )
     public void getOne(Context ctx) {
-        ctx.json(banService.getOne(validPathParamBanId(ctx)));
+        ctx.json(banBridge.getOne(validPathParamBanId(ctx)));
     }
 
     @OpenApi(
@@ -108,15 +108,15 @@ public class BanController {
                 date = DateFormat.getInstance().parse(untilDate);
             }
             if (date != null && userId != null && userId >= 0) {
-                ctx.json(banService.getAll(userId, date));
+                ctx.json(banBridge.getAll(userId, date));
             } else if (userId != null && userId >= 0) {
-                ctx.json(banService.getAll(userId));
+                ctx.json(banBridge.getAll(userId));
             } else if (date != null) {
-                ctx.json(banService.getAll(date));
+                ctx.json(banBridge.getAll(date));
             } else if (active != null) {
-                ctx.json(banService.getAll(active));
+                ctx.json(banBridge.getAll(active));
             } else {
-                ctx.json(banService.getAll());
+                ctx.json(banBridge.getAll());
             }
         } catch (ParseException e) {
             ctx.status(400).json(new BadRequestResponse("Could not parse Date!"));

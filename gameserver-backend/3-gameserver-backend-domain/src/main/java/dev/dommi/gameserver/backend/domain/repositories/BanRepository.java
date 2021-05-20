@@ -9,7 +9,7 @@ public interface BanRepository {
 
     boolean create(int userId, int bannedById, String reason, Date until);
 
-    boolean update(int id, String reason, Date until, boolean active);
+    boolean update(BanAggregate ban);
 
     BanAggregate findById(int id);
 

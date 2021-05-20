@@ -12,6 +12,7 @@ public class APIServerEndpointGroup implements EndpointGroup {
     private static final String USER_PATH = "user";
     private static final String USERS_PATH = "users";
     private static final String USER_ID_PATH = ":userId";
+    private static final String USER_CHANGE_PW_PATH = "changePassword";
     private static final String REPORT_PATH = "report";
     private static final String REPORTS_PATH = "reports";
     private static final String REPORT_TYPES_PATH = "types";
@@ -25,7 +26,7 @@ public class APIServerEndpointGroup implements EndpointGroup {
     private static final String GRANT_RANK_PATH = "grant";
     private static final String REVOKE_RANK_PATH = "revoke";
 
-    private APIServerConfig config;
+    private final APIServerConfig config;
 
     public APIServerEndpointGroup(APIServerConfig config) {
         this.config = config;
@@ -56,6 +57,9 @@ public class APIServerEndpointGroup implements EndpointGroup {
     private void createUserPath() {
         path(USER_PATH, () -> {
             get(config.getUserController()::getLoggedIn, new HashSet<>(Arrays.asList(AppRole.USER)));
+            path(USER_CHANGE_PW_PATH, () -> {
+                post(config.getUserController()::changePassword, new HashSet<>(Arrays.asList(AppRole.USER)));
+            });
         });
         path(USERS_PATH, () -> {
             get(config.getUserController()::getAll, new HashSet<>(Arrays.asList(AppRole.USER)));

@@ -30,9 +30,12 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
             logger.severe(e.getMessage());
             return false;
         }
-        BCrypt.Result result = BCrypt.verifyer().verify(pw.toCharArray(), password);
 
-        return result.verified;
+        return checkPassword(password, pw);
+    }
+
+    private boolean checkPassword(String encryptedPassword, String password) {
+        return BCrypt.verifyer().verify(password.toCharArray(), encryptedPassword).verified;
     }
 
     @Override
@@ -78,9 +81,8 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
 
     @Override
     public boolean create(User user) {
-        user.pw = BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(BCRYPT_COST)), user.pw.toCharArray());
         try {
-
+            user.pw = encryptPassword(user.pw);
             wrapper.create(user);
             return true;
         } catch (SQLException e) {
@@ -89,10 +91,13 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
         return false;
     }
 
+    private String encryptPassword(String password) {
+        return BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(BCRYPT_COST)), password.toCharArray());
+    }
+
     @Override
     public boolean update(User user) {
         try {
-
             wrapper.update(user);
             return true;
         } catch (SQLException e) {
@@ -101,5 +106,17 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
         return false;
     }
 
-
+    @Override
+    public boolean changePassword(int id, String oldPassword, String newPassword) {
+        try {
+            User user = wrapper.findById(id);
+            if (checkPassword(user.pw, oldPassword)) {
+                wrapper.update(new User(id, null, null, encryptPassword(newPassword)));
+                return true;
+            }
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+        return false;
+    }
 }

@@ -11,20 +11,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BanEntityTests {
 
     @Test
-    public void updateBanTest() throws SQLException {
-        BanEntity entity = new BanEntity(0, null, null, "old", new Date(), true);
+    public void updateBanTest() {
+        BanEntity entity = new BanEntity(0, "old", new Date(), true);
         String newReason = "newReason";
         Date newDate = new Date();
-        entity.update(newReason, newDate, false, new BanRepositoryMock());
+        entity.update(newReason, newDate, false);
         assertEquals(newReason, entity.getReason());
         assertEquals(newDate, entity.getUntil());
         assertFalse(entity.isActive());
     }
 
     @Test
-    public void updateNullBanTest() throws SQLException {
-        BanEntity entity = new BanEntity(0, null, null, "old", new Date(), true);
-        entity.update(null, null, true, new BanRepositoryMock());
+    public void updateNullBanTest() {
+        BanEntity entity = new BanEntity(0, "old", new Date(), true);
+        entity.update(null, null, true);
         assertNotNull(entity.getReason());
         assertNotNull(entity.getUntil());
     }

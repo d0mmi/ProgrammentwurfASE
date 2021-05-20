@@ -1,26 +1,30 @@
 package dev.dommi.gameserver.backend.adapter.api.ban;
 
-import dev.dommi.gameserver.backend.adapter.api.user.UserService;
+import dev.dommi.gameserver.backend.adapter.api.user.UserBridge;
+import dev.dommi.gameserver.backend.application.ban.BanUser;
+import dev.dommi.gameserver.backend.application.ban.CheckUserBan;
 import dev.dommi.gameserver.backend.application.ban.GetAllBans;
 import dev.dommi.gameserver.backend.application.ban.UpdateBan;
+import dev.dommi.gameserver.backend.domain.aggregates.BanAggregate;
 import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
+import dev.dommi.gameserver.backend.domain.services.BanService;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class BanService {
+public class BanBridge {
     private final BanUser banUser;
     private final UpdateBan updateBan;
     private final CheckUserBan checkUserBan;
     private final GetAllBans getAllBans;
 
-    public BanService(BanRepository banRepository, UserRepository userRepository) {
-        banUser = new BanUser(banRepository);
+    public BanBridge(BanRepository banRepository, UserRepository userRepository) {
+        banUser = new BanUser(new BanService(userRepository,banRepository));
         updateBan = new UpdateBan(banRepository);
-        checkUserBan = new CheckUserBan(banRepository, userRepository);
+        checkUserBan = new CheckUserBan(new BanService(userRepository,banRepository));
         getAllBans = new GetAllBans(banRepository);
     }
 
@@ -64,15 +68,15 @@ public class BanService {
         return convertToBanCollectionFrom(getAllBans.getAll(userId, date));
     }
 
-    static Ban convertToBanFrom(BanEntity ban) {
+    static Ban convertToBanFrom(BanAggregate ban) {
         if (ban == null) return null;
 
-        return new Ban(ban.getId(), UserService.convertToUserFrom(ban.getUser()), UserService.convertToUserFrom(ban.getBannedBy()), ban.getReason(), ban.getUntil(), ban.isActive());
+        return new Ban(ban.getId(), UserBridge.convertToUserFrom(ban.getUser()), UserBridge.convertToUserFrom(ban.getBannedBy()), ban.getReason(), ban.getUntil(), ban.isActive());
     }
 
-    static Collection<Ban> convertToBanCollectionFrom(Collection<BanEntity> entities) {
+    static Collection<Ban> convertToBanCollectionFrom(Collection<BanAggregate> entities) {
         Collection<Ban> bans = new ArrayList<>();
-        for (BanEntity ban : entities) {
+        for (BanAggregate ban : entities) {
             if (ban != null) {
                 bans.add(convertToBanFrom(ban));
             }

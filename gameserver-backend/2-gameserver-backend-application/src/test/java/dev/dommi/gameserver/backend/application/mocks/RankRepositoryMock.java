@@ -9,32 +9,32 @@ import java.util.Collection;
 
 public class RankRepositoryMock implements RankRepository {
     @Override
-    public Collection<RankVO> getAllRanks() throws SQLException {
-        return Arrays.asList(new RankVO(1,"User", 1));
+    public Collection<RankVO> getAllRanks() {
+        return Arrays.asList(new RankVO(1, "User", 1));
     }
 
     @Override
-    public RankVO getRankFrom(int userId) throws SQLException {
-        return new RankVO(1,"User", 1);
+    public RankVO getRankFrom(int userId) {
+        return new RankVO(1, "User", 1);
     }
 
     @Override
-    public int getRankIdFrom(String name) throws SQLException {
+    public int getRankIdFrom(String name) {
         return 1;
     }
 
     @Override
-    public void grantRank(int userId, int rankId) throws SQLException {
-
+    public boolean grantRank(int userId, int rankId) {
+        return true;
     }
 
     @Override
-    public void revokeRank(int userId, int rankId) throws SQLException {
-
+    public boolean revokeRank(int userId, int rankId) {
+        return true;
     }
 
     @Override
-    public void revokeAllRanks(int userId) throws SQLException {
-
+    public boolean revokeAllRanks(int userId) {
+        return true;
     }
 }
