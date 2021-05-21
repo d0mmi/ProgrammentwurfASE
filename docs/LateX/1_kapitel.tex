@@ -24,6 +24,7 @@
         Report                       & durch einen Report kann ein User einen anderen User zum Beispiel für einen Regelverstoß melden       \\ \hline
         Report Type                  & Gibt eine grobe Kategorie eines Reports an                                                           \\ \hline
         Rank / Rang                  & Der Rang des Users, verschiedene Ränge haben verschieden hohe Level, möglich: User, Moderator, Admin \\ \hline
+        Grant / Revoke Rank          & Einem User einen Rang geben bzw. seinen Rang wegnehmen                                               \\ \hline
         Moderator                    & Verwaltet User, User Reports und User Bans                                                           \\ \hline
         Admin                        & Verwaltet die Ränge der User                                                                         \\ \hline
         Ban                          & Wenn ein User gegen Regeln verstößt kann er gebannt werden und ist dadurch eine Zeit lang gesperrt   \\ \hline
@@ -67,8 +68,8 @@
 
 Value Objects wurden für die Ranks und ReportTypes verwendet, da diese rein auf ihre Werte reduziert werden können und über keine zusätzlichen Funktionen verfügen.
 Dadurch profitieren die Klassen von der Unveränderlichkeit, dies bedeutet das ein Objekt welches gültig konstruiert wurde danach nicht mehr ungültig werden kann.
+Zum Beispiel wird verhindert, dass das Rank Value Object ein Level kleiner als 0 oder einen Leeren Text als Namen gesetzt bekommt.
 Dadurch kann der Code weniger ungewollte Seiteneffekte erzeugen und ist leicht testbar.
-%% TODO Beispiel für Invariante
 
 
 \subsection{Entities}
@@ -95,12 +96,11 @@ Dadurch kann der Code weniger ungewollte Seiteneffekte erzeugen und ist leicht t
 %% Value Objects vs Entities
 %% http://prntscr.com/w4mgu2
 
-Für die User, Ranks, Reports und Bans wurden Entities angelegt,
+Für die User, Reports und Bans wurden Entities angelegt,
 da es für diese wichtig ist eine eindeutige ID zu besitzen und basierend auf dieser unterschieden zu werden.
 Im gegensatz zu den Value Objects haben die Entities einen Lebenszyklus und verändert ihre Werte während iherer Lebenszeit.
 Aber die Entity sorgt auch dafür, dass keine ungültigen Werte gesetzt werden und sie nicht in einen ungüligen Zustand versetzt werden kann.
 Zuletzt besitzen sie noch Methoden die verschiedenes Verhalten der Entities beschreiben.
-
 
 \subsection{Aggregates}
 
@@ -145,8 +145,14 @@ Zuletzt besitzen sie noch Methoden die verschiedenes Verhalten der Entities besc
 %% sichern Entity-/VO-übergreifende Domänenregeln zu
 %% Aggregate sind mächtig, aber auch schwierig
 
-Aggregate wurden keine verwendet, da die Komplexität der Entities und Value Objects nicht sehr hoch war.
-%% TODO mehr / implementieren
+Es wurden verschiedene Aggregate verwendet um die Abhängigkeiten zwischen verschiedenen Entities und Value Objects zu modellieren.
+Hierfür gruppieren die Aggregate die Entities und Value Objects zu gemeinsam verwalteten Einheiten.
+Dadurch reduzieren Aggregate die Komplexität der Beziehungen zwischen den Objekten.
+In jedem Aggregat übernimmt eine Entity die Rolle der Aggregate Root Entity beziehungsweise des Aggregat Root.
+Für das Aggregat bestehend aus UserEntity und Rank Value Object ist das Beispielsweise das UserRankAggregate.
+Zudem gibt es noch das Aggregat BanAggregate welches die Beziehung zwischen der BanEntity, der gebannten UserEntity, und der UserEntity die den Ban durchgeführt hat.
+Und zuletzt noch das ReportAggregate welches die Beziehung zwischen der ReportEntity, der reporteten UserEntity, und der UserEntity die den Report abgesendet hat.
+Die Aussenwelt muss eine Methode auf dem Aggregat Root aufrufen, wenn der innere Zustand verändert werden soll um dafür zu sogen, dass sein Zustand immer den Domänenregeln entspricht.
 
 \subsection{Repositories}
 
@@ -184,11 +190,14 @@ Aggregate wurden keine verwendet, da die Komplexität der Entities und Value Obj
 %% Adapter zwischen Anwendung und Datenbank
 
 Repositories wurden für User, Ranks, Reports und Bans angelegt.
+Sie stellen der Domäne Methoden bereit, um Aggregates aus dem Persistenzspeicher zu lesen, zu speichern und zu löschen.
+Die Repositories liefern dabei immer die Aggregate Roots und damit den Zugriff auf den Rest zurück.
 Dadurch erhält der Domain Code Zugriff auf den persistenten Speicher, deren Implementierung wird der Domäne aber verborgern und ist somit flexibler.
 Sie bilden eine Art Anti-Corruption-Layer zur Persistenzschicht und wurden im Datenbank-Adapter Implementiert.
 Ein großer Vorteil ergibt sich dadurch, dass in Zukunft auch weitere Adapter für zum Beispiel andere Datenbanken hinzugefügt oder der alte ausgetauscht werden können,
 ohne das der Domain Code davon beeinflusst wird.
-
+Die Repositories könnnen auch für Unit Tests leicht gemockt werden wie in den implementierten Tests zu sehen ist.
+Die Implementierung erfolgte in der technischen Schicht Plugin-Database.
 
 %% Factories 
 %% Factories haben nur einen einzigen Zweck:
@@ -231,15 +240,13 @@ ohne das der Domain Code davon beeinflusst wird.
 %% Jede konkrete Instanz des Domain Service kann verwendet werden (alt oder neu)
 %% Er darf aber (global sichtbare) Seiteneffekte haben
 
-Domain Services wurden auch keine verwendet, da es kein Domänenweites komplexes Verhalten gab, welches nicht in Entities oder Value Objects abgebildet werden konnte.
-
-%% Einbauen, z.B für Rechte prüfung? / für sonstige Logik?
-
-
-%% Mehr Interfaces in domain welche in Applikation implementiert werden?
-
-
-
+Es wurden auch diverse Domain Services implementiert wobei auch die beiden Haupteinsatzzwecke abgebildet wurden.
+Für das Abbildung von komplexem Verhalten, wie zum Beispiel Regeln der Problemdomäne, welche nicht eindeutig einer bestimmten Entity oder einem bestimmten Value Object zugeordnet werden können
+wurde zum Beispiel ein CredentialService erstellt welcher für das Einhalten der Namens-, Email- und Passwortkonventionen in der Domäne sorgt.
+Der andere Einsatzzweck welcher die Definition eines Erfüllungs-Vertrages für externe Dienste beschreibt wurde zum Beispiel im AuthService abgebildet.
+Dieser bietet in einem Interface die Funktion an, das Passwort eines Users zu verifizieren, dabei ist die Domäne aber nicht von der technischen Implementierung abhängig,
+wodurch dieses Verhalten in Zukunft eine andere Implementierung erhalten kann ohne die Domäne zu beeinflussen.
+Wichtig zu beachten ist noch das diese Services selbst zustandslos sind.
 
 
 %% Zusammenfassung
