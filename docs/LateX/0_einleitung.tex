@@ -4,8 +4,11 @@
 
 In diesem Programmentwurf wurde ein User Verwaltungs System Backend für einen beliebigen Game Server entworfen.
 Das bedeutet dieses System soll auf die Datenbank eines Game Servers mit Usern zugreifen und diese über eine API Schnittstelle verwalten.
+Um das testen zu vereinfachen werden beim ersten starten der Anwendung ein initialer root Admin User und 3 Beispiel Ränge angelegt.
+Die Login Daten des root Users stehen in der docker-compose Datei.
 Es wurde auch ein simples UI entworfen um die Funktionalität der API Schnittstelle einfacher überprüfen zu können.
 Dieses UI gehört aber nicht zum eigentlichen Programmentwurf und sollte daher als von der Bewertung ausgeschlossen betrachtet werden.
+In diesem UI werden nur die Funktionen angezeigt für die der User auch genügend Rechte hat, daher sieht man als Nicht-Admin nicht alle Funktionen des UIs.
 
 \section{Installation}
 
@@ -33,8 +36,9 @@ Stoppen + alles löschen: docker-compose down --volumes
 \newline
 
 Nach dem starten sollte gewartet werden bis in der Console der Datenbank steht: mysqld: ready for connections.
+Dadurch kann sichergagangen werden, dass das sich Backend erfolgreich mit der Datenbank verbinden kann.
 
-
+\subsection{Benutzen der Anwendung}
 
 Default Admin User: email: root@example.com pw: example
 

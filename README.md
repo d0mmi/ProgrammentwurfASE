@@ -7,14 +7,11 @@ Programmentwurf für die Vorlesung Advanced Software Engineering
     - Default Admin
 	- Admin: Moderator Features + manage Ranks
 	- Moderator: Player Features + edit players + bann players
-	- Player:  edit own info, report players, (WIP: add friends, manage guilds)
+	- Player:  edit own info, report players
 - Reports
 - Banns
 - User Management
 
-## Planned Features:
-- Friends
-- Guilds
 
 ## Running the Project:
 
@@ -28,3 +25,8 @@ Programmentwurf für die Vorlesung Advanced Software Engineering
 - First time build + run "docker-compose -f docker-compose.prod.yml up --build"
 - After first time run "docker-compose -f docker-compose.prod.yml start"
 - To remove it run "docker-compose -f docker-compose.prod.yml down --volumes"
+
+
+## Dokumentation:
+
+Get the PDF [here](https://raw.githubusercontent.com/d0mmi/ProgrammentwurfASE/main/docs/LateX/bericht.pdf)
