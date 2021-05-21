@@ -1,27 +1,37 @@
 package dev.dommi.gameserver.backend.application.ban;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
-import dev.dommi.gameserver.backend.domain.services.BanService;
+import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
+import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
+import dev.dommi.gameserver.backend.domain.services.ban.BanService;
+import dev.dommi.gameserver.backend.domain.services.ban.CheckBanService;
+
+import java.util.Date;
 
 
-public class CheckUserBan {
+public class CheckUserBan implements CheckBanService {
 
-    private final BanService banService;
+    private final UserRepository userRepository;
+    private final BanRepository banRepository;
 
-    public CheckUserBan(BanService banService) {
-        this.banService = banService;
+    public CheckUserBan(UserRepository userRepository, BanRepository banRepository) {
+        this.userRepository = userRepository;
+        this.banRepository = banRepository;
     }
 
-    private boolean isBanned(UserEntity user) {
-        return banService.isUserBanned(user);
+
+    public boolean isUserBanned(String email) {
+        return isUserBanned(userRepository.findByEmail(email));
     }
 
-    public boolean isBanned(String email) {
-        return banService.isUserBanned(email);
+    public boolean isUserBanned(int userId) {
+        return isUserBanned(userRepository.findById(userId));
     }
 
-    public boolean isBanned(int userId) {
-        return banService.isUserBanned(userId);
+    @Override
+    public boolean isUserBanned(UserRankAggregate user) {
+        if (user == null) return true;
+        return !banRepository.findAllByUserAndDate(user.getUserId(), new Date()).isEmpty();
     }
-
 }

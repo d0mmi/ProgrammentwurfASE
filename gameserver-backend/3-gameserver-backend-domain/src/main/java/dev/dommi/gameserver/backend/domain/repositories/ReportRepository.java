@@ -19,7 +19,7 @@ public interface ReportRepository {
 
     int getReportTypeIdByName(String name);
 
-    boolean reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId);
+    boolean create(int creatorId, int reportedUserId, String reason, int reportTypeId);
 
     boolean update(ReportAggregate report);
 

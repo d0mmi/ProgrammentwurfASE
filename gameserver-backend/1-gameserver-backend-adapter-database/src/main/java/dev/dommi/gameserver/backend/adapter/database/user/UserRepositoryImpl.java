@@ -27,11 +27,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean verifyPasswordByEmail(String email, String pw) {
-        return controller.verifyPasswordByEmail(email, pw);
-    }
-
-    @Override
     public Collection<UserRankAggregate> getAll() {
         Collection<User> users = controller.findAll();
         return convertCollection(users);
@@ -43,14 +38,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean changePassword(int id, String oldPassword, String newPassword) {
-        return controller.changePassword(id, oldPassword, newPassword);
-    }
-
-    @Override
     public UserRankAggregate findByEmail(String email) {
         User user = controller.findByEmail(email);
-        if(user == null) return null;
+        if (user == null) return null;
         Rank rank = rankController.getRankFrom(user.id);
         return UserMapper.getUserRankAggregateFrom(user, rank);
     }

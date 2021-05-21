@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
 import dev.dommi.gameserver.backend.adapter.api.user.UserBridge;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
+import dev.dommi.gameserver.backend.domain.services.auth.ChangePasswordService;
 import dev.dommi.gameserver.backend.plugin.api.auth.AppRole;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTProvider;
 import dev.dommi.gameserver.backend.plugin.api.auth.JWTSecretMissingException;
@@ -26,8 +27,8 @@ public class UserController {
     static final String USER_ID = "userId";
     private final UserBridge userBridge;
 
-    public UserController(UserRepository userRepository) {
-        userBridge = new UserBridge(userRepository);
+    public UserController(UserRepository userRepository, ChangePasswordService changePasswordService) {
+        userBridge = new UserBridge(userRepository, changePasswordService);
     }
 
     @OpenApi(

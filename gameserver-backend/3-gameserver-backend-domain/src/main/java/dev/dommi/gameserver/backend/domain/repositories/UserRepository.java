@@ -9,13 +9,9 @@ public interface UserRepository {
 
     boolean create(String name, String email, String pw);
 
-    boolean verifyPasswordByEmail(String email, String pw);
-
     Collection<UserRankAggregate> getAll();
 
     boolean update(UserRankAggregate user);
-
-    boolean changePassword(int id, String oldPassword, String newPassword);
 
     UserRankAggregate findByEmail(String email);
 

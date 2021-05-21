@@ -1,13 +1,13 @@
-package dev.dommi.gameserver.backend.application.login;
+package dev.dommi.gameserver.backend.application.auth;
 
+import dev.dommi.gameserver.backend.application.rank.RankServiceImpl;
 import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
+import dev.dommi.gameserver.backend.domain.entities.RankType;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
-import dev.dommi.gameserver.backend.domain.entities.RankType;
 import dev.dommi.gameserver.backend.domain.services.CredentialService;
 
 public class RegisterUser {
-
 
     private final UserRepository userRepository;
     private final RankRepository rankRepository;
@@ -19,11 +19,12 @@ public class RegisterUser {
 
     public boolean registerUser(String name, String email, String pw) {
         CredentialService credentialService = new CredentialService();
-        if (credentialService.isNameValid(name) && credentialService.isEmailValid(email) && !credentialService.isEmailInUse(userRepository, email) && credentialService.isPasswordValid(pw)) {
+        if (credentialService.isNameValid(name) && credentialService.isEmailValid(email) && userRepository.findByEmail(email) == null && credentialService.isPasswordValid(pw)) {
             userRepository.create(name, email, pw);
             UserRankAggregate user = userRepository.findByEmail(email);
             if (user != null) {
-                return user.grantRank(RankType.USER, rankRepository);
+                new RankServiceImpl(rankRepository, userRepository).grantRankTo(user, RankType.USER);
+                return true;
             }
         }
         return false;

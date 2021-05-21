@@ -1,9 +1,8 @@
-package dev.dommi.gameserver.backend.application.login;
+package dev.dommi.gameserver.backend.application.auth;
 
 import dev.dommi.gameserver.backend.application.mocks.RankRepositoryMock;
 import dev.dommi.gameserver.backend.application.mocks.UserRepositoryMock;
 import org.junit.jupiter.api.Test;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -16,20 +16,11 @@ public class UserEntityTests {
         RankVO old = new RankVO(2, "oldRank", 50);
         UserRankAggregate aggregate = new UserRankAggregate(entity, old);
 
-        aggregate.grantRank(1, new RankRepositoryMock());
+        aggregate.grantRank(new RankVO(3, "newRank", 33));
 
+        assertNotEquals(old.getId(), aggregate.getRankId());
         assertNotEquals(old.getName(), aggregate.getRankName());
-    }
-
-    @Test
-    public void revokeRankTest() {
-        UserEntity entity = new UserEntity(1, "TestUser", "test@example.com");
-        RankVO old = new RankVO(2, "oldRank", 50);
-        UserRankAggregate aggregate = new UserRankAggregate(entity, old);
-
-        aggregate.revokeRank(new RankRepositoryMock());
-
-        assertNotEquals(aggregate.getRankName(), old.getName());
+        assertNotEquals(old.getLevel(), aggregate.getRankLevel());
     }
 
     @Test

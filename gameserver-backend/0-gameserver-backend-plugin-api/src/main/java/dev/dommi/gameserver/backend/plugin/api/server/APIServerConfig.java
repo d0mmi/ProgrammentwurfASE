@@ -20,6 +20,8 @@ import dev.dommi.gameserver.backend.plugin.api.services.user.UserController;
 import dev.dommi.gameserver.backend.plugin.database.ban.BanDatabaseControllerImpl;
 import dev.dommi.gameserver.backend.plugin.database.rank.RankDatabaseControllerImpl;
 import dev.dommi.gameserver.backend.plugin.database.report.ReportDatabaseControllerImpl;
+import dev.dommi.gameserver.backend.plugin.database.user.AuthServiceImpl;
+import dev.dommi.gameserver.backend.plugin.database.user.ChangePasswordServiceImpl;
 import dev.dommi.gameserver.backend.plugin.database.user.UserDatabaseControllerImpl;
 
 public class APIServerConfig {
@@ -53,18 +55,18 @@ public class APIServerConfig {
         BanDatabaseController banDatabaseController = new BanDatabaseControllerImpl();
         RankDatabaseController rankDatabaseController = new RankDatabaseControllerImpl();
         ReportDatabaseController reportDatabaseController = new ReportDatabaseControllerImpl();
-        UserDatabaseController userDatabaseController = new UserDatabaseControllerImpl();
+        UserDatabaseControllerImpl userDatabaseController = new UserDatabaseControllerImpl();
 
         UserRepository userRepository = new UserRepositoryImpl(userDatabaseController, rankDatabaseController);
         RankRepository rankRepository = new RankRepositoryImpl(rankDatabaseController);
         ReportRepository reportRepository = new ReportRepositoryImpl(reportDatabaseController, userDatabaseController);
         BanRepository banRepository = new BanRepositoryImpl(banDatabaseController, userDatabaseController);
 
-        LoginController loginController = new LoginController(userRepository, rankRepository, banRepository);
+        LoginController loginController = new LoginController(userRepository, rankRepository, banRepository, new AuthServiceImpl(userDatabaseController));
         BanController banController = new BanController(banRepository, userRepository);
         RankController rankController = new RankController(rankRepository, userRepository);
         ReportController reportController = new ReportController(userRepository, reportRepository);
-        UserController userController = new UserController(userRepository);
+        UserController userController = new UserController(userRepository, new ChangePasswordServiceImpl(userDatabaseController));
 
         return new APIServerConfig(Integer.parseInt(System.getenv(API_PORT)), loginController, banController, rankController, reportController, userController);
     }

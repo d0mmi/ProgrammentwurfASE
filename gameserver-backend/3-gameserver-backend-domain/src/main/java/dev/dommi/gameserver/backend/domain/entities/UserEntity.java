@@ -1,6 +1,5 @@
 package dev.dommi.gameserver.backend.domain.entities;
 
-import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
 import dev.dommi.gameserver.backend.domain.services.CredentialService;
 
 
@@ -36,11 +35,6 @@ public class UserEntity {
             return true;
         }
         return false;
-    }
-
-    public boolean reportUser(int reportedUserId, String reason, int reportTypeId, ReportRepository reportRepository) {
-        if (id == reportedUserId || (reason == null || reason.length() < 1)) return false;
-        return reportRepository.reportUser(id, reportedUserId, reason, reportTypeId);
     }
 
     public UserEntity copy() {

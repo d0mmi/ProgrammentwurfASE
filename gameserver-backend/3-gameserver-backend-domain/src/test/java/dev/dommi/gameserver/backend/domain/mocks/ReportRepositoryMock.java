@@ -33,7 +33,7 @@ public class ReportRepositoryMock implements ReportRepository {
     }
 
     @Override
-    public boolean reportUser(int creatorId, int reportedUserId, String reason, int reportTypeId) {
+    public boolean create(int creatorId, int reportedUserId, String reason, int reportTypeId) {
         return true;
     }
 

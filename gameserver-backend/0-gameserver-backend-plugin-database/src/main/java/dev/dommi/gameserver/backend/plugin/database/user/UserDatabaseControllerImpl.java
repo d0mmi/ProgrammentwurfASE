@@ -20,21 +20,7 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
         wrapper = new UserTableWrapper(MariaDBConnector.getInstance());
     }
 
-    @Override
-    public boolean verifyPasswordByEmail(String email, String pw) {
-
-        String password;
-        try {
-            password = wrapper.findByEmail(email).pw;
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            return false;
-        }
-
-        return checkPassword(password, pw);
-    }
-
-    private boolean checkPassword(String encryptedPassword, String password) {
+    public boolean checkPassword(String encryptedPassword, String password) {
         return BCrypt.verifyer().verify(password.toCharArray(), encryptedPassword).verified;
     }
 
@@ -91,7 +77,7 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
         return false;
     }
 
-    private String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         return BCrypt.withDefaults().hashToString(Integer.parseInt(System.getenv(BCRYPT_COST)), password.toCharArray());
     }
 
@@ -106,17 +92,4 @@ public class UserDatabaseControllerImpl implements UserDatabaseController {
         return false;
     }
 
-    @Override
-    public boolean changePassword(int id, String oldPassword, String newPassword) {
-        try {
-            User user = wrapper.findById(id);
-            if (checkPassword(user.pw, oldPassword)) {
-                wrapper.update(new User(id, null, null, encryptPassword(newPassword)));
-                return true;
-            }
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return false;
-    }
 }

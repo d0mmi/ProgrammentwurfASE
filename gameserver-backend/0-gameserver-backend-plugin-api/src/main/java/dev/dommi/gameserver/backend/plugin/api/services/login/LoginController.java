@@ -4,7 +4,8 @@ package dev.dommi.gameserver.backend.plugin.api.services.login;
 import dev.dommi.gameserver.backend.adapter.api.ban.BanBridge;
 import dev.dommi.gameserver.backend.adapter.api.login.LoginBridge;
 import dev.dommi.gameserver.backend.adapter.api.user.User;
-import dev.dommi.gameserver.backend.application.login.InvalidCredentialsException;
+import dev.dommi.gameserver.backend.domain.services.auth.AuthService;
+import dev.dommi.gameserver.backend.domain.services.auth.InvalidCredentialsException;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
@@ -23,8 +24,8 @@ public class LoginController {
     private final LoginBridge loginBridge;
     private final BanBridge banBridge;
 
-    public LoginController(UserRepository userRepository, RankRepository rankRepository, BanRepository banRepository) {
-        loginBridge = new LoginBridge(userRepository, rankRepository);
+    public LoginController(UserRepository userRepository, RankRepository rankRepository, BanRepository banRepository, AuthService authService) {
+        loginBridge = new LoginBridge(authService, userRepository, rankRepository);
         banBridge = new BanBridge(banRepository, userRepository);
     }
 

@@ -42,6 +42,10 @@ public class UserRankTableWrapper extends TableWrapper<UserRank> {
         Query.of("INSERT INTO " + tableName + " (userId, rankId) VALUES (:userId, :rankId)").on(Param.value("userId", value.userId), Param.value("rankId", value.rankId)).execute(conn.getConnection());
     }
 
+    public UserRank findByUserAndRank(int userId, int rankId) throws SQLException {
+        return Query.of("SELECT * FROM " + tableName + " WHERE userId = :userId AND rankId = :rankId").on(Param.value("userId", userId),Param.value("rankId", rankId)).as(parse().singleNull(), conn.getConnection());
+    }
+
     public UserRank findByUserId(int userId) throws SQLException {
         return Query.of("SELECT * FROM " + tableName + " WHERE userId = :userId").on(Param.value("userId", userId)).as(parse().singleNull(), conn.getConnection());
     }

@@ -34,45 +34,35 @@ public class RankDatabaseControllerImpl implements RankDatabaseController {
     }
 
     @Override
-    public int getRankIdFrom(String name) {
+    public Rank getRankFrom(String name) {
         try {
-            return rankWrapper.findByName(name).id;
+            return rankWrapper.findByName(name);
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
-        return -1;
+        return null;
     }
 
     @Override
-    public boolean grantRank(int userId, int rankId) {
+    public boolean update(int userId, int rankId) {
+
         try {
-            userRankWrapper.create(new UserRank(userId, rankId));
+            UserRank userRank = userRankWrapper.findByUserAndRank(userId, rankId);
+            if (userRank != null) return false;
+            userRank = userRankWrapper.findByUserId(userId);
+
+            if (userRank == null) {
+                userRankWrapper.create(new UserRank(userId, rankId));
+            } else {
+                userRank.rankId = rankId;
+                userRankWrapper.update(userRank);
+            }
             return true;
         } catch (SQLException e) {
             logger.severe(e.getMessage());
         }
-        return false;
-    }
 
-    @Override
-    public boolean revokeRank(int userId, int rankId) {
-        try {
-            userRankWrapper.deleteRankByUserId(userId, rankId);
-            return true;
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
-        return false;
-    }
 
-    @Override
-    public boolean revokeAllRanks(int userId) {
-        try {
-            userRankWrapper.deleteByUserId(userId);
-            return true;
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
         return false;
     }
 

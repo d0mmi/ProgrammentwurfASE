@@ -11,10 +11,6 @@ public class UserRepositoryMock implements UserRepository {
         return true;
     }
 
-    @Override
-    public boolean verifyPasswordByEmail(String email, String pw) {
-        return false;
-    }
 
     @Override
     public Collection<UserRankAggregate> getAll() {
@@ -24,11 +20,6 @@ public class UserRepositoryMock implements UserRepository {
     @Override
     public boolean update(UserRankAggregate user) {
         return true;
-    }
-
-    @Override
-    public boolean changePassword(int id, String oldPassword, String newPassword) {
-        return false;
     }
 
     @Override

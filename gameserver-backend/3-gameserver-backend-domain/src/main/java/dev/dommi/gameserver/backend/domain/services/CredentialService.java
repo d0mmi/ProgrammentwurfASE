@@ -1,7 +1,5 @@
 package dev.dommi.gameserver.backend.domain.services;
 
-import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
-
 
 public class CredentialService {
 
@@ -16,10 +14,6 @@ public class CredentialService {
 
     public boolean isEmailValid(String email) {
         return email.matches(EMAIL_REGEX);
-    }
-
-    public boolean isEmailInUse(UserRepository userRepository, String email) {
-        return userRepository.findByEmail(email) != null;
     }
 
     public boolean isPasswordValid(String password) {

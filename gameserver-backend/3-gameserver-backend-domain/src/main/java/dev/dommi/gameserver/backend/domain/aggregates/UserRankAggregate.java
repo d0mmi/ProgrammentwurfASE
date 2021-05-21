@@ -1,10 +1,6 @@
 package dev.dommi.gameserver.backend.domain.aggregates;
 
-import dev.dommi.gameserver.backend.domain.entities.RankType;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
-import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
-import dev.dommi.gameserver.backend.domain.repositories.ReportRepository;
-import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 
 public class UserRankAggregate {
@@ -45,30 +41,8 @@ public class UserRankAggregate {
         return userEntity.modify(name, email);
     }
 
-    public boolean reportUser(int reportedUserId, String reason, int reportTypeId, ReportRepository reportRepository) {
-        return userEntity.reportUser(reportedUserId, reason, reportTypeId, reportRepository);
-    }
-
-    public boolean grantRank(RankType rank, RankRepository rankRepository) {
-        return grantRank(rankRepository.getRankIdFrom(rank.value), rankRepository);
-    }
-
-    public boolean grantRank(int rankId, RankRepository rankRepository) {
-        if (rankRepository.revokeAllRanks(userEntity.getId())) {
-            if (rankRepository.grantRank(userEntity.getId(), rankId)) {
-                rankVO = rankRepository.getRankFrom(userEntity.getId());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean revokeRank(RankRepository rankRepository) {
-        if (rankVO.getName().equalsIgnoreCase(RankType.USER.value)) return false;
-        int rankId = rankRepository.getRankIdFrom(RankType.USER.value);
-        if (rankId > -1)
-            return grantRank(rankId, rankRepository);
-        return false;
+    public void grantRank(RankVO rank) {
+        this.rankVO = rank;
     }
 
 }

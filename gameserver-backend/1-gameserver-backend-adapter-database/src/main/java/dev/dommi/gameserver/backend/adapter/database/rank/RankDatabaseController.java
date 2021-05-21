@@ -6,9 +6,9 @@ import dev.dommi.gameserver.backend.adapter.database.DatabaseController;
 public interface RankDatabaseController extends DatabaseController<Rank> {
 
     Rank getRankFrom(int userId);
-    int getRankIdFrom(String name);
-    boolean grantRank(int userId, int rankId);
-    boolean revokeRank(int userId, int rankId);
-    boolean revokeAllRanks(int userId);
+
+    Rank getRankFrom(String name);
+
+    boolean update(int userId, int rankId);
 
 }

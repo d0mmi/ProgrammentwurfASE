@@ -7,6 +7,7 @@ import dev.dommi.gameserver.backend.application.user.UserNotFoundException;
 import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.entities.UserEntity;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
+import dev.dommi.gameserver.backend.domain.services.auth.ChangePasswordService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,9 +21,9 @@ public class UserBridge {
     private final ModifyUser modifyUser;
     private final GetUser getUser;
 
-    public UserBridge(UserRepository userRepository) {
+    public UserBridge(UserRepository userRepository, ChangePasswordService changePasswordService) {
         getAllUsers = new GetAllUsers(userRepository);
-        modifyUser = new ModifyUser(userRepository);
+        modifyUser = new ModifyUser(userRepository, changePasswordService);
         getUser = new GetUser(userRepository);
     }
 

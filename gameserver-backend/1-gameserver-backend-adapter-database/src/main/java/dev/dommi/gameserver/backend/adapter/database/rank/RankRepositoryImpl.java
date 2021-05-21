@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.adapter.database.rank;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 
@@ -24,23 +25,12 @@ public class RankRepositoryImpl implements RankRepository {
     }
 
     @Override
-    public int getRankIdFrom(String name) {
-        return controller.getRankIdFrom(name);
+    public RankVO getRankFrom(String name) {
+        return RankMapper.getRankVOFrom(controller.getRankFrom(name));
     }
 
     @Override
-    public boolean grantRank(int userId, int rankId) {
-        return controller.grantRank(userId, rankId);
+    public boolean update(UserRankAggregate user) {
+        return controller.update(user.getUserId(), user.getRankId());
     }
-
-    @Override
-    public boolean revokeRank(int userId, int rankId) {
-        return controller.revokeRank(userId, rankId);
-    }
-
-    @Override
-    public boolean revokeAllRanks(int userId) {
-        return controller.revokeAllRanks(userId);
-    }
-
 }

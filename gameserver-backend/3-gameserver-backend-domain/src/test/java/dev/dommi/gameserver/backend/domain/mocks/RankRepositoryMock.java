@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.domain.mocks;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.repositories.RankRepository;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 
@@ -13,26 +14,16 @@ public class RankRepositoryMock implements RankRepository {
 
     @Override
     public RankVO getRankFrom(int userId) {
-        return new RankVO(1,"test", 1);
+        return new RankVO(1, "test", 1);
     }
 
     @Override
-    public int getRankIdFrom(String name) {
-        return 1;
+    public RankVO getRankFrom(String name) {
+        return new RankVO(1, name, 0);
     }
 
     @Override
-    public boolean grantRank(int userId, int rankId) {
-        return  true;
-    }
-
-    @Override
-    public boolean revokeRank(int userId, int rankId) {
-        return  true;
-    }
-
-    @Override
-    public boolean revokeAllRanks(int userId) {
-        return  true;
+    public boolean update(UserRankAggregate user) {
+        return true;
     }
 }

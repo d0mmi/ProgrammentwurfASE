@@ -6,10 +6,9 @@ import dev.dommi.gameserver.backend.application.ban.CheckUserBan;
 import dev.dommi.gameserver.backend.application.ban.GetAllBans;
 import dev.dommi.gameserver.backend.application.ban.UpdateBan;
 import dev.dommi.gameserver.backend.domain.aggregates.BanAggregate;
-import dev.dommi.gameserver.backend.domain.entities.BanEntity;
 import dev.dommi.gameserver.backend.domain.repositories.BanRepository;
 import dev.dommi.gameserver.backend.domain.repositories.UserRepository;
-import dev.dommi.gameserver.backend.domain.services.BanService;
+import dev.dommi.gameserver.backend.domain.services.ban.BanService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,9 +21,9 @@ public class BanBridge {
     private final GetAllBans getAllBans;
 
     public BanBridge(BanRepository banRepository, UserRepository userRepository) {
-        banUser = new BanUser(new BanService(userRepository,banRepository));
+        banUser = new BanUser(userRepository, banRepository);
         updateBan = new UpdateBan(banRepository);
-        checkUserBan = new CheckUserBan(new BanService(userRepository,banRepository));
+        checkUserBan = new CheckUserBan(userRepository, banRepository);
         getAllBans = new GetAllBans(banRepository);
     }
 
@@ -37,11 +36,11 @@ public class BanBridge {
     }
 
     public boolean isUserBanned(int userId) {
-        return checkUserBan.isBanned(userId);
+        return checkUserBan.isUserBanned(userId);
     }
 
     public boolean isUserBanned(String email) {
-        return checkUserBan.isBanned(email);
+        return checkUserBan.isUserBanned(email);
     }
 
     public Ban getOne(int id) {

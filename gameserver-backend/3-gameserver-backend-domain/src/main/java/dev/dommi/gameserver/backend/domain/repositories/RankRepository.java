@@ -1,5 +1,6 @@
 package dev.dommi.gameserver.backend.domain.repositories;
 
+import dev.dommi.gameserver.backend.domain.aggregates.UserRankAggregate;
 import dev.dommi.gameserver.backend.domain.valueobjects.RankVO;
 
 import java.util.Collection;
@@ -10,12 +11,8 @@ public interface RankRepository {
 
     RankVO getRankFrom(int userId);
 
-    int getRankIdFrom(String name);
+    RankVO getRankFrom(String name);
 
-    boolean grantRank(int userId, int rankId);
-
-    boolean revokeRank(int userId, int rankId);
-
-    boolean revokeAllRanks(int userId);
+    boolean update(UserRankAggregate user);
 
 }

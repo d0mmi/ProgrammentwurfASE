@@ -1,4 +1,4 @@
-package dev.dommi.gameserver.backend.application.login;
+package dev.dommi.gameserver.backend.domain.services.auth;
 
 public class InvalidCredentialsException extends Exception{
     public InvalidCredentialsException(){
