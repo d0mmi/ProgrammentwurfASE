@@ -20,14 +20,14 @@ Zudem konnten durch das aufteilen einfacher sinnvolle Namen für die Methoden de
 
 
 Commit zum Refactoring: 04e489aab4cc16ecb07dde6ed08f51ef80c86231
-
+\newpage
 \section{Duplicated Code}
 
 \subsection{Identifizierung}
 
 Ein weiterer Code Smell ist Duplicated Code, dieser wurde in der update Methode der diversen TableWraper Klassen in der Plugin-Database-Schicht gefunden.
 Allgemein ist es der wichtigste Code Smell da er am häufigsten vorkommt und meistens durch Unwissenheit entsteht.
-Dabei ist die gleiche Code-Struktur an mehr als einerStelle im Code vorhanden.
+Dabei ist die gleiche Code-Struktur an mehr als einer Stelle im Code vorhanden.
 Das bedeutet die gleiche Anweisung kommt mehrfach in einer Methode oder Klasse vor oder der ähnliche Code verteilt sich auf mehreren Methoden oder Klassen.
 In meinem Fall wurde in fast allen Klassen auf die selbe Art ein SQL String gebaut, dies könnte aber auch an einer anderen Stelle einmalig für alle implementiert werden.
 
