@@ -10,8 +10,12 @@ public class UserEntity {
     private String email;
 
     public UserEntity(int id, String name, String email) {
+        if (id < 0 && id != -1) throw new IllegalArgumentException("id must be >= 0 or -1 to count as not set");
         this.id = id;
+        CredentialService credentialService = new CredentialService();
+        if (!credentialService.isNameValid(name)) throw new IllegalArgumentException("name is invalid");
         this.name = name;
+        if (!credentialService.isEmailValid(email)) throw new IllegalArgumentException("email is invalid");
         this.email = email;
     }
 

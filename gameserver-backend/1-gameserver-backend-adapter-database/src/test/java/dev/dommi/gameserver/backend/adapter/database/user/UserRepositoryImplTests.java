@@ -18,7 +18,7 @@ public class UserRepositoryImplTests {
 
 
         User user = new User(1, "TestUser", "test@example.com", "pw");
-        UserRankAggregate aggregate = UserMapper.getUserRankAggregateFrom(user, new Rank(1, "", 50));
+        UserRankAggregate aggregate = UserMapper.getUserRankAggregateFrom(user, new Rank(1, "test", 50));
 
         assertNotNull(aggregate);
         assertEquals(user.id, aggregate.getUserId());
@@ -34,7 +34,7 @@ public class UserRepositoryImplTests {
         for (int i = 0; i < users.size(); i++) {
             User user = (User) users.toArray()[i];
 
-            UserRankAggregate aggregate = UserMapper.getUserRankAggregateFrom(user, new Rank(1, "", 50));
+            UserRankAggregate aggregate = UserMapper.getUserRankAggregateFrom(user, new Rank(1, "test", 50));
 
             assertNotNull(aggregate);
             assertEquals(user.id, aggregate.getUserId());

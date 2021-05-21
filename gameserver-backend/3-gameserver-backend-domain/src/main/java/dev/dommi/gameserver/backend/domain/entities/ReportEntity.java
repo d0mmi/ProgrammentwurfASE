@@ -7,7 +7,9 @@ public class ReportEntity {
     private boolean open;
 
     public ReportEntity(int id, String reason, boolean open) {
+        if (id < 0 && id != -1) throw new IllegalArgumentException("id must be >= 0 or -1 to count as not set");
         this.id = id;
+        if (!checkReason(reason)) throw new IllegalArgumentException("reason is invalid");
         this.reason = reason;
         this.open = open;
     }
@@ -30,6 +32,10 @@ public class ReportEntity {
             return true;
         }
         return false;
+    }
+
+    private boolean checkReason(String reason) {
+        return reason != null && reason.length() > 0;
     }
 
 }

@@ -11,7 +11,7 @@ public class ReportEntityTests {
 
     @Test
     public void updateStatusTest() throws SQLException {
-        ReportEntity entity = new ReportEntity(0, "", true);
+        ReportEntity entity = new ReportEntity(0, "testReason", true);
         entity.updateStatus(false);
         assertFalse(entity.isOpen());
     }

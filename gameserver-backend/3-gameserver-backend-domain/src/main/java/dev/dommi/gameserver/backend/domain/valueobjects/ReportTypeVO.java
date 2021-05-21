@@ -7,7 +7,9 @@ public class ReportTypeVO {
     private final String name;
 
     public ReportTypeVO(int id, String name) {
+        if (id < 0 && id != -1) throw new IllegalArgumentException("id must be >= 0 or -1 to count as not set");
         this.id = id;
+        if (name.length() < 1) throw new IllegalArgumentException("name length must be >= 1");
         this.name = name;
     }
 
