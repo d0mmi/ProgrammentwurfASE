@@ -6,18 +6,18 @@
 
 Das Singleton wurde für die beiden Klassen MariaDBConnector und JWTProvider eingesetzt.
 Hierbei wurde eine Lazy Instantiation eingesetzt da dadurch die Systemstartzeit nicht verlängert wird.
-Es wurde keine Synchronized Lazy Instantiation eingesetzt, da sowieso alles auf dem Selben Thread läuft.
+Es wurde keine Synchronized Lazy Instantiation eingesetzt, da sowieso alles auf dem selben Thread läuft.
 
 \subsection{Einsatz begründen}
 
 Das Singleton kam zum Einsatz da es gerantiert,
-dass systemweit nur eine Instanz vorhanden ist und es nur eine einheitliche aktive Datenbank Verbindung geben soll.
+dass Systemweit nur eine Instanz vorhanden ist und es zum nur eine einheitliche aktive Datenbank Verbindung und eine JWTProvider Instanz geben soll.
 Zudem benötigt das System auch nur eine globale Instanz des JWTProvider.
 Weiterhin ermöglicht es einen einfachen Zugriff auf diese Instanz, ist einfach zu verstehen und anzuwenden.
 Und eine Instanz wird auch nur angelegt wenn diese auch benötigt wird.
 Durch das Singleton gibt es zwar keine Möglichkeiten für polymorpe Aufrufe mehr aber diese werden in diesem Fall auch nicht benötigt.
 
-
+\newpage
 \subsection{UML}
 
 

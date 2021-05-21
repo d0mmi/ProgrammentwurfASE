@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ReportRepositoryImplTests {
+public class ReportMapperTests {
 
     @Test
     public void convertToReportEntityFromTest() {

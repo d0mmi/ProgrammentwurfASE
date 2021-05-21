@@ -20,9 +20,9 @@
 
 \subsection{Single Responsibility Principle}
 Das Single Responsibility Principle sagt aus, dass eine Klasse nur eine Zuständigkeit haben sollte.
-Somit hat jede Klasse eine klar definierte Aufgabe und es entsteht eine niedrige Komplexität des Codes.
+Somit hat jede Klasse eine klar definierte Aufgabe und es entsteht eine niedrige Komplexität und Kopplung des Codes.
 Und um so niedriger die Komplexität des Codes desto besser lässt er sich warten und erweitern.
-Angewendet wurde das vor allem in den Klassen der Application-Schicht, denn hier wurde für jede Anfrage eine eigene Klasse erstellt.
+Angewendet wurde das vor allem in den Klassen der Application-Schicht, denn hier wurden für die Anfragen verschiedene Klassen erstellt.
 Die Klasse LoginUser bzw. RegisterUser kümmern sich zum Beispiel nur um den Login bzw. die Registrierung der User.
 Ein weiteres Beispiel wäre die Klasse ReportUser, da diese nur für die Report Anfrage zuständig ist.
 
@@ -45,10 +45,12 @@ Durch das Open Closed Principle wird die Software offen für Erweiterungen aber 
 Das bedeutet der Code wird nur durch Vererbung bzw. Implementierung von Interfaces erweitert.
 Dies führt dazu das bestehender Code nicht geändert wird, wodurch die Anwendung für eine gute kompatibilität über die Versionen sorgt.
 Hierbei ist es wichtig viele Abstraktionen zu nutzen um die Erweiterbarkeit zu fördern.
-Dieses Prinzip wurde nicht sehr viel angewendet, aber passend zu diesem Prinzip sind die Repository Interfaces welche auf verschiedene Arten implementiert werden können.
+Dieses Prinzip wurde hauptsächllich für die Interfaces im Domaincode angewendet, zum einen mit den Repository Interfaces aber auch durch die Domain Service Interfaces
+welche auf verschiedene Arten implementiert werden können.
 Ein Beispiel hierfür wäre es eine neue Datenbank hinzuzufügen welche dann den Code durch das Implementieren der Repository Interfaces erweitert.
 Ein weiterer Bereich ist die Database-Adapter-Schicht in der die Controller der einzelnen Tabellen von einem Allgemeinen Database Controller erben.
 Um den Code mit einer neuen Datenbanktabelle zu erweitern wird hier eine neue Klasse erstellt welche Vererbung einsetzt um die Funktionalität zu erweitern.
+Zudem werden diese dann von der Datenbank Implementiert und könnte in Zukunft durch mehrere Datenbanken implementiert werden.
 
 %% Liskov Substitution Principle
 %%  - Objekte eines abgeleiteten Typs müssen als Ersatz für Instanzen ihres Basistyps funktionieren ohne die Korrektheit des Programms zu ändern
@@ -59,13 +61,13 @@ Um den Code mit einer neuen Datenbanktabelle zu erweitern wird hier eine neue Kl
 %%      - Abgeleitete Typen müssen stärkere Nachbedingungen haben
 %%  - Design by Contract kann helfen Verstöße zufinden
 %%  - Ableitung in OOP ist mehr eine "verhält sich wie" Beziehung anstatt einer "ist ein" Beziehung
-
+\newpage
 \subsection{Liskov Substitution Principle}
 Im Liskov Substitution Principle werden Ableitungsregeln stark eingeschränkt was zu einer Einhaltung von Invarianzen führt.
 Hierbei müssen abgeleitete Typen schwächere Vorbedingungen und stärkere Nachbedingungen haben.
 Durch dieses Prinzip ergeben sich somit im OOP \glqq verhält sich wie\grqq{} Beziehungen statt den üblichen \glqq ist ein\grqq{} Beziehungen.
 Somit kann man sich auf ein bestimmtes Verhalten der abgeleiteten Typen verlassen, wenn man das Verhalten des Basistyps kennt.
-Dieses Prinzip wurde nicht angewendet da neben den Repository Interfaces kaum Interfaces oder Vererbungen zum Einsatz kamen.
+Dieses Prinzip wurde zum Beispiel für die Domain Service Interfaces angewendet welche ja darauf ausgelegt sind dem Domaincode eine \glqq verhält sich wie\grqq{} Beziehung darzubieten.
 
 %% Interface Segregation Principle
 %%  - Anwender sollten nicht von Funktionen abhängig sein, die sie nicht nutzen
@@ -80,9 +82,8 @@ Dieses Prinzip wurde nicht angewendet da neben den Repository Interfaces kaum In
 Das Interface Segregation Principle sorgt dafür, dass Anwender nicht von Funktionen abhängig sind die sie gar nicht nutzen.
 Dies wird ermöglicht indem man statt einzelnen großen schweren Interfaces mit vielen Funktionen, viele kleine leichte Interfaces mit wenigen Funktionen implementiert.
 Somit kann man seine Klasse passend für den Anwendungszweck anpassen ohne unnötige extrafunktionen mit zu schleppen.
-Der Code beeinhaltet aber bisher keine komplexen Abhängigkeiten von Interfaces in denen Funktionen des Interfaces nicht genutzt würden.
-Daher wurde dieses Prinzip noch nicht angewendet.
-%% TODO bei Repository interfaces
+Da der Code keine Interface Implementierungen beeinhaltet in denen Funktionen des Interfaces nicht genutzt würden sind alle Eigenschaften des Prinzips erfüllt.
+Das bedeutet jedes Interface welches im Programmentwurf enthalten ist dieses Prinzip erfüllt.
 
 %% Dependency Inversion Principle
 %%  - Klassischerweise sind High-Level Module von Low-Level Modulen abhängig:
@@ -106,9 +107,10 @@ Denn Abstraktionen sollten nicht von Details abhängig sein, daher werden hierbe
 Dadurch bilden die High-Level Module ein Framework und es werden nur noch abtrakte Abhängigkeiten genutzt.
 Ein großer Vorteil der dieses Prinzip ist die hohe Fexibilität der Software, denn Low-Level Module können somit einfach ausgetauscht werden ohne die High-Level Module zu beinflussen.
 Dieses Prinzip wurde durch die Schichtenarchitektur der Clean Architecture verwirklicht,
-in welcher die Repositories und Entities des High-Level Moduls Domain in den darunterliegenden Implementiert und aufgerufen werden.
+in welcher die Repositories und Domain Services des High-Level Moduls Domain in den darunterliegenden Implementiert und aufgerufen werden.
+Beim initialen Aufbau der Anwendung werden dann die Instanzen der Repositories und Domain Services erzeugt.
 
-
+\newpage
 \section{Analyse und Begründung für GRASP} %%  (insb. Kopplung/Kohäsion)
 %% 
 %% General Responsibility Assignment Software Patterns
@@ -154,7 +156,8 @@ Durch eine lose Kopplung werden Komponenten austauschbar.
 Man kann an konkrete oder abstrakte Datentypen gekoppelt sein, aber auch durch verschiedene Threads mit gemeinsamen Sperren oder durch Resourcen wie gemeinsame Dateien.
 Dabei ist eine Kopplung zu stabilen Komponenten weniger problematisch.
 Durch die Inversion of Control sind die meisten Klassen von Klassen innerer Schichten abhängig, somit also von stabileren Komponenten.
-Denn je tiefer eine Klasse liegt desto selterner wird diese Klasse geändert wodurch die Abhängigkeiten relativ stabiel sind.
+Denn je tiefer eine Klasse liegt desto selterner wird diese Klasse geändert wodurch die Abhängigkeiten relativ stabil sind.
+Beispielsweise sind die Mapper in der Database-Adapter Schicht nur von den Objeten welche sie umwandeln anhängig wodurch sie sehr einfach zu testen sind.
 
 %% 
 %% High Cohesion:
@@ -176,8 +179,8 @@ Kohäsion ist ein Maß für den Zusammenhalt einer Klasse, es beschreibt die sem
 Hohe Kohäsion und Lose Kopplung sind das Fundament für idealen Code, da sie zu einem einfacheren und verständlicheren Design führen.
 Die Semantische Nähe der Attribute und Methoden ist nur schwer automatisiert testbar und es ist Menschliche Einschätzung notwendig.
 Zu den Automatisch bestimmbaren technischen Metriken gehören Anzahl Attribute und Methoden einer Klasse und Häufigkeit der Verwendung der Attribute in allen Methoden aber diese sind nicht immer ideal.
-Der Zusammenhalt der Klassen in diesem Projekt ist ziemlich gut da die Attribute, wie zum Beispiel in den Entities der Domain-Schicht zu sehen ist, semantisch gut zu den Klassen passen.
-Die ReportEntity enthält zum Beispiel nur Attribute welche semantisch zu einem Report des Users gehören und verwendet jedes Attribut auch in mindestens einer Methode.
+Der Zusammenhalt der Klassen in diesem Projekt ist ziemlich gut da die Attribute, wie zum Beispiel in den Entities oder Value Objects der Domain-Schicht zu sehen ist, semantisch gut zu den Klassen passen.
+Das Rank Value Object enthält zum Beispiel nur Attribute welche semantisch zu einem Rang des Users gehören und verwendet jedes Attribut auch in mindestens einer Methode.
 %% Information Expert: 
 %%  - Allgemeine Zuweisung einer Zuständigkeit zu einem Objekt
 %%  - Einfachste Möglichkeit
@@ -192,14 +195,15 @@ Die ReportEntity enthält zum Beispiel nur Attribute welche semantisch zu einem 
 %%  + Leichtere Klassen, da Businesslogik zu denDaten verteilt wird 
 %%  - Kann zu Problemen mit anderen Prinzipienführen
 %%  - Separation of Concerns kann eine Lösung sein
+\newpage
 \subsection{Information Expert}
 Hierbei geht es um eine allgemeine Zuweisung einer Zuständigkeit zu einem Objekt.
 Die einfachste Möglichkeit ist es dem Objekt, das die Informationen besitzt, die Verantwortung dafür zu überreichen.
 Wenn im Designmodell eine passende Klasse existiert wird diese verwendet, ansonsten wird im Domänenmodell eine passende Repräsentation gesucht und dafür eine Klasse im Designmodell erstellt.
 Objekte sind dann zuständig für Aufgaben über die sie Informationen besitzen, wodurch eine kapselung von Informationen und leichtere Klassen enstehen.
 Aber es kann zu Problemen mit anderen Prinzipien führen.
-Auch hier passen die Entities wieder rein, da diese die Verantwortung zu ihren Informationen übernehmen.
-Die UserEntity übernimmt zum Beispiel die Zuständigkeit über die Informationen eines Users.
+Auch hier passen die Aggregate Root Klassen gut rein, da diese die Verantwortung zu ihren Informationen und denen der enthaltenen Entities beziehungsweise Value Objects übernehmen.
+Das UserRankAggregate übernimmt zum Beispiel die Zuständigkeit über die Informationen der UserEntity und des Rank Value Object.
 %% Creator:
 %%  - Das Erzeuger-Prinzip legt fest, wer für die Erzeugung von Objekten zuständig ist
 %%  - Ein Objekt der Klasse B ist zuständig für die Erzeugung von Objekten der Klasse A, wenn
@@ -215,8 +219,10 @@ Die UserEntity übernimmt zum Beispiel die Zuständigkeit über die Informatione
 Im Creator-Prinzip wird festgelegt wer für die Erzeugung von Objekten zuständig ist.
 Allgemein gesehen kommt ein Objekt als Creator eines anderen in Frage, wenn es zu jedem erstellten Objekt eine Beziehung hat.
 Ein geeigneter Creator verringert die Kopplung von Komponenten, was zu den bereits genannten Vorteilen führt.
-Dieses Prinzip wurde nicht angewandt da die Objekte direkt in den Adapter-Schichten erzeugt und umgewandelt werden und dafür keine extra Klasse verwendet wird.
-%% TODO Creator trotzdem erwähnen? Creator Implementieren!!!!!
+Die Creator der Objekte sind hier zum Beispiel die Repositories, da in deren Implementierung die Instanzen der Aggregate und Entities erzeugt werden.
+Ein weiteres Beispiel wären auch die Mapper welche die Objekt-Formate umwandeln und dabei neue Objekte erzeugen.
+Dabei wird die Kopplung zwischen den inneren und den äußeren Schichten verringert.
+
 
 %% Indirection:
 %%  - Indirektion bzw. Delegation (<T>)
@@ -229,7 +235,6 @@ Dieses Prinzip wurde nicht angewandt da die Objekte direkt in den Adapter-Schich
 Durch Indirection werden Systeme oder Teile von Systemen voneinander entkoppelt.
 Es bietet mehr Freiheitsgrade als Vererbung oder Polymorphismus, aber benötigt auch mehr Aufwand.
 Dadurch ensteht die gewollte High Cohesion und die Software wird viel flexibler.
-%% TODO Indirection trotzdem erwähnen? Indirection Implementieren? fragen ob die Wrappen wirklich passen?
 Die Table Wrapper sorgen hierbei beispielsweise dafür den übergeordneten Code von den SQL Strings zu entkoppeln.
 %% Polymorphism:
 %%  - Polymorphismus
@@ -268,6 +273,7 @@ Hier werden die Funktionen die Allgemein für alle Tabellen benötigt werden dur
 %%  - Use Case Controller
 %%      - 1 Controller pro Use Case
 %%      - Viele kleine Controller
+\newpage
 \subsection{Controller}
 Der Controller verarbeitet einkommende Benutzereingaben und koordiniert zwischen Benutzeroberfläche und Businesslogik.
 Seine Hauptaufgabe ist die Delegation zu anderen Objekten und er enthält keine Businesslogik.
@@ -298,8 +304,7 @@ Diese Controller leiten die Anfragen dann an die API-Adapter-Schicht weiter in d
 \subsection{Pure Fabrication}
 Bei der Pure Fabrication besitzt eine Klasse keinen Bezug zur Problemdomäne, wodurch eine Trennung zwischen Technologie und Problemdomäne und eine Kapselung von Algorithmen entsteht.
 Damit werden diese Softwareteile auch außerhalb der Domäne einfach wiederverwendbar und durch die Kapselung spezieller Funktionalität wird High Cohesion begünstigt.
-Dies wurde nicht angewandt da alle Klassen einen Bezug zur Domäne hatten.
-%% TODO Pure Fabrication trotzdem erwähnen? Pure Fabrication Implementieren?
+Dies wurde nicht angewandt da alle Klassen einen Bezug zur Domäne hatten und das Projekt zum Beispiel keine allgemein Verwendbaren Algorithmen oder ähnliches enthällt.
 %% Protected Variations:
 %%  - Sicherung vor Variation
 %%  - Kapselung verschiedener Implementierungen hinter einer einheitlichen Schnittstelle (API)
@@ -320,7 +325,9 @@ Mit der Kapselung verschiedener Implementierungen hinter einer einheitlichen Sch
 Der Einfluss von Variabilität einzelner Komponenten soll dadurch nicht das Gesamtsystem betreffen.
 Mit Polymorphie und Delegation lässt sich ein System gut schützen.
 Weitere Schutzöglichkeiten gibt es durch Stylesheets im Webumfeld, Spezifikation von Schnittstellen oder Betriebssystemen und Virtuellen Maschinen.
-Um diese einheitlichen Schnittstellen zu ermöglichen beinhaltet zum Beispiel die Domain-Schicht die Repository Interfaces, welche dann für verschiedene Datenbanken abgekapselt implementiert werden können.
+Um diese einheitlichen Schnittstellen zu ermöglichen beinhaltet zum Beispiel die Domain-Schicht die Repository Interfaces und Domain Services,
+welche dann für verschiedene Datenbanken abgekapselt implementiert werden können.
+\newpage
 \section{Analyse und Begründung für DRY}
 %%  - Don’t Repeat Yourself!
 %%  - Anwendbar auf alles mögliche
@@ -328,7 +335,7 @@ Um diese einheitlichen Schnittstellen zu ermöglichen beinhaltet zum Beispiel di
 %%      - Testpläne
 %%      - Buildsystem
 %%      - Dokumentation
-Die Abkürzung DRY steht für Don’t Repeat Yourself und kann auf alles mögliche wie zum Beispeil Datenbankschemata, Testpläne, Buildsysteme oder Dokumentation angewendet werden.
+Die Abkürzung DRY steht für Don’t Repeat Yourself und kann auf alles mögliche wie zum Beispiel Datenbankschemata, Testpläne, Buildsysteme oder Dokumentation angewendet werden.
 %%  - "Every piece of knowledge must have a single,unambiguous, authoritative representationwithin a system"
 %%  - Es darf nur eine Quelle der Wahrheit geben
 %%  - Alle anderen Quellen werden davon abgeleitet
@@ -361,6 +368,20 @@ dies kann aber teilweise durch diverse Tools vermieden werden indem sie erkannte
 %%      - Entwickler ist zu faul die Duplikation zu beseitigen
 Diese ungeduldige Duplikation ensteht durch Entwickler die zu faul sind die Duplikation zu beseitigen.
 
-In der Erstellung dieses Projektes wurde darauf geachtet keinen duplizierten Code zu erzeugen und stattdessen bestehenden Code wiederzuverwenden.
+\subsection{Anwendung}
 
-%% TODO Funktionen Zeigen welche von vielen Stellen aufgerufen werden!!!!!
+In der Erstellung dieses Projektes wurde darauf geachtet keinen duplizierten Code zu erzeugen und stattdessen bestehenden Code wiederzuverwenden.
+Denn durch duplizierten Code kann es zu einigen Problemen kommen:
+\begin{itemize}
+    \item Es soll eine Regelung / Einstellung geändert werden und es werden manche Stellen vergessen => Inkonsistenz, Sicherheits-Risiko
+    \item Großer Aufwand wenn sich z.B eine Datenstruktur ändert und dass an vielen Stellen angepasst werden muss => Großer Aufwand
+    \item Duplizierter Code macht den Programmcode länger und unübersichtlicher
+    \item Duplizierter Code führt zu Duplizierten Bugs => Shotgun Surgery
+\end{itemize}
+Folgende Funktionen werden zum Beispiel an mehreren Stellen aufgerufen statt den Code zu duplizieren:
+
+Im CredentialService wurde ein Check für Name, Email und Passwort einmalig Implementiert und von vielen Stelle naufgerufen.
+Dadurch wird sichergestellt, dass überall einheitliche Richtlinien gelten und diese auch bei einer Änderung überall automatisch korrekt sind.
+
+Die Mapper wie der UserMapper sorgen zum Beispiel dafür dass überall eine korrekte umwandlung der Datenstrukturen stattfindet.
+Dadurch muss bei der Änderung einer Datenstruktur nur der Mapper angepasst werden und alle umwandlungen bleiben funktionell.
