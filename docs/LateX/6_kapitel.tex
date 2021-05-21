@@ -9,3 +9,18 @@
 %% 
 %% 
 %% 
+\chapter{Unit Tests}
+
+Es wurden mehr als 10 Tests verteilt auf die verschiedenen Module eingebaut.
+
+\section{Mocking}
+
+Zum einen kann Mocking mit Mockito im Plugin-API Modul gefunden werden und zum anderen wurden noch die Repositories in den Tests der Application und der Domain Schicht manuell gemockt.
+
+\section{Ausführen der Tests}
+
+Wichtig die Mockito version benötigt eine Java 11 Runtime sonst laufen die Mockito Tests nicht!
+
+Befehl im root Order des Backends ausführen: ./gameserver-backend
+
+Befehl zum ausführen der Unit tests: mvn test
